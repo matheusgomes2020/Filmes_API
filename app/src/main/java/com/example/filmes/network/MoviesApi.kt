@@ -8,7 +8,10 @@ import javax.inject.Singleton
 @Singleton
 interface MoviesApi {
 
-    @GET("movie/popular?api_key=" + Constants.API_KEY)
+    @GET("movie/popular?language=pt-BR&api_key=" + Constants.API_KEY)
     suspend fun getPopularMovies() : Movies
+
+    @GET("movie/top_rated?language=pt-BR&api_key=" + Constants.API_KEY)
+    suspend fun getRatedMovies(): Movies
 
 }

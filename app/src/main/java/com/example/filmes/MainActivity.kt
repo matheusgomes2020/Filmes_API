@@ -5,8 +5,8 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.filmes.adapter.MovieAdapter
-import com.example.filmes.adapter.MovieClickListener
 import com.example.filmes.databinding.ActivityMainBinding
 import com.example.filmes.model.Movie
 import dagger.hilt.android.AndroidEntryPoint
@@ -17,6 +17,7 @@ class MainActivity : AppCompatActivity() {
 
     private val mainViewModel: MainViewModel by viewModels()
     private lateinit var lista: List<Movie>
+    private lateinit var lista2: List<Movie>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,10 +32,19 @@ class MainActivity : AppCompatActivity() {
     private fun setRecyclerView() {
 
         val mainActivity = this
-        mainViewModel.cc1.observe( this ) {
+        mainViewModel.popularMovies.observe( this ) {
 
             binding.movieRecyclerView.apply {
-                layoutManager = LinearLayoutManager( applicationContext )
+                layoutManager = LinearLayoutManager( applicationContext, RecyclerView.HORIZONTAL, false)
+                adapter = MovieAdapter( it )
+            }
+
+        }
+
+        mainViewModel.ratedMovies.observe( this ) {
+
+            binding.movieRecyclerView2.apply {
+                layoutManager = LinearLayoutManager( applicationContext, RecyclerView.HORIZONTAL, false)
                 adapter = MovieAdapter( it )
             }
 
@@ -44,7 +54,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun o() {
 
-        mainViewModel.cc1.observe(this) {
+        mainViewModel.popularMovies.observe(this) {
 
             lista = it
 

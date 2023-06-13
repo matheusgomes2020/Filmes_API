@@ -1,13 +1,10 @@
 package com.example.filmes
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.filmes.data.Resource
 import com.example.filmes.model.Movie
-import com.example.filmes.model.Movies
 import com.example.filmes.repository.MoviesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -18,14 +15,17 @@ class MainViewModel @Inject constructor( private val moviesRepository: MoviesRep
     : ViewModel() {
 
 
-    private val cc = MutableLiveData<List<Movie>>()
+    private val popularMoviesEmitter = MutableLiveData<List<Movie>>()
+    private val ratedMoviesEmitter = MutableLiveData<List<Movie>>()
 
-    val cc1: LiveData<List<Movie>> = cc
+    val popularMovies: LiveData<List<Movie>> = popularMoviesEmitter
+    val ratedMovies: LiveData<List<Movie>> = ratedMoviesEmitter
 
 
     init {
 
         loadPopularMovies()
+        loadRatedMovies()
 
     }
 
@@ -34,7 +34,17 @@ class MainViewModel @Inject constructor( private val moviesRepository: MoviesRep
 
         viewModelScope.launch {
 
-            cc.value = moviesRepository.getPopularMovies()
+            popularMoviesEmitter.value = moviesRepository.getPopularMovies()
+
+        }
+
+    }
+
+    private fun loadRatedMovies() {
+
+        viewModelScope.launch {
+
+            ratedMoviesEmitter.value = moviesRepository.getRatedMovies()
 
         }
 

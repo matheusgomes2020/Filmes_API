@@ -14,4 +14,10 @@ class MoviesRepository @Inject constructor( private val api: MoviesApi ) {
         return api.getPopularMovies().results
     }
 
+    suspend fun getRatedMovies(): List<Movie> {
+
+
+        return api.getRatedMovies().results
+    }
+
 }
