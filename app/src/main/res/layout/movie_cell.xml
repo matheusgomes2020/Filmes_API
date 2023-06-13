@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.cardview.widget.CardView android:id="@+id/movie_cellContainer"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="30dp"
+    android:layout_margin="5dp"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="5dp">
+
+
+        <TextView
+            android:id="@+id/id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="1213243543"
+            style="@style/TextAppearance.AppCompat.Title"
+            >
+        </TextView>
+
+        <TextView
+            android:id="@+id/nome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Avatar"
+            style="@style/TextAppearance.AppCompat.Title"
+            >
+        </TextView>
+
+        <TextView
+            android:id="@+id/titulo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Sajsgadgsgdhsghdghsg
+            gggggggggggggggggggggg
+            ggggggggggggggggg
+            ggggggggggggggggggggggg
+            ggggggggggggggg
+            dsghdgshdg sgsdgsgds fdhfhdfhdfhdhfhdfhd"
+            style="@style/TextAppearance.AppCompat.Title"
+            >
+        </TextView>
+
+    </LinearLayout>
+
+</androidx.cardview.widget.CardView>
