@@ -12,15 +12,16 @@ import com.example.filmes.model.Movie
 import com.example.filmes.repository.MoviesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
+import java.lang.Exception
 import javax.inject.Inject
 
 @HiltViewModel
 class MovieDetailsViewModel @Inject constructor( private val repository: MoviesRepository )
     : ViewModel() {
 
-    //private val popularMoviesEmitter = MutableLiveData<Movie>()
+    private var movieInfoEmitter = MutableLiveData<Movie>()
 
-    //val popularMovies: LiveData<Movie> = popularMoviesEmitter
+    val movieInfo: LiveData<Movie> = movieInfoEmitter
 
     private val popularMoviesEmitter = MutableLiveData<List<Movie>>()
     private val ratedMoviesEmitter = MutableLiveData<List<Movie>>()
@@ -28,39 +29,45 @@ class MovieDetailsViewModel @Inject constructor( private val repository: MoviesR
     val popularMovies: LiveData<List<Movie>> = popularMoviesEmitter
 
     init {
-        getMovieInfo2()
-        loadPopularMovies()
+        //getMovieInfo("667538")
+        //getMovieInfo2()
 
     }
 
-    private fun loadPopularMovies() {
 
-        viewModelScope.launch {
 
-            popularMoviesEmitter.value = repository.getPopularMovies()
+     fun getMovieInfo( movieId: String ) {
 
+        try {
+            viewModelScope.launch {
+                movieInfoEmitter.value = repository.getMovieInfo(movieId)
+            }
+        }catch (e: Exception){
+            e.printStackTrace()
         }
 
-    }
 
-    suspend fun getMovieInfo( movieId: String ): Movie {
-
-        return repository.getMovieInfo2( )
 
     }
 
+
+     /*
     private fun getMovieInfo2( ) {
 
         viewModelScope.launch {
 
-            //popularMoviesEmitter.value = repository.getMovieInfo2()
+            movieInfoEmitter.value = repository.getMovieInfo2()
 
         }
 
 
+      */
+
     }
 
 
-}
+
+
+//}
 
 

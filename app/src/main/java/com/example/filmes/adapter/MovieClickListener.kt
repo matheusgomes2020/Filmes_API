@@ -1,4 +1,8 @@
 package com.example.filmes.adapter
 
-class MovieClickListener {
+import com.example.filmes.model.Movie
+
+interface MovieClickListener {
+    fun clickMovie(movie: Movie)
+
 }

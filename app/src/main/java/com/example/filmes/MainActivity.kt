@@ -11,6 +11,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.filmes.adapter.MovieAdapter
+import com.example.filmes.adapter.MovieClickListener
 import com.example.filmes.databinding.ActivityMainBinding
 import com.example.filmes.model.Movie
 import com.example.filmes.ui.movieDetails.MovieDetailsActivity
@@ -19,7 +20,7 @@ import com.example.filmes.ui.search.SearchViewState
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), MovieClickListener {
     private val binding by lazy { ActivityMainBinding.inflate(layoutInflater) }
 
     private val mainViewModel: MainViewModel by viewModels()
@@ -63,7 +64,7 @@ class MainActivity : AppCompatActivity() {
 
             binding.movieRecyclerView.apply {
                 layoutManager = LinearLayoutManager( applicationContext, RecyclerView.HORIZONTAL, false)
-                adapter = MovieAdapter( it )
+                adapter = MovieAdapter( it, mainActivity )
             }
 
         }
@@ -80,10 +81,29 @@ class MainActivity : AppCompatActivity() {
 
             binding.movieRecyclerView2.apply {
                 layoutManager = LinearLayoutManager( applicationContext, RecyclerView.HORIZONTAL, false)
-                adapter = MovieAdapter( it )
+                adapter = MovieAdapter( it, mainActivity )
             }
 
         }
+
+    }
+
+    override fun clickMovie(movie: Movie) {
+
+        val mensagem = movie.title
+        val id = movie.id.toString()
+//            val m = lista[0]
+        Toast.makeText(applicationContext, "Deu certo!!!", Toast.LENGTH_LONG).show()
+        Toast.makeText(applicationContext, "ID: " + id, Toast.LENGTH_LONG).show()
+        val intent = Intent(this, MovieDetailsActivity::class.java).apply {
+            putExtra("mensagem", mensagem)
+            putExtra("id", id)
+            //putExtra("obj", m.overview)
+
+
+        }
+
+        startActivity( intent )
 
     }
 
