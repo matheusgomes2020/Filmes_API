@@ -3,6 +3,7 @@ package com.example.filmes.ui.search
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.SearchView
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,17 +32,23 @@ class SearchActivity : AppCompatActivity(), MovieClickListener {
 
         setRecyclerView()
 
-        binding.buttonSearch.setOnClickListener {
+        binding.searchView.setOnQueryTextListener(object: androidx.appcompat.widget.SearchView.OnQueryTextListener{
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                return false
+            }
 
-            bb()
+            override fun onQueryTextChange(newText: String?): Boolean {
+                bb(newText)
+                return true
+            }
 
-        }
+        })
+
 
     }
 
-    private fun bb(){
+    private fun bb(query: String?){
 
-        var query = binding.editTextSearch.text.toString()
 
         if (!query.isNullOrEmpty()) {
             viewModel.searchMovies( query )
@@ -61,7 +68,7 @@ class SearchActivity : AppCompatActivity(), MovieClickListener {
 
 
 
-            binding.recyclerSearch.apply {
+            binding.recyclerView.apply {
                 layoutManager = LinearLayoutManager( applicationContext, RecyclerView.VERTICAL, false)
                 adapter = MovieAdapter( it, searchActivity )
             }

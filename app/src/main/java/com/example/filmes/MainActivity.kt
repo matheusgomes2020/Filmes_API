@@ -2,6 +2,7 @@ package com.example.filmes
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -130,5 +131,11 @@ class MainActivity : AppCompatActivity(), MovieClickListener {
 
     }
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+
+        menuInflater.inflate(R.menu.actionbar_munu, menu)
+
+        return super.onCreateOptionsMenu(menu)
+    }
 
 }
