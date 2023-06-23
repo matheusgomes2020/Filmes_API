@@ -12,6 +12,7 @@ import androidx.room.InvalidationTracker.Observer
 import com.example.filmes.R
 import com.example.filmes.adapter.MovieAdapter
 import com.example.filmes.adapter.MovieClickListener
+import com.example.filmes.adapter.MovieSearchAdapter
 import com.example.filmes.databinding.ActivitySearchBinding
 import com.example.filmes.model.Movie
 import com.example.filmes.ui.movieDetails.MovieDetailsActivity
@@ -70,7 +71,7 @@ class SearchActivity : AppCompatActivity(), MovieClickListener {
 
             binding.recyclerView.apply {
                 layoutManager = LinearLayoutManager( applicationContext, RecyclerView.VERTICAL, false)
-                adapter = MovieAdapter( it, searchActivity )
+                adapter = MovieSearchAdapter( it, searchActivity )
             }
 
         }

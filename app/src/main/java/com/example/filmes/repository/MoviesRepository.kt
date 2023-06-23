@@ -13,6 +13,12 @@ class MoviesRepository @Inject constructor( private val api: MoviesApi ) {
         return api.searchMovies( searchQuery ).results
 
     }
+
+    suspend fun getUpcoming(): List<Movie> {
+
+        return api.getUpcoming().results
+
+    }
     suspend fun getPopularMovies(): List<Movie> {
 
         return api.getPopularMovies().results

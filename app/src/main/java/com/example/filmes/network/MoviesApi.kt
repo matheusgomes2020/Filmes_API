@@ -18,6 +18,10 @@ interface MoviesApi {
 
     ): Movies
 
+    @GET("movie/upcoming?language=pt-BR&api_key=" + Constants.API_KEY)
+    suspend fun getUpcoming() : Movies
+
+
     @GET("movie/popular?language=pt-BR&api_key=" + Constants.API_KEY)
     suspend fun getPopularMovies() : Movies
 

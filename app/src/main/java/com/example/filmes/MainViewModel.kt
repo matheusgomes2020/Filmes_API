@@ -17,18 +17,30 @@ class MainViewModel @Inject constructor( private val moviesRepository: MoviesRep
 
     private val popularMoviesEmitter = MutableLiveData<List<Movie>>()
     private val ratedMoviesEmitter = MutableLiveData<List<Movie>>()
+    private val upcomingMoviesEmitter = MutableLiveData<List<Movie>>()
 
     val popularMovies: LiveData<List<Movie>> = popularMoviesEmitter
     val ratedMovies: LiveData<List<Movie>> = ratedMoviesEmitter
+    val upcomingMovies: LiveData<List<Movie>> = upcomingMoviesEmitter
 
 
     init {
 
         loadPopularMovies()
         loadRatedMovies()
+        loadUpcoming()
 
     }
 
+    private fun loadUpcoming() {
+
+        viewModelScope.launch {
+
+            upcomingMoviesEmitter.value = moviesRepository.getUpcoming()
+
+        }
+
+    }
 
     private fun loadPopularMovies() {
 

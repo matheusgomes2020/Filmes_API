@@ -2,6 +2,7 @@ package com.example.filmes.ui.movieDetails
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.lifecycle.viewModelScope
@@ -22,10 +23,6 @@ class MovieDetailsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMovieDetailsBinding
 
     private val viewModel: MovieDetailsViewModel by viewModels()
-   // private lateinit var idd: String
-
-
-    var ov = "OVEr"
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -33,51 +30,50 @@ class MovieDetailsActivity : AppCompatActivity() {
         binding = ActivityMovieDetailsBinding.inflate(layoutInflater)
         setContentView( binding.root )
 
-        val mensagem = intent.getStringExtra("mensagem")
         val id = intent.getStringExtra("id")
-        val o = intent.getStringExtra("obj")
 
-       // idd = id!!
-
-        binding.idPassado.text = "ID: " + id
-
-        bb()
+        observeMovies()
 
         viewModel.getMovieInfo(id!!)
-        //Toast.makeText(applicationContext, binding.movieOverview.text.toString(), Toast.LENGTH_LONG).show()
-
-
-       // aa()
-
-
 
     }
 
-
-
-
-
-    fun bb() {
+    fun observeMovies() {
 
         try {
             viewModel.movieInfo.observe(this) {
+                Log.d("RESGATE", "observeMovies: " + it.toString())
 
                 binding.movieOverview.text = it.overview
                 binding.movieTitle.text = it.title
-                binding.movieID.text = it.id.toString()
                 binding.imageView2.load("https://image.tmdb.org/t/p/w500" + it.poster_path)
+                binding.textData.text = it.release_date
+                binding.textDuration.text = it.runtime.toString()
+
+                var gen = ""
+                it.genres.forEachIndexed { index, genres ->
+                    gen += genres.name + "  "
+                }
+
+                binding.textGenres.text = gen
+
+                when ( it.vote_average ) {
+
+                    in 0.0..1.9 -> binding.texRating.text = "🌟⭐⭐⭐⭐"
+                    in 2.0..3.9 -> binding.texRating.text = "🌟🌟⭐⭐⭐"
+                    in 4.0..5.9 -> binding.texRating.text = "🌟🌟🌟⭐⭐"
+                    in 6.0..7.9 -> binding.texRating.text = "🌟🌟🌟🌟⭐"
+                    in 8.0..10.0 -> binding.texRating.text = "🌟🌟🌟🌟🌟"
+
+                }
+
 
             }
             }catch (e: Exception){
             e.printStackTrace()
         }
 
-
-
         }
-
-
-
 
 }
 
