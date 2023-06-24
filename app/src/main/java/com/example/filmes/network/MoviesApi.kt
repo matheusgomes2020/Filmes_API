@@ -11,7 +11,7 @@ import javax.inject.Singleton
 @Singleton
 interface MoviesApi {
 
-    @GET("search/movie?api_key=" + Constants.API_KEY)
+    @GET("search/movie?language=pt-BR&api_key=" + Constants.API_KEY)
     suspend fun searchMovies(
 
         @Query("query") query: String
@@ -25,10 +25,14 @@ interface MoviesApi {
     @GET("movie/popular?language=pt-BR&api_key=" + Constants.API_KEY)
     suspend fun getPopularMovies() : Movies
 
+    //now_playing?
+    @GET("movie/now_playing?language=pt-BR&api_key=" + Constants.API_KEY)
+    suspend fun getNowPlaying() : Movies
+
     @GET("movie/top_rated?language=pt-BR&api_key=" + Constants.API_KEY)
     suspend fun getRatedMovies(): Movies
 
-    @GET("movie/{movieID}?api_key=" + Constants.API_KEY)
+    @GET("movie/{movieID}?language=pt-BR&api_key=" + Constants.API_KEY)
     suspend fun  getMovieInfo(@Path("movieID") movieId: String) : Movie
 
     //https://api.themoviedb.org/3/movie/550?api_key=0f5183b12ca04341d5f0f71d8bc698b5

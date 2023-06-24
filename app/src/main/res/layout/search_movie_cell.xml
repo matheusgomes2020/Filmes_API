@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:maxLines="1"
             android:text="Avatar"
-            android:textSize="20sp"
+            android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/ratingSearchCell"
             app:layout_constraintEnd_toEndOf="@+id/imageSearchCell"

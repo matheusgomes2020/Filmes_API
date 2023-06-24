@@ -15,8 +15,8 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="0dp"
-        android:layout_height="200dp"
+        android:layout_width="120dp"
+        android:layout_height="150dp"
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -28,9 +28,9 @@
 
 
     <LinearLayout
-        android:layout_width="200dp"
+        android:layout_width="120dp"
         android:layout_height="match_parent"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="5dp"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -43,7 +43,8 @@
             android:layout_height="wrap_content"
             android:maxLines="1"
             android:text="Avatar"
-            android:textSize="20sp"
+            android:textColor="#434242"
+            android:textSize="16sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toTopOf="@+id/ratingSearchCell"
             app:layout_constraintEnd_toEndOf="@+id/imageSearchCell"
@@ -52,13 +53,14 @@
 
         <TextView
             android:id="@+id/titulo"
-            style="@style/TextAppearance.AppCompat.Title"
+            style="@style/TextAppearance.AppCompat.Display1"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginTop="5dp"
             android:maxLines="6"
             android:text="No exuberante mundo alienígena de Pandora vivem os Na'vi, seres que parecem ser primitivos, mas são altamente evoluídos. Como o ambiente do planeta é tóxico, foram criados os avatares, corpos biológicos controlados pela mente humana que se movimentam livremente em Pandora. Jake Sully, um ex-fuzileiro naval paralítico, volta a andar através de um avatar e se apaixona por uma Na'vi. Esta paixão leva Jake a lutar pela sobrevivência de Pandora."
-            android:textSize="18sp"
+            android:textColor="@color/material_dynamic_neutral50"
+            android:textSize="12sp"
             tools:layout_editor_absoluteX="157dp"
             tools:layout_editor_absoluteY="402dp"></TextView>
 

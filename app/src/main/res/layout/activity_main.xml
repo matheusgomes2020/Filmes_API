@@ -5,12 +5,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".ui.main.MainActivity">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/myToolbar"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="45dp"
         android:background="?attr/colorPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -42,15 +42,16 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="5dp"
                     android:layout_marginEnd="8dp"
-                    android:text=" 🌀 Upcoming Movies "
+                    android:text=" 🔥 Em alta"
+                    android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"></TextView>
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/movieRecyclerViewUpcoming"
+                    android:id="@+id/movieRecyclerViewEmAlta"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_marginStart="8dp"
@@ -68,16 +69,17 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="5dp"
                     android:layout_marginEnd="8dp"
-                    android:text="🔥 Popular Movies "
+                    android:text=" ⭐ Em cartaz"
+                    android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/movieRecyclerViewUpcoming"></TextView>
+                    app:layout_constraintTop_toBottomOf="@+id/movieRecyclerViewEmAlta"></TextView>
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/movieRecyclerView"
+                    android:id="@+id/movieRecyclerViewEmCartaz"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_marginStart="8dp"
@@ -95,18 +97,21 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="12dp"
-                    android:layout_marginTop="16dp"
+                    android:layout_marginTop="5dp"
                     android:layout_marginEnd="8dp"
-                    android:text="⭐ Best Movies "
+                    android:text=" 🌀 Lançamentos"
+                    android:textSize="16sp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/movieRecyclerView">
+                    app:layout_constraintTop_toBottomOf="@+id/movieRecyclerViewEmCartaz">
 
                 </TextView>
 
+
+
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/movieRecyclerView2"
+                    android:id="@+id/movieRecyclerViewLancamentos"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_marginStart="8dp"
@@ -116,6 +121,36 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+                <TextView
+                    android:id="@+id/textView3"
+                    style="@style/TextAppearance.AppCompat.Title"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_marginEnd="8dp"
+                    android:text=" ⭐ Melhores avaliados"
+                    android:textSize="16sp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/movieRecyclerViewLancamentos">
+
+                </TextView>
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/movieRecyclerViewMelhores"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:backgroundTint="@color/design_default_color_background"
+                    android:orientation="horizontal"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/textView3">
+
+                </androidx.recyclerview.widget.RecyclerView>
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 

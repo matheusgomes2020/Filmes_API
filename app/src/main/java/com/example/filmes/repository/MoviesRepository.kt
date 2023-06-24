@@ -31,6 +31,12 @@ class MoviesRepository @Inject constructor( private val api: MoviesApi ) {
 
     }
 
+    suspend fun getNowPlayingMovies(): List<Movie> {
+
+        return api.getNowPlaying().results
+
+    }
+
     suspend fun getMovieInfo( movieId: String ): Movie {
 
         return api.getMovieInfo( movieId )

@@ -1,26 +1,20 @@
-package com.example.filmes
+package com.example.filmes.ui.main
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Observer
-import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.filmes.R
 import com.example.filmes.adapter.MovieAdapter
 import com.example.filmes.adapter.MovieClickListener
 import com.example.filmes.databinding.ActivityMainBinding
 import com.example.filmes.model.Movie
 import com.example.filmes.ui.movieDetails.MovieDetailsActivity
 import com.example.filmes.ui.search.SearchActivity
-import com.example.filmes.ui.search.SearchViewModel
-import com.example.filmes.ui.search.SearchViewState
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -40,6 +34,7 @@ class MainActivity : AppCompatActivity(), MovieClickListener {
 
     private fun setupToobar(){
         setSupportActionBar(binding.myToolbar)
+        binding.myToolbar.setTitleTextColor(resources.getColor(R.color.white))
     }
 
     private fun setRecyclerView() {
@@ -47,15 +42,15 @@ class MainActivity : AppCompatActivity(), MovieClickListener {
         val mainActivity = this
         mainViewModel.popularMovies.observe( this ) {
 
-            binding.movieRecyclerView.apply {
+            binding.movieRecyclerViewEmAlta.apply {
                 layoutManager = LinearLayoutManager( applicationContext, RecyclerView.HORIZONTAL, false)
                 adapter = MovieAdapter( it, mainActivity )
             }
         }
 
-        mainViewModel.ratedMovies.observe( this ) {
+        mainViewModel.nowPlayingovies.observe( this ) {
 
-            binding.movieRecyclerView2.apply {
+            binding.movieRecyclerViewEmCartaz.apply {
                 layoutManager = LinearLayoutManager( applicationContext, RecyclerView.HORIZONTAL, false)
                 adapter = MovieAdapter( it, mainActivity )
             }
@@ -63,7 +58,15 @@ class MainActivity : AppCompatActivity(), MovieClickListener {
 
         mainViewModel.upcomingMovies.observe( this ) {
 
-            binding.movieRecyclerViewUpcoming.apply {
+            binding.movieRecyclerViewLancamentos.apply {
+                layoutManager = LinearLayoutManager( applicationContext, RecyclerView.HORIZONTAL, false)
+                adapter = MovieAdapter( it, mainActivity )
+            }
+        }
+
+        mainViewModel.ratedMovies.observe( this ) {
+
+            binding.movieRecyclerViewMelhores.apply {
                 layoutManager = LinearLayoutManager( applicationContext, RecyclerView.HORIZONTAL, false)
                 adapter = MovieAdapter( it, mainActivity )
             }

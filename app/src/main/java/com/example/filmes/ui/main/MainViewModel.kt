@@ -1,4 +1,4 @@
-package com.example.filmes
+package com.example.filmes.ui.main
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -18,10 +18,12 @@ class MainViewModel @Inject constructor( private val moviesRepository: MoviesRep
     private val popularMoviesEmitter = MutableLiveData<List<Movie>>()
     private val ratedMoviesEmitter = MutableLiveData<List<Movie>>()
     private val upcomingMoviesEmitter = MutableLiveData<List<Movie>>()
+    private val nowPlayingMoviesEmitter = MutableLiveData<List<Movie>>()
 
     val popularMovies: LiveData<List<Movie>> = popularMoviesEmitter
     val ratedMovies: LiveData<List<Movie>> = ratedMoviesEmitter
     val upcomingMovies: LiveData<List<Movie>> = upcomingMoviesEmitter
+    val nowPlayingovies: LiveData<List<Movie>> = nowPlayingMoviesEmitter
 
 
     init {
@@ -29,6 +31,8 @@ class MainViewModel @Inject constructor( private val moviesRepository: MoviesRep
         loadPopularMovies()
         loadRatedMovies()
         loadUpcoming()
+        loadNowPlayingMovies()
+
 
     }
 
@@ -57,6 +61,16 @@ class MainViewModel @Inject constructor( private val moviesRepository: MoviesRep
         viewModelScope.launch {
 
             ratedMoviesEmitter.value = moviesRepository.getRatedMovies()
+
+        }
+
+    }
+
+    private fun loadNowPlayingMovies() {
+
+        viewModelScope.launch {
+
+            nowPlayingMoviesEmitter.value = moviesRepository.getNowPlayingMovies()
 
         }
 
