@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -30,6 +31,8 @@ class MainActivity : AppCompatActivity(), MovieClickListener {
         setupToobar()
         setRecyclerView()
 
+
+
     }
 
     private fun setupToobar(){
@@ -45,6 +48,10 @@ class MainActivity : AppCompatActivity(), MovieClickListener {
             binding.movieRecyclerViewEmAlta.apply {
                 layoutManager = LinearLayoutManager( applicationContext, RecyclerView.HORIZONTAL, false)
                 adapter = MovieAdapter( it, mainActivity )
+
+                binding.shimmer.stopShimmer()
+                binding.shimmer.visibility = View.GONE
+                binding.movieRecyclerViewEmAlta.visibility = View.VISIBLE
             }
         }
 
@@ -53,6 +60,9 @@ class MainActivity : AppCompatActivity(), MovieClickListener {
             binding.movieRecyclerViewEmCartaz.apply {
                 layoutManager = LinearLayoutManager( applicationContext, RecyclerView.HORIZONTAL, false)
                 adapter = MovieAdapter( it, mainActivity )
+                binding.shimmer2.stopShimmer()
+                binding.shimmer2.visibility = View.GONE
+                binding.movieRecyclerViewEmCartaz.visibility = View.VISIBLE
             }
         }
 
@@ -61,14 +71,32 @@ class MainActivity : AppCompatActivity(), MovieClickListener {
             binding.movieRecyclerViewLancamentos.apply {
                 layoutManager = LinearLayoutManager( applicationContext, RecyclerView.HORIZONTAL, false)
                 adapter = MovieAdapter( it, mainActivity )
+                binding.shimmer3.stopShimmer()
+                binding.shimmer3.visibility = View.GONE
+                binding.movieRecyclerViewLancamentos.visibility = View.VISIBLE
             }
         }
 
+        /*
         mainViewModel.ratedMovies.observe( this ) {
 
             binding.movieRecyclerViewMelhores.apply {
                 layoutManager = LinearLayoutManager( applicationContext, RecyclerView.HORIZONTAL, false)
                 adapter = MovieAdapter( it, mainActivity )
+            }
+        }
+
+         */
+
+        mainViewModel.nowPlayingovies2.observe( this ) {
+
+            binding.movieRecyclerViewMelhores.apply {
+                layoutManager = LinearLayoutManager( applicationContext, RecyclerView.HORIZONTAL, false)
+                adapter = MovieAdapter( it, mainActivity )
+
+                binding.shimmer4.stopShimmer()
+                binding.shimmer4.visibility = View.GONE
+                binding.movieRecyclerViewMelhores.visibility = View.VISIBLE
             }
         }
 
