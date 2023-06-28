@@ -11,7 +11,7 @@ class MovieViewHolder (
 
     private val context: Context,
     private val binding: MovieCellBinding,
-    //private val clickListener: MovieClickListener
+    private val clickListener: MovieClickListener
 
     ): RecyclerView.ViewHolder( binding.root ) {
 
@@ -20,6 +20,12 @@ class MovieViewHolder (
             binding.imageView.load("https://image.tmdb.org/t/p/w500" + movie.poster_path)
             binding.nome.text = movie.title
             binding.titulo.text = movie.overview
+
+            binding.movieCellContainer.setOnClickListener {
+
+                clickListener.clickMovie(movie)
+
+            }
 
         }
 

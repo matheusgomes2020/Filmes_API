@@ -10,7 +10,7 @@ import kotlinx.coroutines.NonDisposableHandle.parent
 class MovieAdapter (
 
     private val lista: List<Movie>,
-    //private val clickListener: MovieClickListener
+    private val clickListener: MovieClickListener
 
     ): RecyclerView.Adapter<MovieViewHolder>() {
 
@@ -18,7 +18,7 @@ class MovieAdapter (
         val from = LayoutInflater.from( parent.context )
         val bindind = MovieCellBinding.inflate( from, parent, false )
 
-        return MovieViewHolder( parent.context, bindind )
+        return MovieViewHolder( parent.context, bindind, clickListener )
 
     }
 

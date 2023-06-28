@@ -21,8 +21,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@color/material_dynamic_neutral10"
-        tools:srcCompat="@tools:sample/avatars">
+        android:background="@android:color/darker_gray"
+        >
 
     </ImageView>
 
@@ -39,10 +39,10 @@
         <TextView
             android:id="@+id/nome"
             style="@style/TextAppearance.AppCompat.Title"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:maxLines="1"
-            android:text="Avatar"
+            android:background="@android:color/darker_gray"
             android:textColor="#434242"
             android:textSize="16sp"
             android:textStyle="bold"
@@ -58,8 +58,9 @@
             android:layout_height="match_parent"
             android:layout_marginTop="5dp"
             android:maxLines="6"
+            android:background="@android:color/darker_gray"
             android:text="No exuberante mundo alienígena de Pandora vivem os Na'vi, seres que parecem ser primitivos, mas são altamente evoluídos. Como o ambiente do planeta é tóxico, foram criados os avatares, corpos biológicos controlados pela mente humana que se movimentam livremente em Pandora. Jake Sully, um ex-fuzileiro naval paralítico, volta a andar através de um avatar e se apaixona por uma Na'vi. Esta paixão leva Jake a lutar pela sobrevivência de Pandora."
-            android:textColor="@color/material_dynamic_neutral50"
+            android:textColor="@android:color/darker_gray"
             android:textSize="12sp"
             tools:layout_editor_absoluteX="157dp"
             tools:layout_editor_absoluteY="402dp"></TextView>
