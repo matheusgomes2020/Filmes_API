@@ -31,8 +31,6 @@ class MainActivity : AppCompatActivity(), MovieClickListener {
         setupToobar()
         setRecyclerView()
 
-
-
     }
 
     private fun setupToobar(){
@@ -77,18 +75,7 @@ class MainActivity : AppCompatActivity(), MovieClickListener {
             }
         }
 
-        /*
         mainViewModel.ratedMovies.observe( this ) {
-
-            binding.movieRecyclerViewMelhores.apply {
-                layoutManager = LinearLayoutManager( applicationContext, RecyclerView.HORIZONTAL, false)
-                adapter = MovieAdapter( it, mainActivity )
-            }
-        }
-
-         */
-
-        mainViewModel.nowPlayingovies2.observe( this ) {
 
             binding.movieRecyclerViewMelhores.apply {
                 layoutManager = LinearLayoutManager( applicationContext, RecyclerView.HORIZONTAL, false)

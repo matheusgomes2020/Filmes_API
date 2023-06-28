@@ -3,39 +3,58 @@ package com.example.filmes.repository
 import com.example.filmes.data.Resource
 import com.example.filmes.model.Movie
 import com.example.filmes.network.MoviesApi
-import retrofit2.Response
 import javax.inject.Inject
 
 class MoviesRepository @Inject constructor( private val api: MoviesApi ) {
 
-    suspend fun searchMovies(searchQuery: String): List<Movie> {
+    suspend fun searchMovies(searchQuery: String): Resource<List<Movie>> {
 
-        return api.searchMovies( searchQuery ).results
-
+        return try {
+            Resource.Loading(data = true)
+            val itemList = api.searchMovies(searchQuery).results
+            if (itemList.isNotEmpty()) Resource.Loading(data = false)
+            Resource.Success(data = itemList)
+        } catch (exception: Exception) {
+            Resource.Error(message = exception.message.toString())
+        }
     }
 
-    suspend fun getUpcoming(): List<Movie> {
+    suspend fun getUpcomingMovies(): Resource<List<Movie>> {
 
-        return api.getUpcoming().results
-
+        return try {
+            Resource.Loading(data = true)
+            val itemList = api.getUpcoming().results
+            if (itemList.isNotEmpty()) Resource.Loading(data = false)
+            Resource.Success(data = itemList)
+        } catch (exception: Exception) {
+            Resource.Error(message = exception.message.toString())
+        }
     }
-    suspend fun getPopularMovies(): List<Movie> {
+    suspend fun getPopularMovies(): Resource<List<Movie>> {
 
-        return api.getPopularMovies().results
-
+        return try {
+            Resource.Loading(data = true)
+            val itemList = api.getPopularMovies().results
+            if (itemList.isNotEmpty()) Resource.Loading(data = false)
+            Resource.Success(data = itemList)
+        } catch (exception: Exception) {
+            Resource.Error(message = exception.message.toString())
+        }
     }
 
-    suspend fun getRatedMovies(): List<Movie> {
+    suspend fun getRatedMovies(): Resource<List<Movie>> {
 
-        return api.getRatedMovies().results
+        return try {
+            Resource.Loading(data = true)
+            val itemList = api.getRatedMovies().results
+            if (itemList.isNotEmpty()) Resource.Loading(data = false)
+            Resource.Success(data = itemList)
+        } catch (exception: Exception) {
+            Resource.Error(message = exception.message.toString())
+        }
     }
 
-    suspend fun getNowPlayingMovies(): List<Movie> {
-
-        return api.getNowPlaying().results
-    }
-
-    suspend fun getNowPlayingMovies2(): Resource<List<Movie>> {
+    suspend fun getNowPlayingMovies(): Resource<List<Movie>> {
 
         return try {
             Resource.Loading( data = true )
@@ -47,16 +66,16 @@ class MoviesRepository @Inject constructor( private val api: MoviesApi ) {
         }
     }
 
-    suspend fun getMovieInfo( movieId: String ): Movie {
+    suspend fun getMovieInfo(movieId: String): Resource<Movie> {
 
-        return api.getMovieInfo( movieId )
-
-    }
-
-    suspend fun getMovieInfo2(  ): Movie {
-
-        return api.getMovieInfo2( )
-
+        val response = try {
+            Resource.Loading( data = true )
+            api.getMovieInfo( movieId )
+        }catch ( exception: Exception ) {
+            return Resource.Error( message = "An error occurred ${exception.message.toString()}" )
+        }
+        Resource.Loading( data = false )
+        return Resource.Success( data = response )
     }
 
 }

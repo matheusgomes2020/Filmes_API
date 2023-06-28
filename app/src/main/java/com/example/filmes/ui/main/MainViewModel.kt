@@ -16,108 +16,123 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor( private val moviesRepository: MoviesRepository )
     : ViewModel() {
 
-
     private val popularMoviesEmitter = MutableLiveData<List<Movie>>()
     private val ratedMoviesEmitter = MutableLiveData<List<Movie>>()
     private val upcomingMoviesEmitter = MutableLiveData<List<Movie>>()
     private val nowPlayingMoviesEmitter = MutableLiveData<List<Movie>>()
-    private val nowPlayingMoviesEmitter2 = MutableLiveData<List<Movie>>()
-
-    var carr: Boolean = true
-
-
-
+    var carregando: Boolean = true
     val popularMovies: LiveData<List<Movie>> = popularMoviesEmitter
     val ratedMovies: LiveData<List<Movie>> = ratedMoviesEmitter
     val upcomingMovies: LiveData<List<Movie>> = upcomingMoviesEmitter
     val nowPlayingovies: LiveData<List<Movie>> = nowPlayingMoviesEmitter
-    val nowPlayingovies2: LiveData<List<Movie>> = nowPlayingMoviesEmitter2
-
 
     init {
-
         loadPopularMovies()
         loadRatedMovies()
-        loadUpcoming()
+        loadUpcomingMovies()
         loadNowPlayingMovies()
-        loadPopularMovies2()
+        loadPopularMovies()
 
-        Log.e("Network", "Init!!! Carregando?= $carr")
-
-
+        Log.e("Network", "Init!!! Carregando?= $carregando")
     }
 
-    private fun loadUpcoming() {
+    private fun loadUpcomingMovies() {
 
         viewModelScope.launch {
-
-            upcomingMoviesEmitter.value = moviesRepository.getUpcoming()
-
+            try {
+                when (val response = moviesRepository.getUpcomingMovies()) {
+                    is Resource.Success -> {
+                        upcomingMoviesEmitter.value = response.data!!
+                        if (upcomingMoviesEmitter.value!!.isNotEmpty()) carregando = false
+                        Log.e("Network", "upcomingMovies: Ok. Certo!!! Carregando?= $carregando")
+                    }
+                    is Resource.Error -> {
+                        carregando = false
+                        Log.e("Network", "upcomingMovies: Failed getting filmes Carregando?= $carregando")
+                    }
+                    else -> {
+                        carregando = false
+                    }
+                }
+            } catch (exception: Exception) {
+                carregando = false
+                Log.d("Network", "upcomingMovies: ${exception.message.toString()} Carregando?= $carregando")
+            }
         }
-
     }
 
     private fun loadPopularMovies() {
 
         viewModelScope.launch {
-
-            popularMoviesEmitter.value = moviesRepository.getPopularMovies()
-
-        }
-
-    }
-
-    private fun loadPopularMovies2() {
-
-        viewModelScope.launch {
-
             try {
-                when (val response = moviesRepository.getNowPlayingMovies2()) {
+                when (val response = moviesRepository.getPopularMovies()) {
                     is Resource.Success -> {
-
-                        nowPlayingMoviesEmitter2.value = response.data!!
-                        if (nowPlayingMoviesEmitter2.value!!.isNotEmpty()) carr = false
-                        Log.e("Network", "popularMovies: Ok. Certo!!! Carregando?= $carr")
-
+                        popularMoviesEmitter.value = response.data!!
+                        if (popularMoviesEmitter.value!!.isNotEmpty()) carregando = false
+                        Log.e("Network", "popularMovies: Ok. Certo!!! Carregando?= $carregando")
                     }
-
                     is Resource.Error -> {
-                        carr = false
-                        Log.e("Network", "popularMovies: Failed getting filmes Carregando?= $carr")
+                        carregando = false
+                        Log.e("Network", "popularMovies: Failed getting filmes Carregando?= $carregando")
                     }
-
                     else -> {
-                        carr = false
+                        carregando = false
                     }
                 }
             } catch (exception: Exception) {
-                carr = false
-                Log.d("Network", "popularMovies: ${exception.message.toString()} Carregando?= $carr")
-
-
+                carregando = false
+                Log.d("Network", "popularMovies: ${exception.message.toString()} Carregando?= $carregando")
             }
-
         }
     }
 
     private fun loadRatedMovies() {
 
         viewModelScope.launch {
-
-            ratedMoviesEmitter.value = moviesRepository.getRatedMovies()
-
+            try {
+                when (val response = moviesRepository.getRatedMovies()) {
+                    is Resource.Success -> {
+                        ratedMoviesEmitter.value = response.data!!
+                        if (ratedMoviesEmitter.value!!.isNotEmpty()) carregando = false
+                        Log.e("Network", "ratedMovies: Ok. Certo!!! Carregando?= $carregando")
+                    }
+                    is Resource.Error -> {
+                        carregando = false
+                        Log.e("Network", "ratedMovies: Failed getting filmes Carregando?= $carregando")
+                    }
+                    else -> {
+                        carregando = false
+                    }
+                }
+            } catch (exception: Exception) {
+                carregando = false
+                Log.d("Network", "ratedMovies: ${exception.message.toString()} Carregando?= $carregando")
+            }
         }
-
     }
 
     private fun loadNowPlayingMovies() {
 
         viewModelScope.launch {
-
-            nowPlayingMoviesEmitter.value = moviesRepository.getNowPlayingMovies()
-
+            try {
+                when (val response = moviesRepository.getNowPlayingMovies()) {
+                    is Resource.Success -> {
+                        nowPlayingMoviesEmitter.value = response.data!!
+                        if (nowPlayingMoviesEmitter.value!!.isNotEmpty()) carregando = false
+                        Log.e("Network", "nowPlayingMovies: Ok. Certo!!! Carregando?= $carregando")
+                    }
+                    is Resource.Error -> {
+                        carregando = false
+                        Log.e("Network", "nowPlayingMovies: Failed getting filmes Carregando?= $carregando")
+                    }
+                    else -> {
+                        carregando = false
+                    }
+                }
+            } catch (exception: Exception) {
+                carregando = false
+                Log.d("Network", "nowPlayingMovies: ${exception.message.toString()} Carregando?= $carregando")
+            }
         }
-
     }
-
 }

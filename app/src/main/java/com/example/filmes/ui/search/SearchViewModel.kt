@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.filmes.data.Resource
 import com.example.filmes.model.Movie
 import com.example.filmes.repository.MoviesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -16,9 +17,8 @@ class SearchViewModel @Inject constructor( private val repository: MoviesReposit
     :ViewModel() {
 
     private var resultMoviesEmitter = MutableLiveData<List<Movie>>()
-
+    var carregando: Boolean = true
     val popularMovies: LiveData<List<Movie>> = resultMoviesEmitter
-
     private val _state = MutableLiveData<String>()
     val state: LiveData<String> get() = _state
 
@@ -26,7 +26,6 @@ class SearchViewModel @Inject constructor( private val repository: MoviesReposit
 
         _state.value = "Star wars"
         loadMovies()
-
     }
 
     private fun  loadMovies() {
@@ -34,20 +33,30 @@ class SearchViewModel @Inject constructor( private val repository: MoviesReposit
         //Log.d("SSTATE", "FILLLLME: " + state.value)
     }
 
-
     fun searchMovies(query: String) {
 
         viewModelScope.launch {
-
             if (query.isEmpty()) {
                 return@launch
             }
-
-            resultMoviesEmitter.value = repository.searchMovies(query)
-
+            try {
+                when(val response = repository.searchMovies(query)) {
+                    is Resource.Success -> {
+                        resultMoviesEmitter.value = response.data!!
+                        if (resultMoviesEmitter.value!!.isNotEmpty()) carregando = false
+                        Log.e("Network", "searchMovies: Ok. Certo!!! Carregando?= $carregando")
+                    }
+                    is Resource.Error -> {
+                        carregando = false
+                        Log.e("Network", "searchMovies: Failed getting filmes Carregando?= $carregando")
+                    }
+                    else -> { carregando = false }
+                }
+            }catch (exception: Exception){
+                carregando = false
+                Log.d("Network", "searchMovies: ${exception.message.toString()} Carregando?= $carregando")
+            }
+        //resultMoviesEmitter.value = repository.searchMovies(query)
         }
-
     }
-
-
 }
