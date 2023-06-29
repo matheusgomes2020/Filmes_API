@@ -1,4 +1,4 @@
-package com.example.filmes.ui.main
+package com.example.filmes.ui.filmes
 
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MainViewModel @Inject constructor( private val moviesRepository: MoviesRepository )
+class MovieViewModel @Inject constructor(private val moviesRepository: MoviesRepository )
     : ViewModel() {
 
     private val popularMoviesEmitter = MutableLiveData<List<Movie>>()

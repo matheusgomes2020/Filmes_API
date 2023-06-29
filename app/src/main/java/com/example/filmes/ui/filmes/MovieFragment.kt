@@ -1,31 +1,27 @@
-package com.example.filmes.ui.main.ui.home
+package com.example.filmes.ui.filmes
 
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import androidx.activity.viewModels
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.filmes.adapter.MovieAdapter
 import com.example.filmes.adapter.MovieClickListener
-import com.example.filmes.databinding.FragmentHomeBinding
+import com.example.filmes.databinding.FragmentMovieBinding
 import com.example.filmes.model.Movie
-import com.example.filmes.ui.main.MainViewModel
 import com.example.filmes.ui.movieDetails.MovieDetailsActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class HomeFragment : Fragment(), MovieClickListener {
+class MovieFragment : Fragment(), MovieClickListener {
 
-    private var _binding: FragmentHomeBinding? = null
+    private var _binding: FragmentMovieBinding? = null
     private val binding get() = _binding!!
-    private val mainViewModel: MainViewModel by viewModels()
+    private val mainViewModel: MovieViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -33,7 +29,7 @@ class HomeFragment : Fragment(), MovieClickListener {
         savedInstanceState: Bundle?
     ): View {
 
-        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        _binding = FragmentMovieBinding.inflate(inflater, container, false)
         return binding.root
     }
 
