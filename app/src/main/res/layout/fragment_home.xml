@@ -5,18 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.main.MainActivity">
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/myToolbar"
-        android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:background="?attr/colorPrimary"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
-
-    </androidx.appcompat.widget.Toolbar>
+    tools:context=".ui.main.ui.home.HomeFragment">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -293,11 +282,4 @@
         </RelativeLayout>
 
     </ScrollView>
-
-
-
-
-
-
-
 </androidx.constraintlayout.widget.ConstraintLayout>
