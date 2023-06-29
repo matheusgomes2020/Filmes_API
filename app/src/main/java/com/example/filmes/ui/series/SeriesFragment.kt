@@ -1,5 +1,6 @@
 package com.example.filmes.ui.series
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,6 +16,7 @@ import com.example.filmes.adapter.serie.SerieClickListener
 import com.example.filmes.databinding.FragmentSeriesBinding
 import com.example.filmes.model.Movie
 import com.example.filmes.model.Serie
+import com.example.filmes.ui.seriesDetails.SerieDetailsActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -63,15 +65,15 @@ class SeriesFragment : Fragment(), SerieClickListener {
 
         Toast.makeText(this.context, serie.name.toString(), Toast.LENGTH_LONG).show()
 
-        /*
-        val id = movie.id.toString()
-        val intent = Intent(this.context, MovieDetailsActivity::class.java).apply {
+
+        val id = serie.id.toString()
+        val intent = Intent(this.context, SerieDetailsActivity::class.java).apply {
             putExtra("id", id)
 
         }
         startActivity(intent)
 
-         */
+
     }
 
 }
