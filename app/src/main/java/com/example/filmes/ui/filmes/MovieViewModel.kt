@@ -24,7 +24,7 @@ class MovieViewModel @Inject constructor(private val moviesRepository: MoviesRep
     val popularMovies: LiveData<List<Movie>> = popularMoviesEmitter
     val ratedMovies: LiveData<List<Movie>> = ratedMoviesEmitter
     val upcomingMovies: LiveData<List<Movie>> = upcomingMoviesEmitter
-    val nowPlayingovies: LiveData<List<Movie>> = nowPlayingMoviesEmitter
+    val nowPlayingMovies: LiveData<List<Movie>> = nowPlayingMoviesEmitter
 
     init {
         loadPopularMovies()

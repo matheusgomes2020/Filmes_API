@@ -1,4 +1,4 @@
-package com.example.filmes.adapter
+package com.example.filmes.adapter.movie
 
 import com.example.filmes.model.Movie
 

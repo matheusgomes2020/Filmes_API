@@ -1,11 +1,10 @@
-package com.example.filmes.adapter
+package com.example.filmes.adapter.movie
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.filmes.databinding.MovieCellBinding
 import com.example.filmes.model.Movie
-import kotlinx.coroutines.NonDisposableHandle.parent
 
 class MovieAdapter (
 

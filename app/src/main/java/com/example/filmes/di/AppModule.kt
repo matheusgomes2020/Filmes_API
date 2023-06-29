@@ -1,6 +1,7 @@
 package com.example.filmes.di
 
 import com.example.filmes.network.MoviesApi
+import com.example.filmes.network.SeriesApi
 import com.example.filmes.utils.Constants
 import dagger.Module
 import dagger.Provides
@@ -24,6 +25,18 @@ object AppModule {
             .addConverterFactory( GsonConverterFactory.create() )
             .build()
             .create( MoviesApi::class.java )
+
+    }
+
+    @Singleton
+    @Provides
+    fun providesSeriesApi() : SeriesApi {
+
+        return Retrofit.Builder()
+            .baseUrl( Constants.BASE_URL )
+            .addConverterFactory( GsonConverterFactory.create() )
+            .build()
+            .create( SeriesApi::class.java )
 
     }
 

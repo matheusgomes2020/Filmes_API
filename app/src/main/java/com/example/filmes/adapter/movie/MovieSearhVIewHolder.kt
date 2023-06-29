@@ -1,9 +1,8 @@
-package com.example.filmes.adapter
+package com.example.filmes.adapter.movie
 
 import android.content.Context
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.example.filmes.databinding.MovieCellBinding
 import com.example.filmes.databinding.SearchMovieCellBinding
 import com.example.filmes.model.Movie
 

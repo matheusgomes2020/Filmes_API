@@ -2,18 +2,10 @@ package com.example.filmes.ui.movieDetails
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import coil.load
-import com.example.filmes.adapter.MovieAdapter
 import com.example.filmes.databinding.ActivityMovieDetailsBinding
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import java.lang.Exception
 
 

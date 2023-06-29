@@ -9,8 +9,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.filmes.adapter.MovieAdapter
-import com.example.filmes.adapter.MovieClickListener
+import com.example.filmes.adapter.movie.MovieAdapter
+import com.example.filmes.adapter.movie.MovieClickListener
 import com.example.filmes.databinding.FragmentMovieBinding
 import com.example.filmes.model.Movie
 import com.example.filmes.ui.movieDetails.MovieDetailsActivity
@@ -21,7 +21,7 @@ class MovieFragment : Fragment(), MovieClickListener {
 
     private var _binding: FragmentMovieBinding? = null
     private val binding get() = _binding!!
-    private val mainViewModel: MovieViewModel by viewModels()
+    private val movieViewModel: MovieViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -48,7 +48,7 @@ class MovieFragment : Fragment(), MovieClickListener {
     private fun setRecyclerView() {
 
         val mainActivity = this
-        mainViewModel.popularMovies.observe(viewLifecycleOwner) {
+        movieViewModel.popularMovies.observe(viewLifecycleOwner) {
 
             binding.movieRecyclerViewEmAlta.apply {
                 layoutManager = LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false)
@@ -60,7 +60,7 @@ class MovieFragment : Fragment(), MovieClickListener {
             }
         }
 
-        mainViewModel.nowPlayingovies.observe(viewLifecycleOwner) {
+        movieViewModel.nowPlayingMovies.observe(viewLifecycleOwner) {
 
             binding.movieRecyclerViewEmCartaz.apply {
                 layoutManager = LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false)
@@ -71,7 +71,7 @@ class MovieFragment : Fragment(), MovieClickListener {
             }
         }
 
-        mainViewModel.upcomingMovies.observe(viewLifecycleOwner) {
+        movieViewModel.upcomingMovies.observe(viewLifecycleOwner) {
 
             binding.movieRecyclerViewLancamentos.apply {
                 layoutManager = LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false)
@@ -82,7 +82,7 @@ class MovieFragment : Fragment(), MovieClickListener {
             }
         }
 
-        mainViewModel.ratedMovies.observe(viewLifecycleOwner) {
+        movieViewModel.ratedMovies.observe(viewLifecycleOwner) {
 
             binding.movieRecyclerViewMelhores.apply {
                 layoutManager = LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false)
