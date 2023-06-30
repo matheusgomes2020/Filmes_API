@@ -17,11 +17,20 @@ class SerieViewModel @Inject constructor(private val seriesRepository: SeriesRep
     : ViewModel() {
 
     private val popularSeriesEmitter = MutableLiveData<List<Serie>>()
+    private val airingTodaySeriesEmitter = MutableLiveData<List<Serie>>()
+    private val topRatedSeriesEmitter = MutableLiveData<List<Serie>>()
+    private val onTheAirSeriesEmitter = MutableLiveData<List<Serie>>()
     var carregando: Boolean = true
     val popularSeries: LiveData<List<Serie>> = popularSeriesEmitter
+    val airingTodaySeries: LiveData<List<Serie>> = airingTodaySeriesEmitter
+    val topRatedSeries: LiveData<List<Serie>> = topRatedSeriesEmitter
+    val onTheAirSeries: LiveData<List<Serie>> = onTheAirSeriesEmitter
 
     init {
         loadPopularSeries()
+        loadAiringTodaySeries()
+        loadOnTheAirSeries()
+        loadTopRatedSeries()
 
         Log.e("Series", "Init!!! Carregando?= $carregando")
     }
@@ -51,5 +60,85 @@ class SerieViewModel @Inject constructor(private val seriesRepository: SeriesRep
          }
 
     }
+
+    private fun loadAiringTodaySeries() {
+
+        viewModelScope.launch {
+            try {
+                when( val response = seriesRepository.getAiringTodaySeries() ) {
+                    is Resource.Success -> {
+                        airingTodaySeriesEmitter.value = response.data!!
+                        if ( airingTodaySeriesEmitter.value!!.isNotEmpty() ) carregando = false
+                        Log.e("Series", "popularSeries: Ok. Certo!!! Carregando?= $carregando")
+                    }
+                    is Resource.Error -> {
+                        carregando = false
+                        Log.e("Series", "popularSeries: Failed getting séries Carregando?= $carregando")
+                    }
+                    else -> {
+                        carregando = false
+                    }
+                }
+            } catch ( exception: Exception ) {
+                carregando = false
+                Log.d("Series", "popularSeries: ${exception.message.toString()} Carregando?= $carregando")
+            }
+        }
+
+    }
+
+    private fun loadTopRatedSeries() {
+
+        viewModelScope.launch {
+            try {
+                when( val response = seriesRepository.getTopRatedSeries() ) {
+                    is Resource.Success -> {
+                        topRatedSeriesEmitter.value = response.data!!
+                        if ( topRatedSeriesEmitter.value!!.isNotEmpty() ) carregando = false
+                        Log.e("Series", "popularSeries: Ok. Certo!!! Carregando?= $carregando")
+                    }
+                    is Resource.Error -> {
+                        carregando = false
+                        Log.e("Series", "popularSeries: Failed getting séries Carregando?= $carregando")
+                    }
+                    else -> {
+                        carregando = false
+                    }
+                }
+            } catch ( exception: Exception ) {
+                carregando = false
+                Log.d("Series", "popularSeries: ${exception.message.toString()} Carregando?= $carregando")
+            }
+        }
+
+    }
+
+    private fun loadOnTheAirSeries() {
+
+        viewModelScope.launch {
+            try {
+                when( val response = seriesRepository.getOnTheAirSeries() ) {
+                    is Resource.Success -> {
+                        onTheAirSeriesEmitter.value = response.data!!
+                        if ( onTheAirSeriesEmitter.value!!.isNotEmpty() ) carregando = false
+                        Log.e("Series", "popularSeries: Ok. Certo!!! Carregando?= $carregando")
+                    }
+                    is Resource.Error -> {
+                        carregando = false
+                        Log.e("Series", "popularSeries: Failed getting séries Carregando?= $carregando")
+                    }
+                    else -> {
+                        carregando = false
+                    }
+                }
+            } catch ( exception: Exception ) {
+                carregando = false
+                Log.d("Series", "popularSeries: ${exception.message.toString()} Carregando?= $carregando")
+            }
+        }
+
+    }
+
+
 
 }

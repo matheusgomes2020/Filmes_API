@@ -20,6 +20,44 @@ class SeriesRepository @Inject constructor( private val api: SeriesApi) {
         }
     }
 
+    suspend fun getAiringTodaySeries(): Resource<List<Serie>> {
+
+        return try {
+            Resource.Loading( data = true )
+            val itemList = api.getAiringTodaySeries().results
+            if (itemList.isNotEmpty()) Resource.Loading(data = false)
+            Resource.Success(data = itemList)
+        } catch (exception: Exception) {
+            Resource.Error(message = exception.message.toString())
+        }
+    }
+
+    suspend fun getTopRatedSeries(): Resource<List<Serie>> {
+
+        return try {
+            Resource.Loading( data = true )
+            val itemList = api.getPopularTopRated().results
+            if (itemList.isNotEmpty()) Resource.Loading(data = false)
+            Resource.Success(data = itemList)
+        } catch (exception: Exception) {
+            Resource.Error(message = exception.message.toString())
+        }
+    }
+
+    suspend fun getOnTheAirSeries(): Resource<List<Serie>> {
+
+        return try {
+            Resource.Loading( data = true )
+            val itemList = api.getOnTheAirSeries().results
+            if (itemList.isNotEmpty()) Resource.Loading(data = false)
+            Resource.Success(data = itemList)
+        } catch (exception: Exception) {
+            Resource.Error(message = exception.message.toString())
+        }
+    }
+
+
+
     suspend fun getSerieInfo(serieId: String): Resource<Serie> {
 
         val response = try {

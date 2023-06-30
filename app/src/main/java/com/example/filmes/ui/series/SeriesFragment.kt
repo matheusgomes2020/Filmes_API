@@ -2,6 +2,7 @@ package com.example.filmes.ui.series
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -53,12 +54,46 @@ class SeriesFragment : Fragment(), SerieClickListener {
         val mainActivity = this
         serieViewModel.popularSeries.observe(viewLifecycleOwner) {
 
-            binding.recyclerPopularSeries.apply {
+            binding.serieRecyclerViewLancamentos  .apply {
                 layoutManager = LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false)
                 adapter = SerieAdapter(it, mainActivity)
 
             }
         }
+
+        serieViewModel.onTheAirSeries.observe(viewLifecycleOwner) {
+
+            binding.serieRecyclerViewEmCartaz  .apply {
+                layoutManager = LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false)
+                adapter = SerieAdapter(it, mainActivity)
+
+            }
+        }
+
+        serieViewModel.topRatedSeries.observe(viewLifecycleOwner) {
+
+            binding.serieRecyclerViewMelhores  .apply {
+                layoutManager = LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false)
+                adapter = SerieAdapter(it, mainActivity)
+
+
+            }
+        }
+
+        serieViewModel.airingTodaySeries.observe(viewLifecycleOwner) {
+
+
+            binding.serieRecyclerViewEmAlta  .apply {
+                layoutManager = LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false)
+                adapter = SerieAdapter(it, mainActivity)
+
+            }
+        }
+
+
+
+
+
     }
 
         override fun clickMovie(serie: Serie) {
@@ -69,6 +104,7 @@ class SeriesFragment : Fragment(), SerieClickListener {
         val id = serie.id.toString()
         val intent = Intent(this.context, SerieDetailsActivity::class.java).apply {
             putExtra("id", id)
+            Log.d("SSSSS", "observeSeries: " + id)
 
         }
         startActivity(intent)

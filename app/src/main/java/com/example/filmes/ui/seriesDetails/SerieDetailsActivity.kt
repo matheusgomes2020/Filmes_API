@@ -2,6 +2,7 @@ package com.example.filmes.ui.seriesDetails
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import coil.load
 import com.example.filmes.databinding.ActivitySerieDetailBinding
@@ -29,7 +30,8 @@ class SerieDetailsActivity : AppCompatActivity() {
 
         try {
             viewModel.serieInfo.observe(this) {
-                binding.movieOverview.text = it.overview
+                binding.movieOverview.text = it.toString()
+
                 binding.movieTitle.text = it.name
                 binding.imageView2.load("https://image.tmdb.org/t/p/w500" + it.poster_path)
                 binding.textData.text = it.first_air_date
