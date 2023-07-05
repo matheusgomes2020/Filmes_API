@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -11,6 +12,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import com.example.filmes.databinding.ActivityMainBinding
 import com.example.filmes.ui.search.SearchActivity
+import com.example.filmes.ui.searchSeries.SerieSearchActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -18,6 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
+    private var atual = "Movie"
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +40,21 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        binding.navView.setOnNavigationItemSelectedListener {
+
+
+            when (it.itemId) {
+                R.id.navigation_movie -> { atual = "Movie" }
+                R.id.navigation_serie -> { atual = "Serie"}
+                R.id.navigation_profile -> {atual = "Perfil" }
+            }
+
+
+
+            true
+        }
+
     }
 
     private fun setupToolbar(){
@@ -52,12 +70,24 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
+        //Toast.makeText(applicationContext, atual, Toast.LENGTH_SHORT).show()
+
         when (item.itemId) {
             R.id.search -> {
 
-                val intent = Intent(this, SearchActivity::class.java)
-                startActivity( intent )
-                return true
+                if ( atual == "Movie" ) {
+                    val intent = Intent(this, SearchActivity::class.java)
+                    startActivity( intent )
+                    return true
+                }
+
+                if ( atual == "Serie" ) {
+                    val intent = Intent(this, SerieSearchActivity::class.java)
+                    startActivity( intent )
+                    return true
+                }
+
+
             }
         }
 

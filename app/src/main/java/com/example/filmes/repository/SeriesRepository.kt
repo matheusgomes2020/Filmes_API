@@ -9,6 +9,18 @@ import javax.inject.Inject
 
 class SeriesRepository @Inject constructor( private val api: SeriesApi) {
 
+    suspend fun searchSeries(searchQuery: String): Resource<List<Serie>> {
+
+        return try {
+            Resource.Loading(data = true)
+            val itemList = api.searchSeries(searchQuery).results
+            if (itemList.isNotEmpty()) Resource.Loading(data = false)
+            Resource.Success(data = itemList)
+        } catch (exception: Exception) {
+            Resource.Error(message = exception.message.toString())
+        }
+    }
+
     suspend fun getPopularSeries(): Resource<List<Serie>> {
 
         return try {

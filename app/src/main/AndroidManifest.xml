@@ -22,6 +22,9 @@
             android:name=".ui.search.SearchActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.searchSeries.SerieSearchActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.movieDetails.MovieDetailsActivity"
             android:exported="false" />
         <activity
