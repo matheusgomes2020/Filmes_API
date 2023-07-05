@@ -1,6 +1,6 @@
 package com.example.filmes.model
 
-data class CreatedBy(
+data class CreatedByX(
     val credit_id: String,
     val gender: Int,
     val id: Int,

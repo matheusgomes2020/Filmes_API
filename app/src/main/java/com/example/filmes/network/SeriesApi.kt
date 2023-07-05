@@ -1,7 +1,7 @@
 package com.example.filmes.network
 
-import com.example.filmes.model.Movie
-import com.example.filmes.model.Movies
+import com.example.filmes.model.Cast
+import com.example.filmes.model.Seasons
 import com.example.filmes.model.Serie
 import com.example.filmes.model.Series
 import com.example.filmes.utils.Constants
@@ -30,5 +30,20 @@ interface SeriesApi {
     //https://api.themoviedb.org/3/tv/12345?language=en-US&api_key=0f5183b12ca04341d5f0f71d8bc698b5#
     @GET("tv/{serieID}?language=pt-BR&api_key=" + Constants.API_KEY)
     suspend fun  getSerieInfo(@Path("serieID") serieId: String) : Serie
+
+    //https://api.themoviedb.org/3/tv/{series_id}/season/{season_number}
+
+    //'https://api.themoviedb.org/3/tv/series_id/season/season_number?language=en-US
+
+    //https://api.themoviedb.org/3/tv/12345/season/1?language=en-US1/1?language=en-US&api_key=0f5183b12ca04341d5f0f71d8bc698b5#
+
+    @GET("tv/{series_id}/season/{season_number}?language=pt-BR&api_key=" + Constants.API_KEY)
+    suspend fun getSeasonEpisodes(@Path("series_id") series_id: String, @Path("season_number") season_number: Int ) : Seasons
+
+    //https://api.themoviedb.org/3/tv/114472/aggregate_credits?language=en-US'&api_key=0f5183b12ca04341d5f0f71d8bc698b5
+    @GET("tv/{series_id}/aggregate_credits?language=pt-BR&api_key=" + Constants.API_KEY)
+    suspend fun getCast(@Path("series_id") series_id: String ) : Cast
+
+
 
 }

@@ -4,7 +4,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.filmes.databinding.MovieCellBinding
-import com.example.filmes.model.Movie
 import com.example.filmes.model.Serie
 
 class SerieAdapter (

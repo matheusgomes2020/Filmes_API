@@ -11,11 +11,9 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.filmes.adapter.movie.MovieAdapter
 import com.example.filmes.adapter.serie.SerieAdapter
 import com.example.filmes.adapter.serie.SerieClickListener
 import com.example.filmes.databinding.FragmentSeriesBinding
-import com.example.filmes.model.Movie
 import com.example.filmes.model.Serie
 import com.example.filmes.ui.seriesDetails.SerieDetailsActivity
 import dagger.hilt.android.AndroidEntryPoint

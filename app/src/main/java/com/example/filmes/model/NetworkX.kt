@@ -1,6 +1,6 @@
 package com.example.filmes.model
 
-data class Network(
+data class NetworkX(
     val id: Int,
     val logo_path: String,
     val name: String,

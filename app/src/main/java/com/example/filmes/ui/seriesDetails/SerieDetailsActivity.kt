@@ -3,14 +3,22 @@ package com.example.filmes.ui.seriesDetails
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.example.filmes.adapter.cast.CastAdapter
+import com.example.filmes.adapter.season.SeasonAdapter
+import com.example.filmes.adapter.season.SeasonClickListener
 import com.example.filmes.databinding.ActivitySerieDetailBinding
+import com.example.filmes.model.CastX
+import com.example.filmes.model.SeasonX
 import dagger.hilt.android.AndroidEntryPoint
 import java.lang.Exception
 
 @AndroidEntryPoint
-class SerieDetailsActivity : AppCompatActivity() {
+class SerieDetailsActivity : AppCompatActivity(), SeasonClickListener {
 
     private lateinit var binding: ActivitySerieDetailBinding
     private val viewModel: SeriesDetailsViewModel by viewModels()
@@ -21,8 +29,16 @@ class SerieDetailsActivity : AppCompatActivity() {
         setContentView( binding.root )
 
         val id = intent.getStringExtra("id")
+        Log.d("UUU", "onCreate: " + id)
+        viewModel.getSerieInfo(id!!)
+        viewModel.getSeasonEpisodes( id!!, 1 )
+        viewModel.getCast( id!! )
         observeSeries()
-        viewModel.getMovieInfo(id!!)
+        observeEpisodes()
+        observeCast()
+        Log.d("UUU", "onCreate: " + id)
+
+
 
     }
 
@@ -30,30 +46,100 @@ class SerieDetailsActivity : AppCompatActivity() {
 
         try {
             viewModel.serieInfo.observe(this) {
-                binding.movieOverview.text = it.toString()
-
-                binding.movieTitle.text = it.name
-                binding.imageView2.load("https://image.tmdb.org/t/p/w500" + it.poster_path)
-                binding.textData.text = it.first_air_date
-                binding.textDuration.text = it.episode_run_time.toString()
+                binding.seriesOverview.text = it.overview
+                Log.d("UUU", "onCreate: " + it.id)
+                binding.seriesTitle.text = it.name.toString()
+                binding.seriesImageView.load("https://image.tmdb.org/t/p/w500" + it.poster_path)
+                binding.textSeriesData.text = it.first_air_date
+                binding.textSeriesDuration.text = it.episode_run_time.toString()
 
                 var gen = ""
                 it.genres.forEachIndexed { index, genres ->
                     gen += genres.name + "  "
                 }
-                binding.textGenres.text = gen
+                binding.textSeriesGenres.text = gen
 
                 when ( it.vote_average ) {
-                    in 0.0..1.9 -> binding.texRating.text = "🌟⭐⭐⭐⭐"
-                    in 2.0..3.9 -> binding.texRating.text = "🌟🌟⭐⭐⭐"
-                    in 4.0..5.9 -> binding.texRating.text = "🌟🌟🌟⭐⭐"
-                    in 6.0..7.9 -> binding.texRating.text = "🌟🌟🌟🌟⭐"
-                    in 8.0..10.0 -> binding.texRating.text = "🌟🌟🌟🌟🌟"
+                    in 0.0..1.9 -> binding.texSeriesRating.text = "🌟⭐⭐⭐⭐"
+                    in 2.0..3.9 -> binding.texSeriesRating.text = "🌟🌟⭐⭐⭐"
+                    in 4.0..5.9 -> binding.texSeriesRating.text = "🌟🌟🌟⭐⭐"
+                    in 6.0..7.9 -> binding.texSeriesRating.text = "🌟🌟🌟🌟⭐"
+                    in 8.0..10.0 -> binding.texSeriesRating.text = "🌟🌟🌟🌟🌟"
                 }
+
+                setRecyclerView(it.seasons)
+
+
+
             }
         }catch (e: Exception){
             e.printStackTrace()
         }
+    }
+
+    fun observeEpisodes() {
+
+        try {
+            viewModel.seasonEpisodes.observe(this) {
+                //binding.movieOverview.text = it.toString()
+
+
+
+
+            }
+        }catch (e: Exception){
+            e.printStackTrace()
+        }
+    }
+
+    fun observeCast() {
+
+        try {
+            viewModel.cast.observe(this) {
+                //binding.movieOverview.text = it.toString()
+
+                setRecyclerViewCast( it )
+
+
+            }
+        }catch (e: Exception){
+            e.printStackTrace()
+        }
+    }
+
+    private fun setRecyclerView(lista: List<SeasonX>) {
+
+        val mainActivity = this
+
+        binding.recyclerSeasons.apply {
+            layoutManager = LinearLayoutManager(applicationContext, RecyclerView.HORIZONTAL, false)
+            adapter = SeasonAdapter(lista, mainActivity)
+
+        }
+
+
+
+
+    }
+
+    private fun setRecyclerViewCast(lista: List<CastX>) {
+
+        val mainActivity = this
+
+        binding.recyclerCast.apply {
+            layoutManager = LinearLayoutManager(applicationContext, RecyclerView.HORIZONTAL, false)
+            adapter = CastAdapter( lista )
+
+        }
+
+
+
+
+    }
+
+    override fun clickSeason(season: SeasonX) {
+        Toast.makeText(this.applicationContext, season.season_number, Toast.LENGTH_LONG).show()
+
     }
 
 }
