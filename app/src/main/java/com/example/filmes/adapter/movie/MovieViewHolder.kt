@@ -17,8 +17,8 @@ class MovieViewHolder (
         fun bindMovie( movie: Movie ) {
 
             binding.imageView.load("https://image.tmdb.org/t/p/w500" + movie.poster_path)
-            binding.nome.text = movie.title
-            binding.titulo.text = movie.overview
+            binding.nome.text = movie.id.toString()
+            ///binding.titulo.text = movie.overview
 
             binding.movieCellContainer.setOnClickListener {
 

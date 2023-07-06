@@ -18,7 +18,7 @@ class SerieViewHolder (
 
             binding.imageView.load("https://image.tmdb.org/t/p/w500" + serie.poster_path)
             binding.nome.text = serie.name
-            binding.titulo.text = serie.overview
+            //binding.titulo.text = serie.overview
 
             binding.movieCellContainer.setOnClickListener {
 

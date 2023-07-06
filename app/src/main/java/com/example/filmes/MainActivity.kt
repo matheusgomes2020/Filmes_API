@@ -6,6 +6,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.get
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -41,19 +42,8 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        binding.navView.setOnNavigationItemSelectedListener {
 
 
-            when (it.itemId) {
-                R.id.navigation_movie -> { atual = "Movie" }
-                R.id.navigation_serie -> { atual = "Serie"}
-                R.id.navigation_profile -> {atual = "Perfil" }
-            }
-
-
-
-            true
-        }
 
     }
 

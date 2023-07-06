@@ -1,5 +1,6 @@
 package com.example.filmes.network
 
+import com.example.filmes.model.Cast
 import com.example.filmes.model.Movie
 import com.example.filmes.model.Movies
 import com.example.filmes.utils.Constants
@@ -36,7 +37,10 @@ interface MoviesApi {
     suspend fun  getMovieInfo(@Path("movieID") movieId: String) : Movie
 
     //https://api.themoviedb.org/3/movie/550?api_key=0f5183b12ca04341d5f0f71d8bc698b5
-    @GET("movie/550?api_key=0f5183b12ca04341d5f0f71d8bc698b5")
-    suspend fun  getMovieInfo2() : Movie
+    //https://api.themoviedb.org/3/movie/603692/credits?language=en-US&api_key=0f5183b12ca04341d5f0f71d8bc698b5#
+
+    @GET("movie/{movieID}/credits?language=pt-BR&api_key=" + Constants.API_KEY)
+    suspend fun getCast(@Path("movieID") movieID: String ) : Cast
+
 
 }

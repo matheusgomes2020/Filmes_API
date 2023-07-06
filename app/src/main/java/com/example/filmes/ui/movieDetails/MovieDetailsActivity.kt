@@ -3,8 +3,12 @@ package com.example.filmes.ui.movieDetails
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.activity.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import coil.load
+import com.example.filmes.adapter.cast.CastAdapter
 import com.example.filmes.databinding.ActivityMovieDetailsBinding
+import com.example.filmes.model.CastX
 import dagger.hilt.android.AndroidEntryPoint
 import java.lang.Exception
 
@@ -21,8 +25,11 @@ class MovieDetailsActivity : AppCompatActivity() {
         setContentView( binding.root )
 
         val id = intent.getStringExtra("id")
+        viewModel.getMovieInfo( id!! )
+        viewModel.getCast( id!! )
         observeMovies()
-        viewModel.getMovieInfo(id!!)
+        observeCast()
+
     }
 
     fun observeMovies() {
@@ -31,7 +38,7 @@ class MovieDetailsActivity : AppCompatActivity() {
             viewModel.movieInfo.observe(this) {
                 binding.movieOverview.text = it.overview
                 binding.movieTitle.text = it.title
-                binding.imageView2.load("https://image.tmdb.org/t/p/w500" + it.poster_path)
+                //binding.imageView2.load("https://image.tmdb.org/t/p/w500" + it.poster_path)
                 binding.textData.text = it.release_date
                 binding.textDuration.text = it.runtime.toString()
 
@@ -53,6 +60,26 @@ class MovieDetailsActivity : AppCompatActivity() {
             e.printStackTrace()
         }
     }
+
+    fun observeCast() {
+
+        try {
+            viewModel.cast.observe(this) {
+                setRecyclerViewCast( it )
+            }
+        }catch (e: Exception){
+            e.printStackTrace()
+        }
+    }
+
+    private fun setRecyclerViewCast(lista: List<CastX>) {
+
+        binding.recyclerMoviecast.apply {
+            layoutManager = LinearLayoutManager(applicationContext, RecyclerView.HORIZONTAL, false)
+            adapter = CastAdapter( lista )
+        }
+    }
+
 }
 
 

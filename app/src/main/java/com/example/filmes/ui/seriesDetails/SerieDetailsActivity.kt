@@ -37,9 +37,6 @@ class SerieDetailsActivity : AppCompatActivity(), SeasonClickListener {
         observeEpisodes()
         observeCast()
         Log.d("UUU", "onCreate: " + id)
-
-
-
     }
 
     fun observeSeries() {
@@ -66,11 +63,7 @@ class SerieDetailsActivity : AppCompatActivity(), SeasonClickListener {
                     in 6.0..7.9 -> binding.texSeriesRating.text = "🌟🌟🌟🌟⭐"
                     in 8.0..10.0 -> binding.texSeriesRating.text = "🌟🌟🌟🌟🌟"
                 }
-
                 setRecyclerView(it.seasons)
-
-
-
             }
         }catch (e: Exception){
             e.printStackTrace()
@@ -81,11 +74,6 @@ class SerieDetailsActivity : AppCompatActivity(), SeasonClickListener {
 
         try {
             viewModel.seasonEpisodes.observe(this) {
-                //binding.movieOverview.text = it.toString()
-
-
-
-
             }
         }catch (e: Exception){
             e.printStackTrace()
@@ -96,11 +84,7 @@ class SerieDetailsActivity : AppCompatActivity(), SeasonClickListener {
 
         try {
             viewModel.cast.observe(this) {
-                //binding.movieOverview.text = it.toString()
-
                 setRecyclerViewCast( it )
-
-
             }
         }catch (e: Exception){
             e.printStackTrace()
@@ -110,36 +94,22 @@ class SerieDetailsActivity : AppCompatActivity(), SeasonClickListener {
     private fun setRecyclerView(lista: List<SeasonX>) {
 
         val mainActivity = this
-
         binding.recyclerSeasons.apply {
             layoutManager = LinearLayoutManager(applicationContext, RecyclerView.HORIZONTAL, false)
             adapter = SeasonAdapter(lista, mainActivity)
-
         }
-
-
-
-
     }
 
     private fun setRecyclerViewCast(lista: List<CastX>) {
 
-        val mainActivity = this
-
         binding.recyclerCast.apply {
             layoutManager = LinearLayoutManager(applicationContext, RecyclerView.HORIZONTAL, false)
             adapter = CastAdapter( lista )
-
         }
-
-
-
-
     }
 
     override fun clickSeason(season: SeasonX) {
         Toast.makeText(this.applicationContext, season.season_number, Toast.LENGTH_LONG).show()
-
     }
 
 }

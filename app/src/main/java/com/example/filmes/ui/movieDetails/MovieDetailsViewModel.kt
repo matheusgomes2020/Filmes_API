@@ -4,9 +4,9 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.filmes.data.Resource
+import com.example.filmes.model.CastX
 import com.example.filmes.model.Movie
 import com.example.filmes.repository.MoviesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,10 +19,12 @@ class MovieDetailsViewModel @Inject constructor( private val repository: MoviesR
     : ViewModel() {
 
     private var movieInfoEmitter = MutableLiveData<Movie>()
+    private val castEmitter = MutableLiveData<List<CastX>>()
     var carregando: Boolean = true
     val movieInfo: LiveData<Movie> = movieInfoEmitter
+    val cast: LiveData<List<CastX>> = castEmitter
 
-     fun getMovieInfo( movieId: String ) {
+    fun getMovieInfo( movieId: String ) {
 
          try {
              viewModelScope.launch {
@@ -46,4 +48,30 @@ class MovieDetailsViewModel @Inject constructor( private val repository: MoviesR
              Log.d("Network", "upcomingMovies: ${exception.message.toString()} Carregando?= $carregando")
          }
      }
+
+    fun getCast( movieId: String ) {
+
+        try {
+            viewModelScope.launch {
+                when (val response = repository.getCast( movieId ) ){
+                    is Resource.Success -> {
+                        castEmitter.value = response.data!!
+                        if (castEmitter.value!! != null) carregando = false
+                        Log.e("Network", "cast: Ok. Certo!!! Carregando?= $carregando")
+                    }
+                    is Resource.Error -> {
+                        carregando = false
+                        Log.e("Network", "cast: Failed getting cast Carregando?= $carregando")
+                    }
+                    else -> {
+                        carregando = false
+                    }
+                }
+            }
+        }catch (exception: Exception) {
+            carregando = false
+            Log.d("Network", "cast: ${exception.message.toString()} Carregando?= $carregando")
+        }
+    }
+
     }

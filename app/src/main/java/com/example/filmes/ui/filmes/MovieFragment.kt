@@ -53,10 +53,6 @@ class MovieFragment : Fragment(), MovieClickListener {
             binding.movieRecyclerViewEmAlta.apply {
                 layoutManager = LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false)
                 adapter = MovieAdapter(it, mainActivity)
-
-                binding.shimmer.stopShimmer()
-                binding.shimmer.visibility = View.GONE
-                binding.movieRecyclerViewEmAlta.visibility = View.VISIBLE
             }
         }
 
@@ -65,9 +61,6 @@ class MovieFragment : Fragment(), MovieClickListener {
             binding.movieRecyclerViewEmCartaz.apply {
                 layoutManager = LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false)
                 adapter = MovieAdapter(it, mainActivity)
-                binding.shimmer2.stopShimmer()
-                binding.shimmer2.visibility = View.GONE
-                binding.movieRecyclerViewEmCartaz.visibility = View.VISIBLE
             }
         }
 
@@ -76,9 +69,6 @@ class MovieFragment : Fragment(), MovieClickListener {
             binding.movieRecyclerViewLancamentos.apply {
                 layoutManager = LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false)
                 adapter = MovieAdapter(it, mainActivity)
-                binding.shimmer3.stopShimmer()
-                binding.shimmer3.visibility = View.GONE
-                binding.movieRecyclerViewLancamentos.visibility = View.VISIBLE
             }
         }
 
@@ -87,10 +77,6 @@ class MovieFragment : Fragment(), MovieClickListener {
             binding.movieRecyclerViewMelhores.apply {
                 layoutManager = LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false)
                 adapter = MovieAdapter(it, mainActivity)
-
-                binding.shimmer4.stopShimmer()
-                binding.shimmer4.visibility = View.GONE
-                binding.movieRecyclerViewMelhores.visibility = View.VISIBLE
             }
         }
 
