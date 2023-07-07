@@ -18,7 +18,7 @@ class MovieSearchViewHolder (
 
         binding.imageSearchCell.load("https://image.tmdb.org/t/p/w500" + movie.poster_path)
         binding.nomeSearchCell.text = movie.title
-        binding.textGenreSearchCell.text = movie.genre_ids[0].toString()
+        //binding.textGenreSearchCell.text = movie.genres[0].toString()
 
 
 

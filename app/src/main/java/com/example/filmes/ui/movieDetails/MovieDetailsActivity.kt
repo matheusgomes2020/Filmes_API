@@ -1,16 +1,19 @@
 package com.example.filmes.ui.movieDetails
 
-import androidx.appcompat.app.AppCompatActivity
+import android.R
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
 import com.example.filmes.adapter.cast.CastAdapter
 import com.example.filmes.databinding.ActivityMovieDetailsBinding
 import com.example.filmes.model.CastX
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import dagger.hilt.android.AndroidEntryPoint
-import java.lang.Exception
 
 
 @AndroidEntryPoint
@@ -30,6 +33,18 @@ class MovieDetailsActivity : AppCompatActivity() {
         observeMovies()
         observeCast()
 
+
+
+
+
+
+        binding.movieTitle.setOnClickListener {
+
+
+
+        }
+
+
     }
 
     fun observeMovies() {
@@ -38,6 +53,7 @@ class MovieDetailsActivity : AppCompatActivity() {
             viewModel.movieInfo.observe(this) {
                 binding.movieOverview.text = it.overview
                 binding.movieTitle.text = it.title
+                //Toast.makeText(this, it.toString(),)
                 //binding.imageView2.load("https://image.tmdb.org/t/p/w500" + it.poster_path)
                 binding.textData.text = it.release_date
                 binding.textDuration.text = it.runtime.toString()
@@ -55,6 +71,15 @@ class MovieDetailsActivity : AppCompatActivity() {
                     in 6.0..7.9 -> binding.texRating.text = "🌟🌟🌟🌟⭐"
                     in 8.0..10.0 -> binding.texRating.text = "🌟🌟🌟🌟🌟"
                 }
+
+                binding.videoView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
+                    override fun onReady(youTubePlayer: YouTubePlayer) {
+                        val videoId = it.videos.results[0].key
+                        youTubePlayer.loadVideo(videoId, 0f)
+                    }
+                })
+
+
             }
         }catch (e: Exception){
             e.printStackTrace()

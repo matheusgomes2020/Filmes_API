@@ -9,7 +9,7 @@ import com.example.filmes.model.CastX
 class CastViewHolder (
 
     private val context: Context,
-    private val binding: CastCellBinding,
+    private val binding: CastCellBinding
    // private val clickListener: CastClickListener
 
     ): RecyclerView.ViewHolder( binding.root ) {

@@ -1,12 +1,11 @@
 package com.example.filmes.model
 
-data class Movie(
-
+data class Movie2(
     val adult: Boolean,
     val backdrop_path: String,
     val belongs_to_collection: BelongsToCollection,
     val budget: Int,
-    val genres: List<Genre>,
+    val genres: List<GenreXX>,
     val homepage: String,
     val id: Int,
     val imdb_id: String,
@@ -15,8 +14,8 @@ data class Movie(
     val overview: String,
     val popularity: Double,
     val poster_path: String,
-    val production_companies: List<ProductionCompany>,
-    val production_countries: List<ProductionCountry>,
+    val production_companies: List<ProductionCompanyX>,
+    val production_countries: List<ProductionCountryX>,
     val release_date: String,
     val revenue: Int,
     val runtime: Int,
@@ -25,8 +24,7 @@ data class Movie(
     val tagline: String,
     val title: String,
     val video: Boolean,
-    val videos: Videos,
+    val videos: VideosX,
     val vote_average: Double,
     val vote_count: Int
-
 )
