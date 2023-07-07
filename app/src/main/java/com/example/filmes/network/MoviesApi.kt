@@ -34,7 +34,7 @@ interface MoviesApi {
     suspend fun getRatedMovies(): Movies
 
     //https://api.themoviedb.org/3/movie/157336?api_key=0f5183b12ca04341d5f0f71d8bc698b5&append_to_response=videos
-    @GET("movie/{movieID}?language=pt-BR&api_key=" + Constants.API_KEY + "&append_to_response=videos")
+    @GET("movie/{movieID}?language=pt-BR&api_key=" + Constants.API_KEY + "&append_to_response=videos,images,reviews,similar,credits")
     suspend fun  getMovieInfo(@Path("movieID") movieId: String) : Movie
 
     //https://api.themoviedb.org/3/movie/550?api_key=0f5183b12ca04341d5f0f71d8bc698b5

@@ -7,14 +7,10 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.filmes.adapter.movie.MovieClickListener
-import com.example.filmes.adapter.movie.MovieSearchAdapter
 import com.example.filmes.adapter.serie.SerieClickListener
 import com.example.filmes.adapter.serie.SerieSearchAdapter
 import com.example.filmes.databinding.ActivitySearchBinding
-import com.example.filmes.model.Movie
 import com.example.filmes.model.Serie
-import com.example.filmes.ui.movieDetails.MovieDetailsActivity
 import com.example.filmes.ui.seriesDetails.SerieDetailsActivity
 import dagger.hilt.android.AndroidEntryPoint
 
