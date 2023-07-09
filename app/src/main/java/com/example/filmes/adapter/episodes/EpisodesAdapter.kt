@@ -8,7 +8,7 @@ import com.example.filmes.model.Episode
 
 class EpisodesAdapter (
 
-    private val lista: List<Episode>,
+    private val lista: List<com.example.filmes.di.Episode>,
     private val clickListener: EpisodeClickListener
 
 ): RecyclerView.Adapter<EpisodeViewHolder>() {

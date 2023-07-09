@@ -58,13 +58,13 @@ class SeasonFragment : Fragment(), EpisodeClickListener {
 
             binding.recyclerEpisodes.apply {
                 layoutManager = LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false)
-                adapter = EpisodesAdapter(it, mainActivity)
+                adapter = EpisodesAdapter(it.episodes, mainActivity)
             }
         }
 
     }
 
-    override fun clickEpisode(episode: Episode) {
+    override fun clickEpisode(episode: com.example.filmes.di.Episode) {
         Toast.makeText( context, episode.name, Toast.LENGTH_LONG).show()
 
     }

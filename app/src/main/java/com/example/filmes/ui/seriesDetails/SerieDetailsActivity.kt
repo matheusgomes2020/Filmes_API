@@ -33,6 +33,8 @@ class SerieDetailsActivity : AppCompatActivity(), SeasonClickListener, CastClick
     private lateinit var binding: ActivitySerieDetailBinding
     private val viewModel: SeriesDetailsViewModel by viewModels()
     var id1 =  ""
+    var nomeSerie = ""
+    var poster = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -53,6 +55,10 @@ class SerieDetailsActivity : AppCompatActivity(), SeasonClickListener, CastClick
 
         try {
             viewModel.serieInfo.observe(this) {
+
+                nomeSerie = it.name
+                poster = it.poster_path
+
                 binding.seriesOverview.text = it.overview
                 binding.seriesTitle.text = it.name
                 //binding.seriesImageView.load("https://image.tmdb.org/t/p/w500" + it.poster_path)
@@ -171,6 +177,8 @@ class SerieDetailsActivity : AppCompatActivity(), SeasonClickListener, CastClick
         val intent = Intent( applicationContext, EpisodesActivity::class.java ).apply {
             putExtra("number", season.season_number.toString() )
             putExtra("id", id1 )
+            putExtra("nome", nomeSerie )
+            putExtra("poster", poster )
 
         }
         startActivity(intent)

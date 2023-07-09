@@ -1,6 +1,8 @@
 package com.example.filmes.model
 
-data class Seasons(
+import com.example.filmes.di.Episode
+
+data class Season(
     val _id: String,
     val air_date: String,
     val episodes: List<Episode>,

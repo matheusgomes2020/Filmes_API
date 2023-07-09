@@ -6,8 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.filmes.data.Resource
+import com.example.filmes.model.Season
 import com.example.filmes.model.CastX
-import com.example.filmes.model.Episode
 import com.example.filmes.model.Serie
 import com.example.filmes.repository.SeriesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,11 +20,11 @@ class SeriesDetailsViewModel @Inject constructor( private val seriesRepository: 
     : ViewModel() {
 
     private var serieInfoEmitter = MutableLiveData<Serie>()
-    private val seasonEpisodesEmitter = MutableLiveData<List<Episode>>()
+    private val seasonEpisodesEmitter = MutableLiveData<Season>()
     private val castEmitter = MutableLiveData<List<CastX>>()
     var carregandoEmitter = MutableLiveData<Boolean>()
     val serieInfo: LiveData<Serie> = serieInfoEmitter
-    val seasonEpisodes: LiveData<List<Episode>> = seasonEpisodesEmitter
+    val seasonEpisodes: LiveData<Season> = seasonEpisodesEmitter
     val cast: LiveData<List<CastX>> = castEmitter
     val carregando: LiveData<Boolean> = carregandoEmitter
 

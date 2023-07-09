@@ -1,8 +1,8 @@
 package com.example.filmes.repository
 
 import com.example.filmes.data.Resource
+import com.example.filmes.model.Season
 import com.example.filmes.model.CastX
-import com.example.filmes.model.Episode
 import com.example.filmes.model.Serie
 import com.example.filmes.network.SeriesApi
 import javax.inject.Inject
@@ -83,12 +83,12 @@ class SeriesRepository @Inject constructor( private val api: SeriesApi) {
         return Resource.Success( data = response )
     }
 
-    suspend fun getSeasonEpisodes( seriesId: String, seasonNumber: Int ): Resource<List<Episode>> {
+    suspend fun getSeasonEpisodes( seriesId: String, seasonNumber: Int ): Resource<Season> {
 
         return try {
             Resource.Loading( data = true )
-            val itemList = api.getSeasonEpisodes( seriesId, seasonNumber ).episodes
-            if (itemList.isNotEmpty()) Resource.Loading(data = false)
+            val itemList = api.getSeasonEpisodes( seriesId, seasonNumber )
+            if (itemList.episodes.isNotEmpty()) Resource.Loading(data = false)
             Resource.Success(data = itemList)
         } catch (exception: Exception) {
             Resource.Error(message = exception.message.toString())
