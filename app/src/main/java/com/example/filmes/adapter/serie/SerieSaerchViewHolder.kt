@@ -33,7 +33,7 @@ class SerieSaerchViewHolder (
 
         binding.movieSearchCellContainer.setOnClickListener {
 
-            clickListener.clickMovie(serie)
+            clickListener.clickSerie(serie)
 
         }
 

@@ -4,6 +4,6 @@ import com.example.filmes.model.CastX
 
 interface CastClickListener {
 
-    fun clickSeason( season: CastX)
+    fun clickCast(cast: CastX)
 
 }

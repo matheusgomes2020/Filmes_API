@@ -22,7 +22,7 @@ class SerieViewHolder (
 
             binding.movieCellContainer.setOnClickListener {
 
-                clickListener.clickMovie(serie)
+                clickListener.clickSerie(serie)
 
             }
 

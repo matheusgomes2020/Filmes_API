@@ -94,7 +94,7 @@ class SeriesFragment : Fragment(), SerieClickListener {
 
     }
 
-        override fun clickMovie(serie: Serie) {
+        override fun clickSerie(serie: Serie) {
 
         Toast.makeText(this.context, serie.name.toString(), Toast.LENGTH_LONG).show()
 

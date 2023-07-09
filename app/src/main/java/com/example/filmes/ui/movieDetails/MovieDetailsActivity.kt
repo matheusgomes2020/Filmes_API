@@ -1,6 +1,7 @@
 package com.example.filmes.ui.movieDetails
 
 import android.R
+import android.content.Intent
 import android.opengl.Visibility
 import android.os.Bundle
 import android.view.View
@@ -10,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.filmes.adapter.cast.CastAdapter
+import com.example.filmes.adapter.cast.CastClickListener
 import com.example.filmes.adapter.movie.MovieAdapter
 import com.example.filmes.adapter.movie.MovieClickListener
 import com.example.filmes.databinding.ActivityMovieDetailsBinding
@@ -22,7 +24,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class MovieDetailsActivity : AppCompatActivity(), MovieClickListener {
+class MovieDetailsActivity : AppCompatActivity(), MovieClickListener, CastClickListener {
 
     private lateinit var binding: ActivityMovieDetailsBinding
     private val viewModel: MovieDetailsViewModel by viewModels()
@@ -128,9 +130,11 @@ class MovieDetailsActivity : AppCompatActivity(), MovieClickListener {
 
     private fun setRecyclerViewCast(lista: List<CastX>) {
 
+        val mainActivity = this
+
         binding.recyclerMoviecast.apply {
             layoutManager = LinearLayoutManager(applicationContext, RecyclerView.HORIZONTAL, false)
-            adapter = CastAdapter( lista )
+            adapter = CastAdapter( lista, mainActivity )
         }
     }
 
@@ -145,7 +149,17 @@ class MovieDetailsActivity : AppCompatActivity(), MovieClickListener {
     }
 
     override fun clickMovie(movie: Movie) {
-        TODO("Not yet implemented")
+
+        val id = movie.id.toString()
+        val intent = Intent( applicationContext, MovieDetailsActivity::class.java ).apply {
+            putExtra("id", movie.id.toString() )
+
+        }
+        startActivity(intent)
+    }
+
+    override fun clickCast(cast: CastX) {
+        Toast.makeText(applicationContext, cast.name, Toast.LENGTH_SHORT).show()
     }
 
 }

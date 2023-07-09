@@ -16,6 +16,9 @@
         android:theme="@style/Theme.Filmes"
         tools:targetApi="31">
         <activity
+            android:name=".ui.season.EpisodesActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.seriesDetails.SerieDetailsActivity"
             android:exported="false" />
         <activity

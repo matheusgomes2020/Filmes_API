@@ -8,8 +8,8 @@ import com.example.filmes.model.CastX
 
 class CastAdapter (
 
-    private val lista: List<CastX>
-   // private val clickListener: CastClickListener
+    private val lista: List<CastX>,
+    private val clickListener: CastClickListener
 
 ): RecyclerView.Adapter<CastViewHolder>() {
 
@@ -17,12 +17,12 @@ class CastAdapter (
         val from = LayoutInflater.from( parent.context )
         val binding = CastCellBinding.inflate( from, parent, false )
 
-        return CastViewHolder( parent.context, binding )
+        return CastViewHolder( parent.context, binding, clickListener )
 
     }
 
     override fun onBindViewHolder(holder: CastViewHolder, position: Int) {
-        holder.bindSeason( lista[position] )
+        holder.bindCast( lista[position] )
     }
 
     override fun getItemCount(): Int = lista.size

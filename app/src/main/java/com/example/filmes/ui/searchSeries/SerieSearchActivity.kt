@@ -76,7 +76,7 @@ class SerieSearchActivity : AppCompatActivity(), SerieClickListener {
 
     }
 
-    override fun clickMovie( serie: Serie ) {
+    override fun clickSerie(serie: Serie ) {
 
         val mensagem = serie.name
         val id = serie.id.toString()

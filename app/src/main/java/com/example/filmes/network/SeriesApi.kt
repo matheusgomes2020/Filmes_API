@@ -36,7 +36,7 @@ interface SeriesApi {
 
 
     //https://api.themoviedb.org/3/tv/12345?language=en-US&api_key=0f5183b12ca04341d5f0f71d8bc698b5#
-    @GET("tv/{serieID}?language=pt-BR&api_key=" + Constants.API_KEY)
+    @GET("tv/{serieID}?language=pt-BR&api_key=" + Constants.API_KEY + "&append_to_response=videos,images,reviews,similar,credits,episodes" )
     suspend fun  getSerieInfo(@Path("serieID") serieId: String) : Serie
 
     //https://api.themoviedb.org/3/tv/{series_id}/season/{season_number}
