@@ -20,6 +20,7 @@ import com.example.filmes.databinding.ActivitySerieDetailBinding
 import com.example.filmes.model.CastX
 import com.example.filmes.model.SeasonX
 import com.example.filmes.model.Serie
+import com.example.filmes.ui.season.EpisodesActivity
 import com.example.filmes.ui.season.SeasonFragment
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
@@ -167,7 +168,7 @@ class SerieDetailsActivity : AppCompatActivity(), SeasonClickListener, CastClick
 
     override fun clickSeason(season: SeasonX) {
         Toast.makeText(this.applicationContext, season.toString(), Toast.LENGTH_LONG).show()
-        val intent = Intent( applicationContext, SeasonFragment::class.java ).apply {
+        val intent = Intent( applicationContext, EpisodesActivity::class.java ).apply {
             putExtra("number", season.season_number.toString() )
             putExtra("id", id1 )
 
