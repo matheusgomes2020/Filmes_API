@@ -30,11 +30,15 @@ class SeasonEpisodes(var seasonX: SeasonX?, var serieId: String) :BottomSheetDia
 
         if ( seasonX != null ) {
 
-            //binding.textTitle.text = "seasonX!!.toString()"
             binding.textViewTemporada.text = seasonX!!.season_number.toString() + " - Temporada"
-            binding.textOverview.text = seasonX!!.overview
 
-            if ( seasonX!!.poster_path == null ) binding.imageView6.load(R.drawable.padrao)
+            if ( seasonX!!.overview.isNullOrEmpty() ){
+                binding.textOverview.visibility = View.GONE
+            } else {
+                binding.textOverview.text = seasonX!!.overview
+            }
+
+            if ( seasonX!!.poster_path.isNullOrEmpty() ) binding.imageView6.load(R.drawable.padrao)
             else binding.imageView6.load("https://image.tmdb.org/t/p/w500" + seasonX!!.poster_path )
 
             seasonViewModel.loadSeason( serieId, seasonX!!.season_number )
