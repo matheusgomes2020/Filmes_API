@@ -21,6 +21,7 @@ import com.example.filmes.model.CastX
 import com.example.filmes.model.SeasonX
 import com.example.filmes.model.Serie
 import com.example.filmes.ui.season.EpisodesActivity
+import com.example.filmes.ui.season.SeasonEpisodes
 import com.example.filmes.ui.season.SeasonFragment
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
@@ -173,6 +174,10 @@ class SerieDetailsActivity : AppCompatActivity(), SeasonClickListener, CastClick
     }
 
     override fun clickSeason(season: SeasonX) {
+
+        SeasonEpisodes(season, id1).show(supportFragmentManager, "seasonTag")
+        Log.d("ABCDE", "clickSeason: " + season.toString())
+        /*
         Toast.makeText(this.applicationContext, season.toString(), Toast.LENGTH_LONG).show()
         val intent = Intent( applicationContext, EpisodesActivity::class.java ).apply {
             putExtra("number", season.season_number.toString() )
@@ -182,6 +187,8 @@ class SerieDetailsActivity : AppCompatActivity(), SeasonClickListener, CastClick
 
         }
         startActivity(intent)
+         */
+
     }
 
     override fun clickCast(cast: CastX) {

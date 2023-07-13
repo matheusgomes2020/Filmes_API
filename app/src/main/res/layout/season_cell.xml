@@ -9,7 +9,7 @@
 
     <ImageView
         android:id="@+id/imageView2"
-        android:layout_width="110dp"
+        android:layout_width="100dp"
         android:layout_height="110dp"
         android:scaleType="fitXY"
         tools:srcCompat="@tools:sample/avatars" />
@@ -24,6 +24,7 @@
             android:id="@+id/textViewNTemporada"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/nunito_sans"
             android:text="1 temporada"
             android:textSize="16sp"
             android:textStyle="bold" />
@@ -32,8 +33,9 @@
             android:id="@+id/textViewQtdEpisodios"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/nunito_sans"
             android:text="366 - Espisódios"
-            android:textSize="16sp"
+            android:textSize="14sp"
             android:textStyle="bold" />
     </LinearLayout>
 
