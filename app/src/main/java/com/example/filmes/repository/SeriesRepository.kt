@@ -1,8 +1,11 @@
 package com.example.filmes.repository
 
+import android.util.Log
 import com.example.filmes.data.Resource
+import com.example.filmes.di.Episode2
 import com.example.filmes.model.Season
 import com.example.filmes.model.CastX
+import com.example.filmes.model.Episode
 import com.example.filmes.model.Serie
 import com.example.filmes.network.SeriesApi
 import javax.inject.Inject
@@ -94,6 +97,25 @@ class SeriesRepository @Inject constructor( private val api: SeriesApi) {
             Resource.Error(message = exception.message.toString())
         }
     }
+
+    suspend fun getEpisodeInfo( seriesId: String, seasonNumber: Int, episodeNumber: Int ): Resource<Episode2> {
+
+        return try {
+
+            Log.d( "UTG", "Repository: " + "Id: " + seriesId + "\nSeason: " + seasonNumber + "\nEpisode: " + episodeNumber)
+
+            Resource.Loading( data = true )
+            val item = api.getEpisodeInfo( seriesId, seasonNumber, episodeNumber )
+            Log.d( "UTG", "Repository Item: " + item)
+
+            if (item != null) Resource.Loading(data = false)
+            Resource.Success(data = item)
+        } catch (exception: Exception) {
+            Resource.Error(message = exception.message.toString())
+
+        }
+    }
+
 
     suspend fun getCast( seriesId: String ): Resource<List<CastX>> {
 

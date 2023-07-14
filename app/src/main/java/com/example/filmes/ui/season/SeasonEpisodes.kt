@@ -14,6 +14,7 @@ import com.example.filmes.adapter.episodes.EpisodeClickListener
 import com.example.filmes.adapter.episodes.EpisodesAdapter
 import com.example.filmes.databinding.FragmentSeasonEpisodesBinding
 import com.example.filmes.model.SeasonX
+import com.example.filmes.ui.episodes.Episode
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import java.lang.Exception
@@ -69,7 +70,8 @@ class SeasonEpisodes(var seasonX: SeasonX?, var serieId: String) :BottomSheetDia
     }
 
     override fun clickEpisode(episode: com.example.filmes.di.Episode) {
-        Toast.makeText( context, episode.name, Toast.LENGTH_LONG).show()
+        Toast.makeText( context, episode.name + " | " + episode.season_number+ " | "+ episode.episode_number, Toast.LENGTH_LONG).show()
+        Episode(serieId,episode.season_number, episode.episode_number).show(childFragmentManager, "seasonTag")
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {

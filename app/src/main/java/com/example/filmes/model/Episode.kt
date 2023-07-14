@@ -14,5 +14,6 @@ data class Episode(
     val show_id: Int,
     val still_path: Any,
     val vote_average: Int,
-    val vote_count: Int
+    val vote_count: Int,
+    val images: List<Still>
 )
