@@ -40,7 +40,7 @@
 
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/serieRecyclerViewEmAlta"
+                    android:id="@+id/seriesRecyclerViewAiringToday"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_marginStart="8dp"
@@ -67,10 +67,10 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/serieRecyclerViewEmAlta"></TextView>
+                    app:layout_constraintTop_toBottomOf="@+id/seriesRecyclerViewAiringToday"></TextView>
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/serieRecyclerViewEmCartaz"
+                    android:id="@+id/serieRecyclerViewOnAir"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_marginStart="8dp"
@@ -97,14 +97,14 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/serieRecyclerViewEmCartaz">
+                    app:layout_constraintTop_toBottomOf="@+id/serieRecyclerViewOnAir">
 
                 </TextView>
 
 
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/serieRecyclerViewLancamentos"
+                    android:id="@+id/serieRecyclerViewPopular"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_marginStart="8dp"
@@ -129,12 +129,12 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/serieRecyclerViewLancamentos">
+                    app:layout_constraintTop_toBottomOf="@+id/serieRecyclerViewPopular">
 
                 </TextView>
 
                 <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/serieRecyclerViewMelhores"
+                    android:id="@+id/serieRecyclerViewTopRated"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:layout_marginStart="8dp"

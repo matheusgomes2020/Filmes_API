@@ -16,15 +16,15 @@ import javax.inject.Inject
 class MovieViewModel @Inject constructor(private val moviesRepository: MoviesRepository )
     : ViewModel() {
 
-    private val popularMoviesEmitter = MutableLiveData<List<Movie>>()
-    private val ratedMoviesEmitter = MutableLiveData<List<Movie>>()
-    private val upcomingMoviesEmitter = MutableLiveData<List<Movie>>()
-    private val nowPlayingMoviesEmitter = MutableLiveData<List<Movie>>()
+    private val _popularMovies = MutableLiveData<List<Movie>>()
+    private val _ratedMovies = MutableLiveData<List<Movie>>()
+    private val _upcomingMovies = MutableLiveData<List<Movie>>()
+    private val _nowPlayingMovies = MutableLiveData<List<Movie>>()
     var carregando: Boolean = true
-    val popularMovies: LiveData<List<Movie>> = popularMoviesEmitter
-    val ratedMovies: LiveData<List<Movie>> = ratedMoviesEmitter
-    val upcomingMovies: LiveData<List<Movie>> = upcomingMoviesEmitter
-    val nowPlayingMovies: LiveData<List<Movie>> = nowPlayingMoviesEmitter
+    val popularMovies: LiveData<List<Movie>> = _popularMovies
+    val ratedMovies: LiveData<List<Movie>> = _ratedMovies
+    val upcomingMovies: LiveData<List<Movie>> = _upcomingMovies
+    val nowPlayingMovies: LiveData<List<Movie>> = _nowPlayingMovies
 
     init {
         loadPopularMovies()
@@ -42,8 +42,8 @@ class MovieViewModel @Inject constructor(private val moviesRepository: MoviesRep
             try {
                 when (val response = moviesRepository.getUpcomingMovies()) {
                     is Resource.Success -> {
-                        upcomingMoviesEmitter.value = response.data!!
-                        if (upcomingMoviesEmitter.value!!.isNotEmpty()) carregando = false
+                        _upcomingMovies.value = response.data!!
+                        if (_upcomingMovies.value!!.isNotEmpty()) carregando = false
                         Log.e("Network", "upcomingMovies: Ok. Certo!!! Carregando?= $carregando")
                     }
                     is Resource.Error -> {
@@ -67,8 +67,8 @@ class MovieViewModel @Inject constructor(private val moviesRepository: MoviesRep
             try {
                 when (val response = moviesRepository.getPopularMovies()) {
                     is Resource.Success -> {
-                        popularMoviesEmitter.value = response.data!!
-                        if (popularMoviesEmitter.value!!.isNotEmpty()) carregando = false
+                        _popularMovies.value = response.data!!
+                        if (_popularMovies.value!!.isNotEmpty()) carregando = false
                         Log.e("Network", "popularMovies: Ok. Certo!!! Carregando?= $carregando")
                     }
                     is Resource.Error -> {
@@ -92,8 +92,8 @@ class MovieViewModel @Inject constructor(private val moviesRepository: MoviesRep
             try {
                 when (val response = moviesRepository.getRatedMovies()) {
                     is Resource.Success -> {
-                        ratedMoviesEmitter.value = response.data!!
-                        if (ratedMoviesEmitter.value!!.isNotEmpty()) carregando = false
+                        _ratedMovies.value = response.data!!
+                        if (_ratedMovies.value!!.isNotEmpty()) carregando = false
                         Log.e("Network", "ratedMovies: Ok. Certo!!! Carregando?= $carregando")
                     }
                     is Resource.Error -> {
@@ -117,8 +117,8 @@ class MovieViewModel @Inject constructor(private val moviesRepository: MoviesRep
             try {
                 when (val response = moviesRepository.getNowPlayingMovies()) {
                     is Resource.Success -> {
-                        nowPlayingMoviesEmitter.value = response.data!!
-                        if (nowPlayingMoviesEmitter.value!!.isNotEmpty()) carregando = false
+                        _nowPlayingMovies.value = response.data!!
+                        if (_nowPlayingMovies.value!!.isNotEmpty()) carregando = false
                         Log.e("Network", "nowPlayingMovies: Ok. Certo!!! Carregando?= $carregando")
                     }
                     is Resource.Error -> {

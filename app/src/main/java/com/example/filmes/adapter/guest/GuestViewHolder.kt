@@ -29,7 +29,7 @@ class GuestViewHolder (
 
             }
 
-            binding.textView4.text = cast.name
+            binding.textActorName.text = cast.name
 
 
             binding.containerCast.setOnClickListener {

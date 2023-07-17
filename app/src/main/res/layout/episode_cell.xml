@@ -37,7 +37,7 @@
         app:layout_constraintTop_toBottomOf="@+id/imageSearchCell">
 
         <TextView
-            android:id="@+id/text1"
+            android:id="@+id/textNameEpisode"
             style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -52,7 +52,7 @@
             app:layout_constraintTop_toBottomOf="@+id/id"></TextView>
 
         <TextView
-            android:id="@+id/text2"
+            android:id="@+id/textOverviewEpisode"
             style="@style/TextAppearance.AppCompat.Title"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

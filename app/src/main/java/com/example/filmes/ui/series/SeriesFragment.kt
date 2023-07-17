@@ -1,29 +1,26 @@
 package com.example.filmes.ui.series
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.filmes.adapter.serie.SerieAdapter
-import com.example.filmes.adapter.serie.SerieClickListener
+import com.example.filmes.adapter.Adapter
 import com.example.filmes.databinding.FragmentSeriesBinding
 import com.example.filmes.model.Serie
-import com.example.filmes.ui.seriesDetails.SerieDetailsActivity
+import com.example.filmes.views.SeriesView
 import dagger.hilt.android.AndroidEntryPoint
+import java.lang.Exception
 
 @AndroidEntryPoint
-class SeriesFragment : Fragment(), SerieClickListener {
+class SeriesFragment : Fragment() {
 
     private var _binding: FragmentSeriesBinding? = null
     private val binding get() = _binding!!
-    private val serieViewModel: SerieViewModel by viewModels()
+    private val seriesViewModel: SerieViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,7 +35,7 @@ class SeriesFragment : Fragment(), SerieClickListener {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        setRecyclerView()
+        observe()
 
     }
 
@@ -47,67 +44,69 @@ class SeriesFragment : Fragment(), SerieClickListener {
         _binding = null
     }
 
-    private fun setRecyclerView() {
 
-        val mainActivity = this
-        serieViewModel.popularSeries.observe(viewLifecycleOwner) {
+    private fun observe() {
 
-            binding.serieRecyclerViewLancamentos  .apply {
-                layoutManager = LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false)
-                adapter = SerieAdapter(it, mainActivity)
-
+        try {
+            seriesViewModel.airingTodaySeries.observe( viewLifecycleOwner ) {
+                setRecyclerViewAiringToday( it )
             }
-        }
-
-        serieViewModel.onTheAirSeries.observe(viewLifecycleOwner) {
-
-            binding.serieRecyclerViewEmCartaz  .apply {
-                layoutManager = LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false)
-                adapter = SerieAdapter(it, mainActivity)
-
+            seriesViewModel.onTheAirSeries.observe( viewLifecycleOwner ) {
+                setRecyclerViewOnAir( it )
             }
-        }
-
-        serieViewModel.topRatedSeries.observe(viewLifecycleOwner) {
-
-            binding.serieRecyclerViewMelhores  .apply {
-                layoutManager = LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false)
-                adapter = SerieAdapter(it, mainActivity)
-
-
+            seriesViewModel.popularSeries.observe( viewLifecycleOwner ) {
+                setRecyclerViewPopular( it )
             }
-        }
-
-        serieViewModel.airingTodaySeries.observe(viewLifecycleOwner) {
-
-
-            binding.serieRecyclerViewEmAlta  .apply {
-                layoutManager = LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false)
-                adapter = SerieAdapter(it, mainActivity)
-
+            seriesViewModel.topRatedSeries.observe( viewLifecycleOwner ) {
+                setRecyclerViewTopRated( it )
             }
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
-
-
-
-
 
     }
 
-        override fun clickSerie(serie: Serie) {
-
-        Toast.makeText(this.context, serie.name.toString(), Toast.LENGTH_LONG).show()
-
-
-        val id = serie.id.toString()
-        val intent = Intent(this.context, SerieDetailsActivity::class.java).apply {
-            putExtra("id", id)
-            Log.d("SSSSS", "observeSeries: " + id)
-
+    private fun setRecyclerViewAiringToday(list: List<Serie> ) {
+        binding.seriesRecyclerViewAiringToday.apply {
+            layoutManager = LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false)
+            adapter = Adapter {
+                SeriesView( it )
+            }.apply {
+                items = list.toMutableList()
+            }
         }
-        startActivity(intent)
-
-
     }
 
+    private fun setRecyclerViewOnAir( list: List<Serie> ) {
+        binding.serieRecyclerViewOnAir.apply {
+            layoutManager = LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false)
+            adapter = Adapter {
+                SeriesView( it )
+            }.apply {
+                items = list.toMutableList()
+            }
+        }
+    }
+
+    private fun setRecyclerViewPopular( list: List<Serie> ) {
+        binding.serieRecyclerViewPopular.apply {
+            layoutManager = LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false)
+            adapter = Adapter {
+                SeriesView( it )
+            }.apply {
+                items = list.toMutableList()
+            }
+        }
+    }
+
+    private fun setRecyclerViewTopRated( list: List<Serie> ) {
+        binding.serieRecyclerViewTopRated.apply {
+            layoutManager = LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false)
+            adapter = Adapter {
+                SeriesView( it )
+            }.apply {
+                items = list.toMutableList()
+            }
+        }
+    }
 }

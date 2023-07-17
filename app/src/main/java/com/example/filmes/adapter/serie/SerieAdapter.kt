@@ -3,7 +3,7 @@ package com.example.filmes.adapter.serie
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.filmes.databinding.MovieCellBinding
+import com.example.filmes.databinding.MovieAnSeriesCellBinding
 import com.example.filmes.model.Serie
 
 class SerieAdapter (
@@ -15,7 +15,7 @@ class SerieAdapter (
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SerieViewHolder {
         val from = LayoutInflater.from( parent.context )
-        val bindind = MovieCellBinding.inflate( from, parent, false )
+        val bindind = MovieAnSeriesCellBinding.inflate( from, parent, false )
 
         return SerieViewHolder( parent.context, bindind, clickListener )
 

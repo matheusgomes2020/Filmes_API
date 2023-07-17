@@ -18,8 +18,8 @@ class EpisodeViewHolder (
         fun bindCast( episode: com.example.filmes.di.Episode ) {
 
 
-            binding.text1.text = episode.episode_number.toString() + " - " + episode.name
-            binding.text2.text = episode.overview
+            binding.textNameEpisode.text = episode.episode_number.toString() + " - " + episode.name
+            binding.textOverviewEpisode.text = episode.overview
 
             if ( episode.still_path == null ){
 

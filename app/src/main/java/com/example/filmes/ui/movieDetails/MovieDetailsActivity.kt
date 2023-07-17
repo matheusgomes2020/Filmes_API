@@ -17,6 +17,10 @@ import com.example.filmes.adapter.movie.MovieClickListener
 import com.example.filmes.databinding.ActivityMovieDetailsBinding
 import com.example.filmes.model.CastX
 import com.example.filmes.model.Movie
+import com.example.filmes.model.Serie
+import com.example.filmes.views.CastView
+import com.example.filmes.views.MovieView
+import com.example.filmes.views.SeriesView
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
@@ -24,7 +28,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class MovieDetailsActivity : AppCompatActivity(), MovieClickListener, CastClickListener {
+class MovieDetailsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMovieDetailsBinding
     private val viewModel: MovieDetailsViewModel by viewModels()
@@ -39,61 +43,33 @@ class MovieDetailsActivity : AppCompatActivity(), MovieClickListener, CastClickL
         viewModel.getCast( id!! )
         observeMovies()
         observeCast()
-
-
-
-
-
-
-        binding.movieTitle.setOnClickListener {
-
-
-
-        }
-
-
     }
 
-    fun observeMovies() {
+    private fun observeMovies() {
 
         try {
+            var roteiro = ""
+            var gen = ""
+
             viewModel.movieInfo.observe(this) {
                 binding.movieOverview.text = it.overview
                 binding.movieTitle.text = it.title
-                //Toast.makeText(this, it.toString(),)
-                //binding.imageView2.load("https://image.tmdb.org/t/p/w500" + it.poster_path)
                 binding.textData.text = it.release_date
                 binding.textDuration.text = it.runtime.toString()
                 binding.textViewDirecaoFilme.text = it.runtime.toString()
-
-                for (i in it.credits.crew) {
-                    if ( i.job == "Director" ) {
-                        binding.textViewDirecaoFilme.text = i.name
-                    }
-                }
-
-                var roteiro = ""
-
-                for (i in it.credits.crew) {
-                    if ( i.department == "Writing" ) {
-                        roteiro += i.name + "\n"
-                    }
-                }
-
+                for (i in it.credits.crew) if ( i.job == "Director" ) binding.textViewDirecaoFilme.text = i.name
+                for (i in it.credits.crew) if ( i.department == "Writing" ) roteiro += i.name + "\n"
                 binding.textViewRoteiro.text = roteiro
-
-                var gen = ""
                 it.genres.forEachIndexed { index, genres ->
                     gen += genres.name + "  "
                 }
                 binding.textGenres.text = gen
-
                 when ( it.vote_average ) {
-                    in 0.0..1.9 -> binding.texRating.text = "🌟⭐⭐⭐⭐"
-                    in 2.0..3.9 -> binding.texRating.text = "🌟🌟⭐⭐⭐"
-                    in 4.0..5.9 -> binding.texRating.text = "🌟🌟🌟⭐⭐"
-                    in 6.0..7.9 -> binding.texRating.text = "🌟🌟🌟🌟⭐"
-                    in 8.0..10.0 -> binding.texRating.text = "🌟🌟🌟🌟🌟"
+                    in 0.0..1.9 -> binding.texRating.text = "⭐"
+                    in 2.0..3.9 -> binding.texRating.text = "⭐⭐"
+                    in 4.0..5.9 -> binding.texRating.text = "⭐⭐⭐"
+                    in 6.0..7.9 -> binding.texRating.text = "⭐⭐⭐⭐"
+                    in 8.0..10.0 -> binding.texRating.text = "⭐⭐⭐⭐⭐"
                 }
 
                 if ( it.videos.results.isNullOrEmpty() ) {
@@ -107,20 +83,17 @@ class MovieDetailsActivity : AppCompatActivity(), MovieClickListener, CastClickL
                     })
                 }
 
-                setRecyclerViewSimilares(it.similar.results)
-
-
+                setRecyclerViewSimilar(it.similar.results)
             }
         }catch (e: Exception){
             e.printStackTrace()
         }
     }
 
-    fun observeCast() {
+    private fun observeCast() {
 
         try {
             viewModel.cast.observe(this) {
-
                 setRecyclerViewCast( it )
             }
         }catch (e: Exception){
@@ -128,48 +101,27 @@ class MovieDetailsActivity : AppCompatActivity(), MovieClickListener, CastClickL
         }
     }
 
-    private fun setRecyclerViewCast(lista: List<CastX>) {
-
-        val mainActivity = this
+    private fun setRecyclerViewCast(list: List<CastX>) {
 
         binding.recyclerMoviecast.apply {
-            layoutManager = LinearLayoutManager(applicationContext, RecyclerView.HORIZONTAL, false)
-            adapter = CastAdapter( lista, mainActivity )
+            layoutManager = LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false)
+            adapter = com.example.filmes.adapter.Adapter {
+                CastView(it)
+            }.apply {
+                items = list.toMutableList()
+            }
         }
     }
 
-    private fun setRecyclerViewSimilares(lista: List<Movie>) {
-
-        val mainActivity = this
+    private fun setRecyclerViewSimilar(list: List<Movie>) {
 
         binding.recyclerMovieSimilars.apply {
-            layoutManager = LinearLayoutManager(applicationContext, RecyclerView.HORIZONTAL, false)
-            adapter = MovieAdapter( lista, mainActivity )
+            layoutManager = LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false)
+            adapter = com.example.filmes.adapter.Adapter {
+                MovieView(it)
+            }.apply {
+                items = list.toMutableList()
+            }
         }
     }
-
-    override fun clickMovie(movie: Movie) {
-
-        val id = movie.id.toString()
-        val intent = Intent( applicationContext, MovieDetailsActivity::class.java ).apply {
-            putExtra("id", movie.id.toString() )
-
-        }
-        startActivity(intent)
-    }
-
-    override fun clickCast(cast: CastX) {
-        Toast.makeText(applicationContext, cast.name, Toast.LENGTH_SHORT).show()
-    }
-
 }
-
-
-
-
-
-
-
-
-
-

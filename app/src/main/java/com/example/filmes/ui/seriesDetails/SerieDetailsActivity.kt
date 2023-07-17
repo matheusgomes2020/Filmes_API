@@ -8,17 +8,17 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.filmes.adapter.cast.CastAdapter
 import com.example.filmes.adapter.cast.CastClickListener
 import com.example.filmes.adapter.season.SeasonAdapter
 import com.example.filmes.adapter.season.SeasonClickListener
-import com.example.filmes.adapter.serie.SerieAdapter
 import com.example.filmes.adapter.serie.SerieClickListener
 import com.example.filmes.databinding.ActivitySerieDetailBinding
 import com.example.filmes.model.CastX
 import com.example.filmes.model.SeasonX
 import com.example.filmes.model.Serie
+import com.example.filmes.views.CastView
 import com.example.filmes.ui.season.SeasonEpisodes
+import com.example.filmes.views.SeriesView
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,25 +29,26 @@ class SerieDetailsActivity : AppCompatActivity(), SeasonClickListener, CastClick
 
     private lateinit var binding: ActivitySerieDetailBinding
     private val viewModel: SeriesDetailsViewModel by viewModels()
-    var serieId =  ""
+    var serieId = ""
     var nomeSerie = ""
     var poster = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySerieDetailBinding.inflate(layoutInflater)
-        setContentView( binding.root )
+        setContentView(binding.root)
 
         val id = intent.getStringExtra("id")
         serieId = id!!
         viewModel.getSerieInfo(id!!)
-        viewModel.getSeasonEpisodes( id!!, 1 )
-        viewModel.getCast( id!! )
+        viewModel.getSeasonEpisodes(id!!, 1)
+        viewModel.getCast(id!!)
         observeSeries()
         observeCast()
+
     }
 
-    fun observeSeries() {
+    private fun observeSeries() {
 
         try {
             viewModel.serieInfo.observe(this) {
@@ -57,17 +58,17 @@ class SerieDetailsActivity : AppCompatActivity(), SeasonClickListener, CastClick
                 binding.textSeriesData.text = it.first_air_date
                 binding.textSeriesDuration.text = it.episode_run_time.toString()
 
-                if (it.number_of_seasons == 1 ) binding.textSeasons.text = "1 Temporada"
+                if (it.number_of_seasons == 1) binding.textSeasons.text = "1 Temporada"
                 else binding.textSeasons.text = it.number_of_seasons.toString() + " Temporadas"
 
-                if ( it.episode_run_time.isNullOrEmpty() ) {
+                if (it.episode_run_time.isNullOrEmpty()) {
                     binding.textSeriesDuration.visibility = View.GONE
                     binding.imageView4.visibility = View.GONE
                 } else {
                     binding.textSeriesDuration.text = it.episode_run_time.toString()
                 }
 
-                if ( it.created_by.isNullOrEmpty() ) {
+                if (it.created_by.isNullOrEmpty()) {
                     binding.textViewSerieDirecao.text = "Null"
                 } else {
                     var roteiro = ""
@@ -84,7 +85,7 @@ class SerieDetailsActivity : AppCompatActivity(), SeasonClickListener, CastClick
                 }
                 binding.textSeriesGenres.text = gen
 
-                when ( it.vote_average ) {
+                when (it.vote_average) {
                     in 0.0..1.9 -> binding.texSeriesRating.text = "⭐"
                     in 2.0..3.9 -> binding.texSeriesRating.text = "⭐⭐"
                     in 4.0..5.9 -> binding.texSeriesRating.text = "⭐⭐⭐"
@@ -92,10 +93,11 @@ class SerieDetailsActivity : AppCompatActivity(), SeasonClickListener, CastClick
                     in 8.0..10.0 -> binding.texSeriesRating.text = "⭐⭐⭐⭐⭐"
                 }
 
-                if ( it.videos.results.isNullOrEmpty() ) {
+                if (it.videos.results.isNullOrEmpty()) {
                     binding.seriesImageView.visibility = View.GONE
                 } else {
-                    binding.seriesImageView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
+                    binding.seriesImageView.addYouTubePlayerListener(object :
+                        AbstractYouTubePlayerListener() {
                         override fun onReady(youTubePlayer: YouTubePlayer) {
                             val videoId = it.videos.results[0].key
                             youTubePlayer.loadVideo(videoId, 0f)
@@ -104,20 +106,20 @@ class SerieDetailsActivity : AppCompatActivity(), SeasonClickListener, CastClick
                 }
 
                 setRecyclerView(it.seasons)
-                setRecyclerViewSimilares( it.similar.results )
+                setRecyclerViewSimilar(it.similar.results)
             }
-        }catch (e: Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
         }
     }
 
-    fun observeCast() {
+    private fun observeCast() {
 
         try {
             viewModel.cast.observe(this) {
-                setRecyclerViewCast( it )
+                setRecyclerViewCast(it)
             }
-        }catch (e: Exception){
+        } catch (e: Exception) {
             e.printStackTrace()
         }
     }
@@ -131,22 +133,31 @@ class SerieDetailsActivity : AppCompatActivity(), SeasonClickListener, CastClick
         }
     }
 
-    private fun setRecyclerViewSimilares(lista: List<Serie>) {
+    private fun setRecyclerViewSimilar(list: List<Serie>) {
 
-        val mainActivity = this
         binding.recyclerSeriresSimilares.apply {
-            layoutManager = LinearLayoutManager(applicationContext, RecyclerView.HORIZONTAL, false)
-            adapter = SerieAdapter( lista, mainActivity )
+            layoutManager = LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false)
+            adapter = com.example.filmes.adapter.Adapter {
+                SeriesView(it)
+            }.apply {
+                items = list.toMutableList()
+            }
         }
-    }
-    private fun setRecyclerViewCast(lista: List<CastX>) {
 
-        val mainActivity = this
+    }
+
+    private fun setRecyclerViewCast(list: List<CastX>) {
+
         binding.recyclerCast.apply {
-            layoutManager = LinearLayoutManager(applicationContext, RecyclerView.HORIZONTAL, false)
-            adapter = CastAdapter( lista, mainActivity )
+            layoutManager = LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false)
+            adapter = com.example.filmes.adapter.Adapter {
+                CastView(it)
+            }.apply {
+                items = list.toMutableList()
+            }
         }
     }
+
 
     override fun clickSeason(season: SeasonX) {
 
@@ -156,6 +167,8 @@ class SerieDetailsActivity : AppCompatActivity(), SeasonClickListener, CastClick
     override fun clickCast(cast: CastX) {
         Toast.makeText(applicationContext, cast.name, Toast.LENGTH_SHORT).show()
     }
+
+
 
     override fun clickSerie(serie: Serie) {
         val id = serie.id.toString()

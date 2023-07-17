@@ -12,11 +12,12 @@
         android:id="@+id/imageCast"
         android:layout_width="110dp"
         android:layout_height="120dp"
-        android:scaleType="center"
-        tools:srcCompat="@tools:sample/avatars" />
+        android:scaleType="centerCrop"
+        app:srcCompat="@drawable/padrao"
+        tools:srcCompat="@drawable/padrao" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/textActorName"
         style="@style/TextAppearance.AppCompat.Title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

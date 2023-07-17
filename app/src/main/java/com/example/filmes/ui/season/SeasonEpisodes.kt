@@ -13,8 +13,12 @@ import com.example.filmes.R
 import com.example.filmes.adapter.episodes.EpisodeClickListener
 import com.example.filmes.adapter.episodes.EpisodesAdapter
 import com.example.filmes.databinding.FragmentSeasonEpisodesBinding
+import com.example.filmes.di.Episode2
 import com.example.filmes.model.SeasonX
+import com.example.filmes.model.Serie
 import com.example.filmes.ui.episodes.Episode
+import com.example.filmes.views.EpisodeView
+import com.example.filmes.views.SeriesView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import java.lang.Exception
@@ -30,15 +34,12 @@ class SeasonEpisodes(var seasonX: SeasonX?, var serieId: String) :BottomSheetDia
         super.onViewCreated(view, savedInstanceState)
 
         if ( seasonX != null ) {
-
             binding.textViewTemporada.text = seasonX!!.season_number.toString() + " - Temporada"
-
             if ( seasonX!!.overview.isNullOrEmpty() ){
                 binding.textOverview.visibility = View.GONE
             } else {
                 binding.textOverview.text = seasonX!!.overview
             }
-
             if ( seasonX!!.poster_path.isNullOrEmpty() ) binding.imageView6.load(R.drawable.padrao)
             else binding.imageView6.load("https://image.tmdb.org/t/p/w500" + seasonX!!.poster_path )
 
@@ -47,7 +48,7 @@ class SeasonEpisodes(var seasonX: SeasonX?, var serieId: String) :BottomSheetDia
         }
     }
 
-    fun observe(){
+    private fun observe(){
 
         try {
             seasonViewModel.season.observe(this){
@@ -60,6 +61,18 @@ class SeasonEpisodes(var seasonX: SeasonX?, var serieId: String) :BottomSheetDia
 
     }
 
+    private fun setRecyclerViewSimilar(list: List<com.example.filmes.di.Episode>) {
+
+        binding.recyclerEpisodes.apply {
+            layoutManager = LinearLayoutManager(this.context, RecyclerView.VERTICAL, false)
+            adapter = com.example.filmes.adapter.Adapter {
+                EpisodeView(it,serieId)
+            }.apply {
+                items = list.toMutableList()
+            }
+        }
+
+    }
     private fun setRecyclerView( lista: List<com.example.filmes.di.Episode> ){
 
         val mainActivity = this
