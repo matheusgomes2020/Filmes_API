@@ -3,7 +3,6 @@ package com.example.filmes.network
 import com.example.filmes.di.Episode2
 import com.example.filmes.model.Season
 import com.example.filmes.model.Cast
-import com.example.filmes.model.Episode
 import com.example.filmes.model.Serie
 import com.example.filmes.model.Series
 import com.example.filmes.utils.Constants
@@ -36,7 +35,7 @@ interface SeriesApi {
     suspend fun getOnTheAirSeries(): Series
 
     @GET("tv/{serieID}?language=pt-BR&api_key=" + Constants.API_KEY + "&append_to_response=videos,images,reviews,similar,credits,episodes" )
-    suspend fun  getSerieInfo(@Path("serieID") serieId: String) : Serie
+    suspend fun  getSeriesInfo(@Path("serieID") serieId: String) : Serie
 
     @GET("tv/{series_id}/season/{season_number}?language=pt-BR&api_key=" + Constants.API_KEY)
     suspend fun getSeasonEpisodes(@Path("series_id") series_id: String, @Path("season_number") season_number: Int ) : Season

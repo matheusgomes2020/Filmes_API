@@ -16,24 +16,19 @@ import javax.inject.Inject
 class SerieSearchViewModel @Inject constructor(private val repository: SeriesRepository)
     :ViewModel() {
 
-    private var resultSeriesEmitter = MutableLiveData<List<Serie>>()
+    private var _series = MutableLiveData<List<Serie>>()
     var carregando: Boolean = true
-    val series: LiveData<List<Serie>> = resultSeriesEmitter
+    val series: LiveData<List<Serie>> = _series
     private val _state = MutableLiveData<String>()
     val state: LiveData<String> get() = _state
 
     init {
 
         _state.value = "Star wars"
-        loadMovies()
     }
 
-    private fun  loadMovies() {
-        //state.value?.let { searchMovies(it) }
-        //Log.d("SSTATE", "FILLLLME: " + state.value)
-    }
 
-    fun searchMovies(query: String) {
+    fun searchSeries(query: String) {
 
         viewModelScope.launch {
             if (query.isEmpty()) {
@@ -42,8 +37,8 @@ class SerieSearchViewModel @Inject constructor(private val repository: SeriesRep
             try {
                 when(val response = repository.searchSeries(query)) {
                     is Resource.Success -> {
-                        resultSeriesEmitter.value = response.data!!
-                        if (resultSeriesEmitter.value!!.isNotEmpty()) carregando = false
+                        _series.value = response.data!!
+                        if (_series.value!!.isNotEmpty()) carregando = false
                         Log.e("Network", "searchSeries: Ok. Certo!!! Carregando?= $carregando")
                     }
                     is Resource.Error -> {
@@ -56,7 +51,6 @@ class SerieSearchViewModel @Inject constructor(private val repository: SeriesRep
                 carregando = false
                 Log.d("Network", "searchSeries: ${exception.message.toString()} Carregando?= $carregando")
             }
-        //resultMoviesEmitter.value = repository.searchMovies(query)
         }
     }
 }

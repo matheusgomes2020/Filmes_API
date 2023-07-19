@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.annotation.LayoutRes
+import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.RecyclerView
 
 class Adapter<T:BaseViewHolder<U>, U>(
@@ -13,6 +14,7 @@ class Adapter<T:BaseViewHolder<U>, U>(
 ) : RecyclerView.Adapter<T>() {
 
     var items: MutableList<U> = mutableListOf()
+    lateinit var fm: FragmentManager
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): T {
         return viewHolderLaunch( parent )

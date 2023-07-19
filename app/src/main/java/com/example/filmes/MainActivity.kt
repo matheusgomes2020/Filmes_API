@@ -1,50 +1,50 @@
 package com.example.filmes
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.get
-import androidx.navigation.findNavController
-import androidx.navigation.ui.AppBarConfiguration
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
+import androidx.fragment.app.Fragment
 import com.example.filmes.databinding.ActivityMainBinding
+import com.example.filmes.ui.filmes.MovieFragment
+import com.example.filmes.ui.perfil.ProfileFragment
 import com.example.filmes.ui.search.SearchActivity
 import com.example.filmes.ui.searchSeries.SerieSearchActivity
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.example.filmes.ui.series.SeriesFragment
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private var atual = "Movie"
+    private var actual = "Movie"
 
+    @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
+        replaceFragment(MovieFragment())
         setupToolbar()
+           binding.navView.setOnItemSelectedListener {
 
-        val navView: BottomNavigationView = binding.navView
-
-        val navController = findNavController(R.id.nav_host_fragment_activity_main2)
-        val appBarConfiguration = AppBarConfiguration(
-            setOf(
-                R.id.navigation_movie, R.id.navigation_serie, R.id.navigation_profile
-            )
-        )
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        navView.setupWithNavController(navController)
-
-
-
-
+               when( it.itemId ) {
+                   R.id.navigation_movie -> { replaceFragment(MovieFragment())
+                       actual = "Movie" }
+                   R.id.navigation_serie -> {
+                       replaceFragment(SeriesFragment())
+                       actual = "Series"
+                   }
+                   R.id.navigation_profile -> replaceFragment(ProfileFragment())
+                   else -> {}
+               }
+               true
+           }
     }
 
     private fun setupToolbar(){
@@ -53,35 +53,35 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-
         menuInflater.inflate(R.menu.actionbar_menu, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
-        //Toast.makeText(applicationContext, atual, Toast.LENGTH_SHORT).show()
+            Toast.makeText(applicationContext, actual, Toast.LENGTH_SHORT).show()
 
         when (item.itemId) {
             R.id.search -> {
-
-                if ( atual == "Movie" ) {
+                return if ( actual == "Movie" ) {
                     val intent = Intent(this, SearchActivity::class.java)
                     startActivity( intent )
-                    return true
-                }
-
-                if ( atual == "Serie" ) {
+                    true
+                } else {
                     val intent = Intent(this, SerieSearchActivity::class.java)
                     startActivity( intent )
-                    return true
+                    true
                 }
-
-
             }
         }
-
         return super.onOptionsItemSelected(item)
     }
 
+    private fun replaceFragment( fragment: Fragment ){
+
+        val fragmentManager = supportFragmentManager
+        val fragmentTransaction = fragmentManager.beginTransaction()
+        fragmentTransaction.replace(R.id.frameLayout, fragment)
+        fragmentTransaction.commit()
+    }
 }

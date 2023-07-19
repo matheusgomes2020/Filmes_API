@@ -1,21 +1,18 @@
 package com.example.filmes.ui.searchSeries
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.filmes.adapter.serie.SerieClickListener
-import com.example.filmes.adapter.serie.SerieSearchAdapter
 import com.example.filmes.databinding.ActivitySearchBinding
 import com.example.filmes.model.Serie
-import com.example.filmes.ui.seriesDetails.SerieDetailsActivity
+import com.example.filmes.views.SearchSeriesView
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class SerieSearchActivity : AppCompatActivity(), SerieClickListener {
+class SerieSearchActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySearchBinding
 
@@ -27,72 +24,44 @@ class SerieSearchActivity : AppCompatActivity(), SerieClickListener {
         binding = ActivitySearchBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        setRecyclerView()
+        observe()
 
         binding.searchView.setOnQueryTextListener(object: androidx.appcompat.widget.SearchView.OnQueryTextListener{
             override fun onQueryTextSubmit(query: String?): Boolean {
                 return false
             }
-
             override fun onQueryTextChange(newText: String?): Boolean {
-                bb(newText)
+                search(newText)
                 return true
             }
-
         })
-
-
     }
 
-    private fun bb(query: String?){
-
+    private fun search(query: String?){
 
         if (!query.isNullOrEmpty()) {
-            viewModel.searchMovies( query )
+            viewModel.searchSeries( query )
         } else {
             Toast.makeText(applicationContext, "Digite algo!!!", Toast.LENGTH_LONG).show()
         }
-
     }
 
-    private fun setRecyclerView() {
+    private fun observe(){
 
-        val searchActivity = this
-
-        viewModel.searchMovies("Agents of SHIELD")
-
+        //viewModel.searchSeries("Game of Thrones")
         viewModel.series.observe( this ) {
+            setRecyclerViewSearch( it )
+        }
+    }
+    private fun setRecyclerViewSearch(list: List<Serie>) {
 
-
-
-            binding.recyclerView.apply {
-                layoutManager = LinearLayoutManager( applicationContext, RecyclerView.VERTICAL, false)
-                adapter = SerieSearchAdapter( it, searchActivity )
+        binding.recyclerView.apply {
+            layoutManager = LinearLayoutManager(this.context, RecyclerView.VERTICAL, false)
+            adapter = com.example.filmes.adapter.Adapter {
+                SearchSeriesView(it)
+            }.apply {
+                items = list.toMutableList()
             }
-
         }
-
-
-
     }
-
-    override fun clickSerie(serie: Serie ) {
-
-        val mensagem = serie.name
-        val id = serie.id.toString()
-//            val m = lista[0]
-        Toast.makeText(applicationContext, "Deu certo!!!", Toast.LENGTH_LONG).show()
-        Toast.makeText(applicationContext, "ID: " + id, Toast.LENGTH_LONG).show()
-        val intent = Intent(this, SerieDetailsActivity::class.java).apply {
-            putExtra("mensagem", mensagem)
-            putExtra("id", id)
-            //putExtra("obj", m.overview)
-
-
-        }
-
-        startActivity( intent )
-
-    }
-
 }

@@ -1,23 +1,18 @@
 package com.example.filmes.ui.seriesDetails
 
-import android.content.Intent
+
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.filmes.adapter.cast.CastClickListener
-import com.example.filmes.adapter.season.SeasonAdapter
-import com.example.filmes.adapter.season.SeasonClickListener
-import com.example.filmes.adapter.serie.SerieClickListener
 import com.example.filmes.databinding.ActivitySerieDetailBinding
 import com.example.filmes.model.CastX
 import com.example.filmes.model.SeasonX
 import com.example.filmes.model.Serie
 import com.example.filmes.views.CastView
-import com.example.filmes.ui.season.SeasonEpisodes
+import com.example.filmes.views.SeasonView
 import com.example.filmes.views.SeriesView
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
@@ -25,7 +20,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.lang.Exception
 
 @AndroidEntryPoint
-class SerieDetailsActivity : AppCompatActivity(), SeasonClickListener, CastClickListener, SerieClickListener {
+class SerieDetailsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySerieDetailBinding
     private val viewModel: SeriesDetailsViewModel by viewModels()
@@ -105,7 +100,7 @@ class SerieDetailsActivity : AppCompatActivity(), SeasonClickListener, CastClick
                     })
                 }
 
-                setRecyclerView(it.seasons)
+                setRecyclerViewSeason(it.seasons)
                 setRecyclerViewSimilar(it.similar.results)
             }
         } catch (e: Exception) {
@@ -124,12 +119,15 @@ class SerieDetailsActivity : AppCompatActivity(), SeasonClickListener, CastClick
         }
     }
 
-    private fun setRecyclerView(lista: List<SeasonX>) {
+    private fun setRecyclerViewSeason(list: List<SeasonX>) {
 
-        val mainActivity = this
         binding.recyclerSeasons.apply {
-            layoutManager = LinearLayoutManager(applicationContext, RecyclerView.HORIZONTAL, false)
-            adapter = SeasonAdapter(lista, mainActivity)
+            layoutManager = LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false)
+            adapter = com.example.filmes.adapter.Adapter {
+                SeasonView(it, serieId, (supportFragmentManager))
+            }.apply {
+                items = list.toMutableList()
+            }
         }
     }
 
@@ -143,7 +141,6 @@ class SerieDetailsActivity : AppCompatActivity(), SeasonClickListener, CastClick
                 items = list.toMutableList()
             }
         }
-
     }
 
     private fun setRecyclerViewCast(list: List<CastX>) {
@@ -157,25 +154,4 @@ class SerieDetailsActivity : AppCompatActivity(), SeasonClickListener, CastClick
             }
         }
     }
-
-
-    override fun clickSeason(season: SeasonX) {
-
-        SeasonEpisodes(season, serieId).show(supportFragmentManager, "seasonTag")
-    }
-
-    override fun clickCast(cast: CastX) {
-        Toast.makeText(applicationContext, cast.name, Toast.LENGTH_SHORT).show()
-    }
-
-
-
-    override fun clickSerie(serie: Serie) {
-        val id = serie.id.toString()
-        val intent = Intent( applicationContext, SerieDetailsActivity::class.java ).apply {
-            putExtra("id", serie.id.toString() )
-        }
-        startActivity(intent)
-    }
-
 }

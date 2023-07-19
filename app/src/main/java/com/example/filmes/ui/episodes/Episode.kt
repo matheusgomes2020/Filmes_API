@@ -31,10 +31,24 @@ class Episode(private var seriesId: String, private var seasonNumber: Int, priva
     private fun observe(){
 
         try {
+            var roteiro = ""
             episodeViewModel.episodeInfo.observe(viewLifecycleOwner) {
-                binding.textView10.text = it.name
-                binding.textView11.text = it.overview
-                setRecyclerViewCast(it.guest_stars)
+                if (!it.name.isNullOrEmpty()) binding.textView10.text = it.name else binding.textView10.visibility = View.GONE
+                if (!it.overview.isNullOrEmpty()) binding.textView11.text = it.overview else binding.textView11.visibility = View.GONE
+                var director = ""
+                var writing = ""
+                for (i in it.crew) if ( i.job == "Director" ) {binding.textViewDirecaoEdisodio.text = i.name
+                director = i.name }
+                for (i in it.crew) if ( i.department == "Writing" ) { roteiro += i.name + "\n"
+                    writing = i.name }
+                binding.textViewRoteiroEdisodio.text = roteiro
+                if (director.isNullOrEmpty()) {binding.textViewDirecaoEdisodio.visibility = View.GONE
+                binding.textView8.visibility = View.GONE}
+                if (writing.isNullOrEmpty()) {binding.textViewRoteiroEdisodio.visibility = View.GONE
+                    binding.textView9.visibility = View.GONE}
+                if ( !it.guest_stars.isNullOrEmpty() ) setRecyclerViewCast(it.guest_stars)
+                else binding.linearLayout2.visibility = View.GONE
+
             }
         }catch (e: Exception){
             e.printStackTrace()

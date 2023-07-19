@@ -1,29 +1,18 @@
 package com.example.filmes.ui.movieDetails
 
-import android.R
-import android.content.Intent
-import android.opengl.Visibility
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.filmes.adapter.cast.CastAdapter
-import com.example.filmes.adapter.cast.CastClickListener
-import com.example.filmes.adapter.movie.MovieAdapter
-import com.example.filmes.adapter.movie.MovieClickListener
 import com.example.filmes.databinding.ActivityMovieDetailsBinding
 import com.example.filmes.model.CastX
 import com.example.filmes.model.Movie
-import com.example.filmes.model.Serie
 import com.example.filmes.views.CastView
 import com.example.filmes.views.MovieView
-import com.example.filmes.views.SeriesView
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
-import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView
 import dagger.hilt.android.AndroidEntryPoint
 
 

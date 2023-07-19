@@ -5,7 +5,6 @@ import com.example.filmes.data.Resource
 import com.example.filmes.di.Episode2
 import com.example.filmes.model.Season
 import com.example.filmes.model.CastX
-import com.example.filmes.model.Episode
 import com.example.filmes.model.Serie
 import com.example.filmes.network.SeriesApi
 import javax.inject.Inject
@@ -78,7 +77,7 @@ class SeriesRepository @Inject constructor( private val api: SeriesApi) {
 
         val response = try {
             Resource.Loading( data = true )
-            api.getSerieInfo( serieId )
+            api.getSeriesInfo( serieId )
         }catch ( exception: Exception ) {
             return Resource.Error( message = "An error occurred ${exception.message.toString()}" )
         }
