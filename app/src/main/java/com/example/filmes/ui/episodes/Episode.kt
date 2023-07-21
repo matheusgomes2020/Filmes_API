@@ -9,7 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.filmes.databinding.FragmentEpisodeBinding
-import com.example.filmes.model.CastX
+import com.example.filmes.model.general.Cast
 import com.example.filmes.views.CastView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -54,7 +54,7 @@ class Episode(private var seriesId: String, private var seasonNumber: Int, priva
             e.printStackTrace()
         }
     }
-    private fun setRecyclerViewCast(list: List<CastX>) {
+    private fun setRecyclerViewCast(list: List<Cast>) {
 
         binding.recyclerMoviecast.apply {
             layoutManager = LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false)

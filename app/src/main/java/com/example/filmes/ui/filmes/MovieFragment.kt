@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.filmes.adapter.Adapter
 import com.example.filmes.databinding.FragmentMovieBinding
-import com.example.filmes.model.Movie
+import com.example.filmes.model.movie.Movie
 import com.example.filmes.views.MovieView
 import dagger.hilt.android.AndroidEntryPoint
 import java.lang.Exception

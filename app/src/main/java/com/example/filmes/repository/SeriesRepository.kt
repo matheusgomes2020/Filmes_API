@@ -2,10 +2,10 @@ package com.example.filmes.repository
 
 import android.util.Log
 import com.example.filmes.data.Resource
-import com.example.filmes.di.Episode2
-import com.example.filmes.model.Season
-import com.example.filmes.model.CastX
-import com.example.filmes.model.Serie
+import com.example.filmes.model.general.Cast
+import com.example.filmes.model.serie.Serie
+import com.example.filmes.model.serie.Season
+import com.example.filmes.model.serie.Episode
 import com.example.filmes.network.SeriesApi
 import javax.inject.Inject
 
@@ -97,7 +97,7 @@ class SeriesRepository @Inject constructor( private val api: SeriesApi) {
         }
     }
 
-    suspend fun getEpisodeInfo( seriesId: String, seasonNumber: Int, episodeNumber: Int ): Resource<Episode2> {
+    suspend fun getEpisodeInfo( seriesId: String, seasonNumber: Int, episodeNumber: Int ): Resource<Episode> {
 
         return try {
 
@@ -116,7 +116,7 @@ class SeriesRepository @Inject constructor( private val api: SeriesApi) {
     }
 
 
-    suspend fun getCast( seriesId: String ): Resource<List<CastX>> {
+    suspend fun getCast( seriesId: String ): Resource<List<Cast>> {
 
         return try {
             Resource.Loading( data = true )

@@ -8,7 +8,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import coil.load
 import com.example.filmes.R
 import com.example.filmes.adapter.BaseViewHolder
-import com.example.filmes.model.Movie
+import com.example.filmes.model.movie.Movie
 import com.example.filmes.ui.movieDetails.MovieDetailsActivity
 
 class MovieView (viewGroup: ViewGroup) : BaseViewHolder<Movie>(

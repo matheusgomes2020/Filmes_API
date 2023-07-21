@@ -6,8 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.filmes.data.Resource
-import com.example.filmes.di.Episode2
-import com.example.filmes.model.Episode
+import com.example.filmes.model.serie.Episode
 import com.example.filmes.repository.SeriesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -18,9 +17,9 @@ import javax.inject.Inject
 class EpisodeViewModel @Inject constructor(private val seriesRepository: SeriesRepository)
     : ViewModel() {
 
-    private var _episodeInfo = MutableLiveData<Episode2>()
+    private var _episodeInfo = MutableLiveData<Episode>()
     var carregando: Boolean = true
-    val episodeInfo: LiveData<Episode2> = _episodeInfo
+    val episodeInfo: LiveData<Episode> = _episodeInfo
 
 
     fun getEpisodeInfo( seriesId: String, seasonNumber: Int, episodeNumber: Int ) {

@@ -1,8 +1,9 @@
 package com.example.filmes.network
 
-import com.example.filmes.model.Cast
-import com.example.filmes.model.Movie
 import com.example.filmes.model.Movies
+import com.example.filmes.model.general.Cast
+import com.example.filmes.model.general.Credits
+import com.example.filmes.model.movie.Movie
 import com.example.filmes.utils.Constants
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -33,15 +34,11 @@ interface MoviesApi {
     @GET("movie/top_rated?language=pt-BR&api_key=" + Constants.API_KEY)
     suspend fun getRatedMovies(): Movies
 
-    //https://api.themoviedb.org/3/movie/157336?api_key=0f5183b12ca04341d5f0f71d8bc698b5&append_to_response=videos
     @GET("movie/{movieID}?language=pt-BR&api_key=" + Constants.API_KEY + "&append_to_response=videos,images,reviews,similar,credits")
     suspend fun  getMovieInfo(@Path("movieID") movieId: String) : Movie
 
-    //https://api.themoviedb.org/3/movie/550?api_key=0f5183b12ca04341d5f0f71d8bc698b5
-    //https://api.themoviedb.org/3/movie/603692/credits?language=en-US&api_key=0f5183b12ca04341d5f0f71d8bc698b5#
-
     @GET("movie/{movieID}/credits?language=pt-BR&api_key=" + Constants.API_KEY)
-    suspend fun getCast(@Path("movieID") movieID: String ) : Cast
+    suspend fun getCast(@Path("movieID") movieID: String ) : Credits
 
 
 }

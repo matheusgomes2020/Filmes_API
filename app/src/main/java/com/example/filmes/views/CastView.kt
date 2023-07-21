@@ -9,16 +9,16 @@ import android.widget.Toast
 import coil.load
 import com.example.filmes.R
 import com.example.filmes.adapter.BaseViewHolder
-import com.example.filmes.model.CastX
+import com.example.filmes.model.general.Cast
 
-class CastView (viewGroup: ViewGroup) : BaseViewHolder<CastX>(
+class CastView (viewGroup: ViewGroup) : BaseViewHolder<Cast>(
     R.layout.cast_cell,
     viewGroup
 ) {
 
     private val context = viewGroup.context
 
-    override fun bind(item: CastX) {
+    override fun bind(item: Cast) {
         itemView.findViewById<TextView>(R.id.textActorName).text = item.name
         if ( !item.profile_path.isNullOrEmpty() ) itemView.findViewById<ImageView>(R.id.imageCast).load( "https://image.tmdb.org/t/p/w500" + item.profile_path)
         else itemView.findViewById<ImageView>(R.id.imageCast).load( R.drawable.padrao)

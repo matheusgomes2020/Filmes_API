@@ -8,7 +8,7 @@ import android.widget.TextView
 import coil.load
 import com.example.filmes.R
 import com.example.filmes.adapter.BaseViewHolder
-import com.example.filmes.model.Serie
+import com.example.filmes.model.serie.Serie
 import com.example.filmes.ui.seriesDetails.SerieDetailsActivity
 
 class SearchSeriesView (viewGroup: ViewGroup) : BaseViewHolder<Serie>(

@@ -7,7 +7,7 @@ import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.filmes.databinding.ActivitySearchBinding
-import com.example.filmes.model.Serie
+import com.example.filmes.model.serie.Serie
 import com.example.filmes.views.SearchSeriesView
 import dagger.hilt.android.AndroidEntryPoint
 

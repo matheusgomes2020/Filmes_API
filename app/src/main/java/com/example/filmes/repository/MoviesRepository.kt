@@ -1,8 +1,8 @@
 package com.example.filmes.repository
 
 import com.example.filmes.data.Resource
-import com.example.filmes.model.CastX
-import com.example.filmes.model.Movie
+import com.example.filmes.model.general.Cast
+import com.example.filmes.model.movie.Movie
 import com.example.filmes.network.MoviesApi
 import javax.inject.Inject
 
@@ -79,7 +79,7 @@ class MoviesRepository @Inject constructor( private val api: MoviesApi ) {
         return Resource.Success( data = response )
     }
 
-    suspend fun getCast( movieId: String ): Resource<List<CastX>> {
+    suspend fun getCast( movieId: String ): Resource<List<Cast>> {
 
         return try {
             Resource.Loading( data = true )

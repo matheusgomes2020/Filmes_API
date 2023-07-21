@@ -1,10 +1,12 @@
 package com.example.filmes.network
 
-import com.example.filmes.di.Episode2
-import com.example.filmes.model.Season
-import com.example.filmes.model.Cast
-import com.example.filmes.model.Serie
+
 import com.example.filmes.model.Series
+import com.example.filmes.model.general.Cast
+import com.example.filmes.model.general.Credits
+import com.example.filmes.model.serie.Episode
+import com.example.filmes.model.serie.Season
+import com.example.filmes.model.serie.Serie
 import com.example.filmes.utils.Constants
 import retrofit2.http.GET
 import retrofit2.http.Path
@@ -41,11 +43,11 @@ interface SeriesApi {
     suspend fun getSeasonEpisodes(@Path("series_id") series_id: String, @Path("season_number") season_number: Int ) : Season
 
     @GET("tv/{series_id}/aggregate_credits?language=pt-BR&api_key=" + Constants.API_KEY)
-    suspend fun getCast(@Path("series_id") series_id: String ) : Cast
+    suspend fun getCast(@Path("series_id") series_id: String ) : Credits
 
     //https://api.themoviedb.org/3/tv/95057/season/2/episode/2?language=en-US&api_key=0f5183b12ca04341d5f0f71d8bc698b5&append_to_response=images
     @GET("tv/{series_id}/season/{season_number}/episode/{episode_number}?language=pt-BR&api_key=" + Constants.API_KEY + "&append_to_response=images")
-    suspend fun getEpisodeInfo(@Path("series_id") series_id: String, @Path("season_number") season_number: Int, @Path("episode_number") episode_number: Int ) : Episode2
+    suspend fun getEpisodeInfo(@Path("series_id") series_id: String, @Path("season_number") season_number: Int, @Path("episode_number") episode_number: Int ) : Episode
 
 
 }

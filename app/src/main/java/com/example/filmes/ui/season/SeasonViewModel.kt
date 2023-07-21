@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.filmes.data.Resource
-import com.example.filmes.model.Season
+import com.example.filmes.model.serie.Season
 import com.example.filmes.repository.SeriesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch

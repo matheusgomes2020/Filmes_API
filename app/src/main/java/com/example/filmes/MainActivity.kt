@@ -21,7 +21,7 @@ import dagger.hilt.android.AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
-    private var actual = "Movie"
+    private var actual = "Filmes"
 
     @RequiresApi(Build.VERSION_CODES.Q)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,13 +34,12 @@ class MainActivity : AppCompatActivity() {
            binding.navView.setOnItemSelectedListener {
 
                when( it.itemId ) {
-                   R.id.navigation_movie -> { replaceFragment(MovieFragment())
-                       actual = "Movie" }
-                   R.id.navigation_serie -> {
-                       replaceFragment(SeriesFragment())
-                       actual = "Series"
-                   }
-                   R.id.navigation_profile -> replaceFragment(ProfileFragment())
+                   R.id.navigation_movie -> { actual = "Filmes"
+                       replaceFragment(MovieFragment()) }
+                   R.id.navigation_serie -> { actual = "Séries"
+                       replaceFragment(SeriesFragment()) }
+                   R.id.navigation_profile -> { actual = "Perfil"
+                       replaceFragment(ProfileFragment()) }
                    else -> {}
                }
                true
@@ -50,6 +49,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupToolbar(){
         setSupportActionBar(binding.myToolbar2)
         binding.myToolbar2.setTitleTextColor(resources.getColor(R.color.white))
+        binding.myToolbar2.setTitle(actual)
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity() {
 
         when (item.itemId) {
             R.id.search -> {
-                return if ( actual == "Movie" ) {
+                return if ( actual == "Filmes" ) {
                     val intent = Intent(this, SearchActivity::class.java)
                     startActivity( intent )
                     true
@@ -83,5 +83,6 @@ class MainActivity : AppCompatActivity() {
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.frameLayout, fragment)
         fragmentTransaction.commit()
+        setupToolbar()
     }
 }

@@ -1,1 +1,3 @@
 /build
+/src/main/java/com/example/filmes/adapter/BaseAdapter.kt
+/src/main/java/com/example/filmes/adapter/BaseClickListener.kt

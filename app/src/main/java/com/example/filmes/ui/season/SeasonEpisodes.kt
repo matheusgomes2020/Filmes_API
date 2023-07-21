@@ -10,14 +10,15 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.filmes.R
 import com.example.filmes.databinding.FragmentSeasonEpisodesBinding
-import com.example.filmes.model.SeasonX
+import com.example.filmes.model.serie.Episode
+import com.example.filmes.model.serie.Season
 import com.example.filmes.views.EpisodeView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import java.lang.Exception
 
 @AndroidEntryPoint
-class SeasonEpisodes(private var seasonX: SeasonX?, private var seriesId: String) :BottomSheetDialogFragment(){
+class SeasonEpisodes(private var seasonX: Season?, private var seriesId: String) :BottomSheetDialogFragment(){
 
     private lateinit var binding: FragmentSeasonEpisodesBinding
     private val seasonViewModel: SeasonViewModel by viewModels()
@@ -51,7 +52,7 @@ class SeasonEpisodes(private var seasonX: SeasonX?, private var seriesId: String
         }
     }
 
-    private fun setRecyclerViewEpisodes(list: List<com.example.filmes.di.Episode>) {
+    private fun setRecyclerViewEpisodes(list: List<Episode>) {
 
         binding.recyclerEpisodes.apply {
             layoutManager = LinearLayoutManager(this.context, RecyclerView.VERTICAL, false)

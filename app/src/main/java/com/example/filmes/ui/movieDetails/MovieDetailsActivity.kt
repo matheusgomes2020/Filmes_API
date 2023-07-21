@@ -7,8 +7,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.filmes.databinding.ActivityMovieDetailsBinding
-import com.example.filmes.model.CastX
-import com.example.filmes.model.Movie
+import com.example.filmes.model.general.Cast
+import com.example.filmes.model.movie.Movie
 import com.example.filmes.views.CastView
 import com.example.filmes.views.MovieView
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
@@ -90,7 +90,7 @@ class MovieDetailsActivity : AppCompatActivity() {
         }
     }
 
-    private fun setRecyclerViewCast(list: List<CastX>) {
+    private fun setRecyclerViewCast(list: List<Cast>) {
 
         binding.recyclerMoviecast.apply {
             layoutManager = LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false)

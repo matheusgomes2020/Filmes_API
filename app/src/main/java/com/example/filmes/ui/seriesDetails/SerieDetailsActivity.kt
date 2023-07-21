@@ -8,9 +8,9 @@ import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.filmes.databinding.ActivitySerieDetailBinding
-import com.example.filmes.model.CastX
-import com.example.filmes.model.SeasonX
-import com.example.filmes.model.Serie
+import com.example.filmes.model.general.Cast
+import com.example.filmes.model.serie.Season
+import com.example.filmes.model.serie.Serie
 import com.example.filmes.views.CastView
 import com.example.filmes.views.SeasonView
 import com.example.filmes.views.SeriesView
@@ -119,7 +119,7 @@ class SerieDetailsActivity : AppCompatActivity() {
         }
     }
 
-    private fun setRecyclerViewSeason(list: List<SeasonX>) {
+    private fun setRecyclerViewSeason(list: List<Season>) {
 
         binding.recyclerSeasons.apply {
             layoutManager = LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false)
@@ -143,7 +143,7 @@ class SerieDetailsActivity : AppCompatActivity() {
         }
     }
 
-    private fun setRecyclerViewCast(list: List<CastX>) {
+    private fun setRecyclerViewCast(list: List<Cast>) {
 
         binding.recyclerCast.apply {
             layoutManager = LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false)

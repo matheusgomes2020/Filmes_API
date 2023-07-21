@@ -6,8 +6,8 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.filmes.data.Resource
-import com.example.filmes.model.CastX
-import com.example.filmes.model.Movie
+import com.example.filmes.model.general.Cast
+import com.example.filmes.model.movie.Movie
 import com.example.filmes.repository.MoviesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -19,10 +19,10 @@ class MovieDetailsViewModel @Inject constructor( private val repository: MoviesR
     : ViewModel() {
 
     private var movieInfoEmitter = MutableLiveData<Movie>()
-    private val castEmitter = MutableLiveData<List<CastX>>()
+    private val castEmitter = MutableLiveData<List<Cast>>()
     var carregando: Boolean = true
     val movieInfo: LiveData<Movie> = movieInfoEmitter
-    val cast: LiveData<List<CastX>> = castEmitter
+    val cast: LiveData<List<Cast>> = castEmitter
 
     fun getMovieInfo( movieId: String ) {
 
