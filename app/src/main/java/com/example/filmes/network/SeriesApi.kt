@@ -23,7 +23,6 @@ interface SeriesApi {
 
     ): Series
 
-    //https://api.themoviedb.org/3/tv/popular?language=pt-BR&api_key=0f5183b12ca04341d5f0f71d8bc698b5
     @GET("tv/airing_today?language=pt-BR&api_key=" + Constants.API_KEY)
     suspend fun getAiringTodaySeries(): Series
 
@@ -36,16 +35,13 @@ interface SeriesApi {
     @GET("tv/on_the_air?language=pt-BR&api_key=" + Constants.API_KEY)
     suspend fun getOnTheAirSeries(): Series
 
-    @GET("tv/{serieID}?language=pt-BR&api_key=" + Constants.API_KEY + "&append_to_response=videos,images,reviews,similar,credits,episodes" )
+    @GET("tv/{serieID}?language=pt-BR&api_key=" + Constants.API_KEY + "&append_to_response=videos,images,reviews,similar,aggregate_credits,episodes" )
     suspend fun  getSeriesInfo(@Path("serieID") serieId: String) : Serie
 
     @GET("tv/{series_id}/season/{season_number}?language=pt-BR&api_key=" + Constants.API_KEY)
     suspend fun getSeasonEpisodes(@Path("series_id") series_id: String, @Path("season_number") season_number: Int ) : Season
 
-    @GET("tv/{series_id}/aggregate_credits?language=pt-BR&api_key=" + Constants.API_KEY)
-    suspend fun getCast(@Path("series_id") series_id: String ) : Credits
 
-    //https://api.themoviedb.org/3/tv/95057/season/2/episode/2?language=en-US&api_key=0f5183b12ca04341d5f0f71d8bc698b5&append_to_response=images
     @GET("tv/{series_id}/season/{season_number}/episode/{episode_number}?language=pt-BR&api_key=" + Constants.API_KEY + "&append_to_response=images")
     suspend fun getEpisodeInfo(@Path("series_id") series_id: String, @Path("season_number") season_number: Int, @Path("episode_number") episode_number: Int ) : Episode
 

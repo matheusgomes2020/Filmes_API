@@ -59,7 +59,7 @@ class Episode(private var seriesId: String, private var seasonNumber: Int, priva
         binding.recyclerMoviecast.apply {
             layoutManager = LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false)
             adapter = com.example.filmes.adapter.Adapter {
-                CastView(it)
+                CastView(it, childFragmentManager )
             }.apply {
                 items = list.toMutableList()
             }

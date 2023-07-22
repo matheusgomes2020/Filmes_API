@@ -37,16 +37,14 @@ class SerieDetailsActivity : AppCompatActivity() {
         serieId = id!!
         viewModel.getSerieInfo(id!!)
         viewModel.getSeasonEpisodes(id!!, 1)
-        viewModel.getCast(id!!)
         observeSeries()
-        observeCast()
 
     }
 
     private fun observeSeries() {
 
         try {
-            viewModel.serieInfo.observe(this) {
+            viewModel.seriesInfo.observe(this) {
                 nomeSerie = it.name
                 binding.seriesOverview.text = it.overview
                 binding.seriesTitle.text = it.name
@@ -101,18 +99,8 @@ class SerieDetailsActivity : AppCompatActivity() {
                 }
 
                 setRecyclerViewSeason(it.seasons)
+                setRecyclerViewCast(it.aggregate_credits.cast)
                 setRecyclerViewSimilar(it.similar.results)
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-    }
-
-    private fun observeCast() {
-
-        try {
-            viewModel.cast.observe(this) {
-                setRecyclerViewCast(it)
             }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -148,7 +136,7 @@ class SerieDetailsActivity : AppCompatActivity() {
         binding.recyclerCast.apply {
             layoutManager = LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false)
             adapter = com.example.filmes.adapter.Adapter {
-                CastView(it)
+                CastView(it, supportFragmentManager)
             }.apply {
                 items = list.toMutableList()
             }

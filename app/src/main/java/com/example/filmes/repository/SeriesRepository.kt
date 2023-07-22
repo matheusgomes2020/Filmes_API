@@ -2,7 +2,6 @@ package com.example.filmes.repository
 
 import android.util.Log
 import com.example.filmes.data.Resource
-import com.example.filmes.model.general.Cast
 import com.example.filmes.model.serie.Serie
 import com.example.filmes.model.serie.Season
 import com.example.filmes.model.serie.Episode
@@ -71,8 +70,6 @@ class SeriesRepository @Inject constructor( private val api: SeriesApi) {
         }
     }
 
-
-
     suspend fun getSerieInfo(serieId: String): Resource<Serie> {
 
         val response = try {
@@ -112,19 +109,6 @@ class SeriesRepository @Inject constructor( private val api: SeriesApi) {
         } catch (exception: Exception) {
             Resource.Error(message = exception.message.toString())
 
-        }
-    }
-
-
-    suspend fun getCast( seriesId: String ): Resource<List<Cast>> {
-
-        return try {
-            Resource.Loading( data = true )
-            val itemList = api.getCast( seriesId ).cast
-            if (itemList.isNotEmpty()) Resource.Loading(data = false)
-            Resource.Success(data = itemList)
-        } catch (exception: Exception) {
-            Resource.Error(message = exception.message.toString())
         }
     }
 

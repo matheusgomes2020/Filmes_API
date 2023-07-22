@@ -1,8 +1,6 @@
 package com.example.filmes.network
 
 import com.example.filmes.model.Movies
-import com.example.filmes.model.general.Cast
-import com.example.filmes.model.general.Credits
 import com.example.filmes.model.movie.Movie
 import com.example.filmes.utils.Constants
 import retrofit2.http.GET
@@ -23,11 +21,9 @@ interface MoviesApi {
     @GET("movie/upcoming?language=pt-BR&api_key=" + Constants.API_KEY)
     suspend fun getUpcoming() : Movies
 
-
     @GET("movie/popular?language=pt-BR&api_key=" + Constants.API_KEY)
     suspend fun getPopularMovies() : Movies
 
-    //now_playing?
     @GET("movie/now_playing?language=pt-BR&api_key=" + Constants.API_KEY)
     suspend fun getNowPlaying() : Movies
 
@@ -36,9 +32,6 @@ interface MoviesApi {
 
     @GET("movie/{movieID}?language=pt-BR&api_key=" + Constants.API_KEY + "&append_to_response=videos,images,reviews,similar,credits")
     suspend fun  getMovieInfo(@Path("movieID") movieId: String) : Movie
-
-    @GET("movie/{movieID}/credits?language=pt-BR&api_key=" + Constants.API_KEY)
-    suspend fun getCast(@Path("movieID") movieID: String ) : Credits
 
 
 }

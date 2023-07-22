@@ -79,18 +79,4 @@ class MoviesRepository @Inject constructor( private val api: MoviesApi ) {
         return Resource.Success( data = response )
     }
 
-    suspend fun getCast( movieId: String ): Resource<List<Cast>> {
-
-        return try {
-            Resource.Loading( data = true )
-            val itemList = api.getCast( movieId ).cast
-            if (itemList.isNotEmpty()) Resource.Loading(data = false)
-            Resource.Success(data = itemList)
-        } catch (exception: Exception) {
-            Resource.Error(message = exception.message.toString())
-        }
-    }
-
-
-
 }

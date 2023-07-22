@@ -29,9 +29,7 @@ class MovieDetailsActivity : AppCompatActivity() {
 
         val id = intent.getStringExtra("id")
         viewModel.getMovieInfo( id!! )
-        viewModel.getCast( id!! )
         observeMovies()
-        observeCast()
     }
 
     private fun observeMovies() {
@@ -73,17 +71,7 @@ class MovieDetailsActivity : AppCompatActivity() {
                 }
 
                 setRecyclerViewSimilar(it.similar.results)
-            }
-        }catch (e: Exception){
-            e.printStackTrace()
-        }
-    }
-
-    private fun observeCast() {
-
-        try {
-            viewModel.cast.observe(this) {
-                setRecyclerViewCast( it )
+                setRecyclerViewCast(it.credits.cast)
             }
         }catch (e: Exception){
             e.printStackTrace()
@@ -95,7 +83,7 @@ class MovieDetailsActivity : AppCompatActivity() {
         binding.recyclerMoviecast.apply {
             layoutManager = LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false)
             adapter = com.example.filmes.adapter.Adapter {
-                CastView(it)
+                CastView(it, supportFragmentManager)
             }.apply {
                 items = list.toMutableList()
             }

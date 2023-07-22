@@ -6,7 +6,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.filmes.data.Resource
-import com.example.filmes.model.general.Cast
 import com.example.filmes.model.movie.Movie
 import com.example.filmes.repository.MoviesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,11 +17,9 @@ import javax.inject.Inject
 class MovieDetailsViewModel @Inject constructor( private val repository: MoviesRepository )
     : ViewModel() {
 
-    private var movieInfoEmitter = MutableLiveData<Movie>()
-    private val castEmitter = MutableLiveData<List<Cast>>()
+    private var _movieInfo = MutableLiveData<Movie>()
     var carregando: Boolean = true
-    val movieInfo: LiveData<Movie> = movieInfoEmitter
-    val cast: LiveData<List<Cast>> = castEmitter
+    val movieInfo: LiveData<Movie> = _movieInfo
 
     fun getMovieInfo( movieId: String ) {
 
@@ -30,8 +27,8 @@ class MovieDetailsViewModel @Inject constructor( private val repository: MoviesR
              viewModelScope.launch {
              when (val response = repository.getMovieInfo( movieId ) ){
                  is Resource.Success -> {
-                     movieInfoEmitter.value = response.data!!
-                     if (movieInfoEmitter.value!! != null) carregando = false
+                     _movieInfo.value = response.data!!
+                     if (_movieInfo.value!! != null) carregando = false
                      Log.e("Network", "upcomingMovies: Ok. Certo!!! Carregando?= $carregando")
                  }
                  is Resource.Error -> {
@@ -48,30 +45,5 @@ class MovieDetailsViewModel @Inject constructor( private val repository: MoviesR
              Log.d("Network", "upcomingMovies: ${exception.message.toString()} Carregando?= $carregando")
          }
      }
-
-    fun getCast( movieId: String ) {
-
-        try {
-            viewModelScope.launch {
-                when (val response = repository.getCast( movieId ) ){
-                    is Resource.Success -> {
-                        castEmitter.value = response.data!!
-                        if (castEmitter.value!! != null) carregando = false
-                        Log.e("Network", "cast: Ok. Certo!!! Carregando?= $carregando")
-                    }
-                    is Resource.Error -> {
-                        carregando = false
-                        Log.e("Network", "cast: Failed getting cast Carregando?= $carregando")
-                    }
-                    else -> {
-                        carregando = false
-                    }
-                }
-            }
-        }catch (exception: Exception) {
-            carregando = false
-            Log.d("Network", "cast: ${exception.message.toString()} Carregando?= $carregando")
-        }
-    }
 
     }
