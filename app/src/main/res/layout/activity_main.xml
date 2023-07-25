@@ -33,7 +33,7 @@
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/nav_view"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="70dp"
         app:itemIconTint="?attr/colorPrimary"
         app:itemTextColor="?attr/colorPrimary"
         app:layout_constraintBottom_toBottomOf="parent"

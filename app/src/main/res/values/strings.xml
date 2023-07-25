@@ -1,9 +1,9 @@
 <resources>
     <string name="app_name">Filmes</string>
     <string name="title_activity_main2">MainActivity2</string>
-    <string name="title_movie"></string>
-    <string name="title_serie"></string>
-    <string name="title_profile"></string>
+    <string name="title_movie">Filmes</string>
+    <string name="title_serie">Séries</string>
+    <string name="title_profile">Perfil</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>
