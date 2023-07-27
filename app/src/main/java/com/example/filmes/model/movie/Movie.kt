@@ -1,5 +1,8 @@
 package com.example.filmes.model.movie
 
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.example.filmes.model.general.Credits
 import com.example.filmes.model.general.Genre
 import com.example.filmes.model.general.Images
@@ -8,7 +11,6 @@ import com.example.filmes.model.general.ProductionCountry
 import com.example.filmes.model.general.Reviews
 import com.example.filmes.model.general.SpokenLanguage
 import com.example.filmes.model.general.Videos
-
 data class Movie(
     val adult: Boolean,
     val backdrop_path: String,
