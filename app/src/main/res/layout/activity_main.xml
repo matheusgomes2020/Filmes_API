@@ -1,301 +1,45 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/container"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.main.MainActivity">
+    android:layout_height="match_parent">
 
     <androidx.appcompat.widget.Toolbar
-        android:id="@+id/myToolbar"
+        android:id="@+id/myToolbar2"
         android:layout_width="match_parent"
         android:layout_height="45dp"
         android:background="?attr/colorPrimary"
+        app:titleTextAppearance="@style/Toolbar.TitleText"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
     </androidx.appcompat.widget.Toolbar>
 
-    <ScrollView
+    <FrameLayout
+        android:id="@+id/frameLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_below="@+id/myToolbar"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/nav_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/myToolbar">
-
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-
-                <TextView
-                    android:id="@+id/textUpcoming"
-                    style="@style/TextAppearance.AppCompat.Title"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="8dp"
-                    android:text=" 🔥 Em alta"
-                    android:textSize="16sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"></TextView>
-
-                <com.facebook.shimmer.ShimmerFrameLayout
-                    android:id="@+id/shimmer"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/textUpcoming">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <include layout="@layout/movie_cell_shimmer" />
-
-                        <include layout="@layout/movie_cell_shimmer" />
-
-                        <include layout="@layout/movie_cell_shimmer" />
-
-                        <include layout="@layout/movie_cell_shimmer" />
-
-                        <include layout="@layout/movie_cell_shimmer" />
-
-                        <include layout="@layout/movie_cell_shimmer" />
-
-                        <include layout="@layout/movie_cell_shimmer" />
-
-                        <include layout="@layout/movie_cell_shimmer" />
-
-                        <include layout="@layout/movie_cell_shimmer" />
-
-                        <include layout="@layout/movie_cell_shimmer" />
-
-                    </LinearLayout>
-
-                </com.facebook.shimmer.ShimmerFrameLayout>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/movieRecyclerViewEmAlta"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:backgroundTint="@color/design_default_color_background"
-                    android:orientation="horizontal"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    android:visibility="invisible"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textUpcoming" />
-
-                <com.facebook.shimmer.ShimmerFrameLayout
-                    android:id="@+id/shimmer2"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/textView">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <include layout="@layout/movie_cell_shimmer" />
-
-                        <include layout="@layout/movie_cell_shimmer" />
-
-                        <include layout="@layout/movie_cell_shimmer" />
-
-                        <include layout="@layout/movie_cell_shimmer" />
-
-                        <include layout="@layout/movie_cell_shimmer" />
-
-                        <include layout="@layout/movie_cell_shimmer" />
-
-                        <include layout="@layout/movie_cell_shimmer" />
-
-                        <include layout="@layout/movie_cell_shimmer" />
-
-                        <include layout="@layout/movie_cell_shimmer" />
-
-                        <include layout="@layout/movie_cell_shimmer" />
-
-                    </LinearLayout>
-
-                </com.facebook.shimmer.ShimmerFrameLayout>
-
-                <TextView
-                    android:id="@+id/textView"
-                    style="@style/TextAppearance.AppCompat.Title"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="8dp"
-                    android:text=" ⭐ Em cartaz"
-                    android:textSize="16sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/movieRecyclerViewEmAlta"></TextView>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/movieRecyclerViewEmCartaz"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:visibility="invisible"
-                    android:backgroundTint="@color/design_default_color_background"
-                    android:orientation="horizontal"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView" />
-
-                <com.facebook.shimmer.ShimmerFrameLayout
-                    android:id="@+id/shimmer3"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-
-                    app:layout_constraintTop_toBottomOf="@id/textView2">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <include layout="@layout/movie_cell_shimmer" />
-                        <include layout="@layout/movie_cell_shimmer" />
-                        <include layout="@layout/movie_cell_shimmer" />
-                        <include layout="@layout/movie_cell_shimmer" />
-                        <include layout="@layout/movie_cell_shimmer" />
-                        <include layout="@layout/movie_cell_shimmer" />
-                        <include layout="@layout/movie_cell_shimmer" />
-                        <include layout="@layout/movie_cell_shimmer" />
-                        <include layout="@layout/movie_cell_shimmer" />
-                        <include layout="@layout/movie_cell_shimmer" />
-
-                    </LinearLayout>
-
-                </com.facebook.shimmer.ShimmerFrameLayout>
-
-                <TextView
-                    android:id="@+id/textView2"
-                    style="@style/TextAppearance.AppCompat.Title"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginTop="5dp"
-                    android:layout_marginEnd="8dp"
-                    android:text=" 🌀 Lançamentos"
-                    android:textSize="16sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/movieRecyclerViewEmCartaz">
-
-                </TextView>
-
-
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/movieRecyclerViewLancamentos"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:visibility="invisible"
-                    android:backgroundTint="@color/design_default_color_background"
-                    android:orientation="horizontal"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView2" />
-
-                <com.facebook.shimmer.ShimmerFrameLayout
-                    android:id="@+id/shimmer4"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-
-                    app:layout_constraintTop_toBottomOf="@id/textView3">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <include layout="@layout/movie_cell_shimmer" />
-                        <include layout="@layout/movie_cell_shimmer" />
-                        <include layout="@layout/movie_cell_shimmer" />
-                        <include layout="@layout/movie_cell_shimmer" />
-                        <include layout="@layout/movie_cell_shimmer" />
-                        <include layout="@layout/movie_cell_shimmer" />
-                        <include layout="@layout/movie_cell_shimmer" />
-                        <include layout="@layout/movie_cell_shimmer" />
-                        <include layout="@layout/movie_cell_shimmer" />
-                        <include layout="@layout/movie_cell_shimmer" />
-
-                    </LinearLayout>
-
-                </com.facebook.shimmer.ShimmerFrameLayout>
-
-                <TextView
-                    android:id="@+id/textView3"
-                    style="@style/TextAppearance.AppCompat.Title"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:layout_marginEnd="8dp"
-                    android:text=" ⭐ Melhores avaliados"
-                    android:textSize="16sp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/movieRecyclerViewLancamentos">
-
-                </TextView>
-
-                <androidx.recyclerview.widget.RecyclerView
-                    android:id="@+id/movieRecyclerViewMelhores"
-                    android:layout_width="match_parent"
-                    android:layout_height="0dp"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:backgroundTint="@color/design_default_color_background"
-                    android:orientation="horizontal"
-                    android:visibility="invisible"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@id/textView3">
-
-                </androidx.recyclerview.widget.RecyclerView>
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
-
-        </RelativeLayout>
-
-    </ScrollView>
-
-
-
-
-
+        app:layout_constraintTop_toBottomOf="@+id/myToolbar2">
+
+    </FrameLayout>
+
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="match_parent"
+        android:layout_height="70dp"
+        app:itemIconTint="?attr/colorPrimary"
+        app:itemTextColor="?attr/colorPrimary"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:menu="@menu/bottom_nav_menu" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

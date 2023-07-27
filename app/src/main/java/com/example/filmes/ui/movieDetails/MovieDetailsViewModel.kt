@@ -4,10 +4,11 @@ import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import com.example.filmes.data.Resource
-import com.example.filmes.model.Movie
+import com.example.filmes.model.MovieD
+import com.example.filmes.model.movie.Movie
+import com.example.filmes.repository.MRepository
 import com.example.filmes.repository.MoviesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -15,21 +16,22 @@ import java.lang.Exception
 import javax.inject.Inject
 
 @HiltViewModel
-class MovieDetailsViewModel @Inject constructor( private val repository: MoviesRepository )
+class MovieDetailsViewModel @Inject constructor( private val repository: MoviesRepository, private val roomRepository: MRepository)
     : ViewModel() {
 
-    private var movieInfoEmitter = MutableLiveData<Movie>()
+    private var _movieInfo = MutableLiveData<Movie>()
     var carregando: Boolean = true
-    val movieInfo: LiveData<Movie> = movieInfoEmitter
+    val movieInfo: LiveData<Movie> = _movieInfo
 
-     fun getMovieInfo( movieId: String ) {
+    fun addMovie(movie: MovieD) = viewModelScope.launch { roomRepository.addMovie(movie) }
+    fun getMovieInfo( movieId: String ) {
 
          try {
              viewModelScope.launch {
              when (val response = repository.getMovieInfo( movieId ) ){
                  is Resource.Success -> {
-                     movieInfoEmitter.value = response.data!!
-                     if (movieInfoEmitter.value!! != null) carregando = false
+                     _movieInfo.value = response.data!!
+                     if (_movieInfo.value!! != null) carregando = false
                      Log.e("Network", "upcomingMovies: Ok. Certo!!! Carregando?= $carregando")
                  }
                  is Resource.Error -> {
@@ -46,4 +48,5 @@ class MovieDetailsViewModel @Inject constructor( private val repository: MoviesR
              Log.d("Network", "upcomingMovies: ${exception.message.toString()} Carregando?= $carregando")
          }
      }
+
     }

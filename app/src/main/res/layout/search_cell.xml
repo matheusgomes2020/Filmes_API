@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/movie_search_cellContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="2dp"
+    android:background="@drawable/bg"
+    android:padding="1dp"
+    app:cardCornerRadius="5dp"
+    tools:layout_editor_absoluteX="5dp"
+    tools:layout_editor_absoluteY="5dp">
+
+    <ImageView
+        android:id="@+id/imageSearchCell"
+        android:layout_width="110dp"
+        android:layout_height="120dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@color/material_dynamic_neutral10"
+        tools:srcCompat="@tools:sample/avatars">
+
+    </ImageView>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginStart="5dp"
+        android:orientation="vertical"
+        android:padding="5dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/imageSearchCell">
+
+        <TextView
+            android:id="@+id/nomeSearchCell"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/poppins"
+            android:maxLines="1"
+            android:text="Avatar"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/overviewSearchCell"
+            app:layout_constraintEnd_toEndOf="@+id/imageSearchCell"
+            app:layout_constraintStart_toEndOf="@+id/imageSearchCell"
+            app:layout_constraintTop_toBottomOf="@+id/id"></TextView>
+
+        <TextView
+            android:id="@+id/ratingSearchCell"
+            style="@style/TextAppearance.AppCompat.Title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:text="⭐⭐⭐⭐⭐"
+            android:textSize="14sp"
+            tools:layout_editor_absoluteX="157dp"
+            tools:layout_editor_absoluteY="402dp"></TextView>
+
+        <TextView
+            android:id="@+id/overviewSearchCell"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="7dp"
+            android:fontFamily="@font/poppins"
+            android:maxLines="3"
+            android:text="O príncipe T'Challa retorna a Wakanda para ser coroado rei. Assumindo o manto de Pantera Negra, ele vai à caça de um vilão que roubou um precioso metal de seu país."
+            android:textSize="12sp"
+            tools:layout_editor_absoluteX="157dp"
+            tools:layout_editor_absoluteY="402dp"></TextView>
+
+
+    </LinearLayout>
+
+
+</LinearLayout>

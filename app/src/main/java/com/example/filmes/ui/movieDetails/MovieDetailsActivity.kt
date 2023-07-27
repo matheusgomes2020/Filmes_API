@@ -1,20 +1,23 @@
 package com.example.filmes.ui.movieDetails
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
-import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import coil.load
-import com.example.filmes.adapter.MovieAdapter
 import com.example.filmes.databinding.ActivityMovieDetailsBinding
+import com.example.filmes.model.MovieD
+import com.example.filmes.model.general.Cast
+import com.example.filmes.model.movie.Movie
+import com.example.filmes.ui.perfil.ProfileViewModel
+import com.example.filmes.views.CastView
+import com.example.filmes.views.MovieView
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
-import java.lang.Exception
 
 
 @AndroidEntryPoint
@@ -22,6 +25,7 @@ class MovieDetailsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMovieDetailsBinding
     private val viewModel: MovieDetailsViewModel by viewModels()
+    var movieD: MovieD? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,46 +33,98 @@ class MovieDetailsActivity : AppCompatActivity() {
         setContentView( binding.root )
 
         val id = intent.getStringExtra("id")
+        viewModel.getMovieInfo( id!! )
         observeMovies()
-        viewModel.getMovieInfo(id!!)
+
+        binding.movieTitle.setOnClickListener {
+            Toast.makeText(applicationContext, movieD!!.title, Toast.LENGTH_SHORT).show()
+
+                viewModel.addMovie( movieD!! )
+
+                Log.d("ROOMST", "MovieDActivity " + movieD.toString())
+
+
+
+        }
+
     }
 
-    fun observeMovies() {
+    private fun observeMovies() {
 
         try {
+            var roteiro = ""
+            var gen = ""
+
             viewModel.movieInfo.observe(this) {
                 binding.movieOverview.text = it.overview
                 binding.movieTitle.text = it.title
-                binding.imageView2.load("https://image.tmdb.org/t/p/w500" + it.poster_path)
                 binding.textData.text = it.release_date
                 binding.textDuration.text = it.runtime.toString()
-
-                var gen = ""
+                binding.textViewDirecaoFilme.text = it.runtime.toString()
+                for (i in it.credits.crew) if ( i.job == "Director" ) binding.textViewDirecaoFilme.text = i.name
+                for (i in it.credits.crew) if ( i.department == "Writing" ) roteiro += i.name + "\n"
+                binding.textViewRoteiro.text = roteiro
                 it.genres.forEachIndexed { index, genres ->
                     gen += genres.name + "  "
                 }
                 binding.textGenres.text = gen
-
                 when ( it.vote_average ) {
-                    in 0.0..1.9 -> binding.texRating.text = "🌟⭐⭐⭐⭐"
-                    in 2.0..3.9 -> binding.texRating.text = "🌟🌟⭐⭐⭐"
-                    in 4.0..5.9 -> binding.texRating.text = "🌟🌟🌟⭐⭐"
-                    in 6.0..7.9 -> binding.texRating.text = "🌟🌟🌟🌟⭐"
-                    in 8.0..10.0 -> binding.texRating.text = "🌟🌟🌟🌟🌟"
+                    in 0.0..1.9 -> binding.texRating.text = "⭐"
+                    in 2.0..3.9 -> binding.texRating.text = "⭐⭐"
+                    in 4.0..5.9 -> binding.texRating.text = "⭐⭐⭐"
+                    in 6.0..7.9 -> binding.texRating.text = "⭐⭐⭐⭐"
+                    in 8.0..10.0 -> binding.texRating.text = "⭐⭐⭐⭐⭐"
                 }
+
+                if ( it.videos.results.isNullOrEmpty() ) {
+                    binding.videoView.visibility = View.GONE
+                } else {
+                    binding.videoView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
+                        override fun onReady(youTubePlayer: YouTubePlayer) {
+                            val videoId = it.videos.results[0].key
+                            youTubePlayer.loadVideo(videoId, 0f)
+                        }
+                    })
+                }
+
+                setRecyclerViewSimilar(it.similar.results)
+                setRecyclerViewCast(it.credits.cast)
+
+                movieD = MovieD(
+                    it.id,
+                    it.poster_path ,
+                    it.title
+                )
+
+
+
             }
         }catch (e: Exception){
             e.printStackTrace()
         }
     }
+
+    private fun setRecyclerViewCast(list: List<Cast>) {
+
+        binding.recyclerMoviecast.apply {
+            layoutManager = LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false)
+            adapter = com.example.filmes.adapter.Adapter {
+                CastView(it, supportFragmentManager)
+            }.apply {
+                items = list.toMutableList()
+            }
+        }
+    }
+
+    private fun setRecyclerViewSimilar(list: List<Movie>) {
+
+        binding.recyclerMovieSimilars.apply {
+            layoutManager = LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false)
+            adapter = com.example.filmes.adapter.Adapter {
+                MovieView(it)
+            }.apply {
+                items = list.toMutableList()
+            }
+        }
+    }
 }
-
-
-
-
-
-
-
-
-
-

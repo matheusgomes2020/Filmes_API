@@ -1,7 +1,8 @@
 package com.example.filmes.repository
 
 import com.example.filmes.data.Resource
-import com.example.filmes.model.Movie
+import com.example.filmes.model.general.Cast
+import com.example.filmes.model.movie.Movie
 import com.example.filmes.network.MoviesApi
 import javax.inject.Inject
 
