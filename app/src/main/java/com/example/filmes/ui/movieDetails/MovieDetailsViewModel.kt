@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.filmes.data.Resource
 import com.example.filmes.model.MovieD
 import com.example.filmes.model.movie.Movie
-import com.example.filmes.repository.MRepository
+import com.example.filmes.repository.MovieRoomRepository
 import com.example.filmes.repository.MoviesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -16,7 +16,7 @@ import java.lang.Exception
 import javax.inject.Inject
 
 @HiltViewModel
-class MovieDetailsViewModel @Inject constructor( private val repository: MoviesRepository, private val roomRepository: MRepository)
+class MovieDetailsViewModel @Inject constructor( private val repository: MoviesRepository, private val roomRepository: MovieRoomRepository)
     : ViewModel() {
 
     private var _movieInfo = MutableLiveData<Movie>()

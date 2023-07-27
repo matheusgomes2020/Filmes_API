@@ -12,6 +12,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
@@ -26,6 +27,8 @@ import com.example.filmes.ui.movieDetails.MovieDetailsActivity
 import com.example.filmes.ui.person.PersonFragment
 import com.example.filmes.views.MovieView
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
 import java.lang.Exception
 
 @AndroidEntryPoint
@@ -47,10 +50,7 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
         observe()
-        Log.d("ROOMST", "Fragment ")
-
     }
 
     override fun onDestroyView() {
@@ -61,20 +61,11 @@ class ProfileFragment : Fragment() {
     private fun observe() {
 
         try {
-
             profileViewModel.movieList.observe(viewLifecycleOwner) {
-
-                Log.d("ROOMST", "Fragment " + it.toString())
-
-                setRecyclerViewPersonMovies( it )
-
-            }
-
-
+                setRecyclerViewPersonMovies( it ) }
         }catch (e: Exception) {
             e.printStackTrace()
         }
-
     }
 
     private fun setRecyclerViewPersonMovies(list: List<MovieD>) {
@@ -82,21 +73,27 @@ class ProfileFragment : Fragment() {
         binding.recyclerPerfil.apply {
             layoutManager = LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false)
             adapter = com.example.filmes.adapter.Adapter {
-                MovieDView(it)
+                MovieDView(it, profileViewModel)
             }.apply {
                 items = list.toMutableList()
             }
         }
     }
 
-    class MovieDView (viewGroup: ViewGroup) : BaseViewHolder<MovieD>(
+     class MovieDView (viewGroup: ViewGroup, private val viewModel: ProfileViewModel) : BaseViewHolder<MovieD>(
         R.layout.movie_an_series_cell,
         viewGroup
     ) {
 
         private val context = viewGroup.context
+        var movie: MovieD? = null
 
         override fun bind(item: MovieD) {
+            movie = MovieD(
+                item.id,
+                item.poster_path ,
+                item.title
+            )
             itemView.findViewById<TextView>(R.id.nomeOrTitle).text = item.title
             if ( item.poster_path.isNullOrEmpty() ) itemView.findViewById<ImageView>(R.id.imageViewMovieAndSeries).load(
                 R.drawable.padrao)
@@ -107,7 +104,13 @@ class ProfileFragment : Fragment() {
                 }
                 context.startActivity(intent)
             }
+            itemView.findViewById<ConstraintLayout>(R.id.movieAndSeriesCellContainer).setOnLongClickListener {
+                viewModel.deleteMovie(movie!!)
+                true
+            }
         }
     }
 
 }
+
+
