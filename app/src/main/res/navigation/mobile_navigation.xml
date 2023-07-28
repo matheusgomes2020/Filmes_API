@@ -19,7 +19,7 @@
 
     <fragment
         android:id="@+id/navigation_profwile"
-        android:name="com.example.filmes.ui.perfil.ProfileFragment"
+        android:name="com.example.filmes.ui.perfil.FavoriteFragment"
         android:label="@string/title_profile"
         tools:layout="@layout/fragment_profile" />
 </navigation>

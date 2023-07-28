@@ -64,9 +64,15 @@ object AppModule {
         app,
         MovieDatabase::class.java,
         "movie_db"
-    ).build() // The reason we can construct a database for the repo
+    )
+        .fallbackToDestructiveMigration()
+        .build() // The reason we can construct a database for the repo
 
     @Singleton
     @Provides
     fun provideMovieDao( movieDatabase: MovieDatabase ) = movieDatabase.movieDao()
+
+    @Singleton
+    @Provides
+    fun provideSeriesDao( movieDatabase: MovieDatabase ) = movieDatabase.seriesDao()
 }

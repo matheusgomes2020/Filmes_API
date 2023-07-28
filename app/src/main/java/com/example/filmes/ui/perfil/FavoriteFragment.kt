@@ -2,40 +2,32 @@ package com.example.filmes.ui.perfil
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.compose.runtime.collectAsState
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.viewModelScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.filmes.R
 import com.example.filmes.adapter.BaseViewHolder
 import com.example.filmes.databinding.FragmentProfileBinding
-import com.example.filmes.model.MovieD
-import com.example.filmes.model.movie.Movie
-import com.example.filmes.model.person.Cast
-import com.example.filmes.model.person.MovieCredits
+import com.example.filmes.model.MovieRoom
+import com.example.filmes.model.SerieRoom
 import com.example.filmes.ui.movieDetails.MovieDetailsActivity
-import com.example.filmes.ui.person.PersonFragment
-import com.example.filmes.views.MovieView
+import com.example.filmes.ui.seriesDetails.SerieDetailsActivity
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
 import java.lang.Exception
 
 @AndroidEntryPoint
-class ProfileFragment : Fragment() {
+class FavoriteFragment : Fragment() {
 
     private var _binding: FragmentProfileBinding? = null
-    private val profileViewModel: ProfileViewModel by viewModels()
+    private val profileViewModel: favoriteViewModel by viewModels()
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -51,6 +43,7 @@ class ProfileFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         observe()
+        observeSeries()
     }
 
     override fun onDestroyView() {
@@ -68,28 +61,50 @@ class ProfileFragment : Fragment() {
         }
     }
 
-    private fun setRecyclerViewPersonMovies(list: List<MovieD>) {
+    private fun observeSeries() {
+
+        try {
+            profileViewModel.seriesList.observe(viewLifecycleOwner) {
+                setRecyclerViewPersonSeries( it ) }
+        }catch (e: Exception) {
+            e.printStackTrace()
+        }
+    }
+
+    private fun setRecyclerViewPersonMovies(list: List<MovieRoom>) {
 
         binding.recyclerPerfil.apply {
             layoutManager = LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false)
             adapter = com.example.filmes.adapter.Adapter {
-                MovieDView(it, profileViewModel)
+                MovieRoomView(it, profileViewModel)
             }.apply {
                 items = list.toMutableList()
             }
         }
     }
 
-     class MovieDView (viewGroup: ViewGroup, private val viewModel: ProfileViewModel) : BaseViewHolder<MovieD>(
+    private fun setRecyclerViewPersonSeries(list: List<SerieRoom>) {
+
+        binding.recyclerSeries.apply {
+            layoutManager = LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false)
+            adapter = com.example.filmes.adapter.Adapter {
+                SeriesRoomView(it, profileViewModel)
+            }.apply {
+                items = list.toMutableList()
+            }
+        }
+    }
+
+     class MovieRoomView (viewGroup: ViewGroup, private val viewModel: favoriteViewModel) : BaseViewHolder<MovieRoom>(
         R.layout.movie_an_series_cell,
         viewGroup
     ) {
 
         private val context = viewGroup.context
-        var movie: MovieD? = null
+        var movie: MovieRoom? = null
 
-        override fun bind(item: MovieD) {
-            movie = MovieD(
+        override fun bind(item: MovieRoom) {
+            movie = MovieRoom(
                 item.id,
                 item.poster_path ,
                 item.title
@@ -106,6 +121,37 @@ class ProfileFragment : Fragment() {
             }
             itemView.findViewById<ConstraintLayout>(R.id.movieAndSeriesCellContainer).setOnLongClickListener {
                 viewModel.deleteMovie(movie!!)
+                true
+            }
+        }
+    }
+
+    class SeriesRoomView (viewGroup: ViewGroup, private val viewModel: favoriteViewModel) : BaseViewHolder<SerieRoom>(
+        R.layout.movie_an_series_cell,
+        viewGroup
+    ) {
+
+        private val context = viewGroup.context
+        var series: SerieRoom? = null
+
+        override fun bind(item: SerieRoom) {
+            series = SerieRoom(
+                item.id,
+                item.poster_path ,
+                item.name
+            )
+            itemView.findViewById<TextView>(R.id.nomeOrTitle).text = item.name
+            if ( item.poster_path.isNullOrEmpty() ) itemView.findViewById<ImageView>(R.id.imageViewMovieAndSeries).load(
+                R.drawable.padrao)
+            else itemView.findViewById<ImageView>(R.id.imageViewMovieAndSeries).load("https://image.tmdb.org/t/p/w500" + item.poster_path)
+            itemView.findViewById<ConstraintLayout>(R.id.movieAndSeriesCellContainer).setOnClickListener {
+                val intent = Intent( context, SerieDetailsActivity::class.java ).apply {
+                    putExtra("id", item.id.toString() )
+                }
+                context.startActivity(intent)
+            }
+            itemView.findViewById<ConstraintLayout>(R.id.movieAndSeriesCellContainer).setOnLongClickListener {
+                viewModel.deleteSeries(series!!)
                 true
             }
         }

@@ -4,10 +4,12 @@ package com.example.filmes.ui.seriesDetails
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.filmes.databinding.ActivitySerieDetailBinding
+import com.example.filmes.model.SerieRoom
 import com.example.filmes.model.general.Cast
 import com.example.filmes.model.serie.Season
 import com.example.filmes.model.serie.Serie
@@ -26,7 +28,7 @@ class SerieDetailsActivity : AppCompatActivity() {
     private val viewModel: SeriesDetailsViewModel by viewModels()
     var serieId = ""
     var nomeSerie = ""
-    var poster = ""
+    var seriesRoom: SerieRoom? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +40,11 @@ class SerieDetailsActivity : AppCompatActivity() {
         viewModel.getSerieInfo(id!!)
         viewModel.getSeasonEpisodes(id!!, 1)
         observeSeries()
+
+        binding.seriesTitle.setOnClickListener {
+            Toast.makeText(applicationContext, seriesRoom!!.name, Toast.LENGTH_SHORT).show()
+            viewModel.addSeries( seriesRoom!! )
+        }
 
     }
 
@@ -101,6 +108,12 @@ class SerieDetailsActivity : AppCompatActivity() {
                 setRecyclerViewSeason(it.seasons)
                 setRecyclerViewCast(it.aggregate_credits.cast)
                 setRecyclerViewSimilar(it.similar.results)
+
+                seriesRoom = SerieRoom(
+                    it.id,
+                    it.poster_path ,
+                    it.name
+                )
             }
         } catch (e: Exception) {
             e.printStackTrace()

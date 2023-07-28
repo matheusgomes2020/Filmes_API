@@ -9,10 +9,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.filmes.databinding.ActivityMovieDetailsBinding
-import com.example.filmes.model.MovieD
+import com.example.filmes.model.MovieRoom
 import com.example.filmes.model.general.Cast
 import com.example.filmes.model.movie.Movie
-import com.example.filmes.ui.perfil.ProfileViewModel
 import com.example.filmes.views.CastView
 import com.example.filmes.views.MovieView
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
@@ -25,7 +24,7 @@ class MovieDetailsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMovieDetailsBinding
     private val viewModel: MovieDetailsViewModel by viewModels()
-    var movieD: MovieD? = null
+    var movieRoom: MovieRoom? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,16 +36,9 @@ class MovieDetailsActivity : AppCompatActivity() {
         observeMovies()
 
         binding.movieTitle.setOnClickListener {
-            Toast.makeText(applicationContext, movieD!!.title, Toast.LENGTH_SHORT).show()
-
-                viewModel.addMovie( movieD!! )
-
-                Log.d("ROOMST", "MovieDActivity " + movieD.toString())
-
-
-
+            Toast.makeText(applicationContext, movieRoom!!.title, Toast.LENGTH_SHORT).show()
+                viewModel.addMovie( movieRoom!! )
         }
-
     }
 
     private fun observeMovies() {
@@ -90,7 +82,7 @@ class MovieDetailsActivity : AppCompatActivity() {
                 setRecyclerViewSimilar(it.similar.results)
                 setRecyclerViewCast(it.credits.cast)
 
-                movieD = MovieD(
+                movieRoom = MovieRoom(
                     it.id,
                     it.poster_path ,
                     it.title

@@ -11,7 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.filmes.databinding.ActivityMainBinding
 import com.example.filmes.ui.filmes.MovieFragment
-import com.example.filmes.ui.perfil.ProfileFragment
+import com.example.filmes.ui.perfil.FavoriteFragment
 import com.example.filmes.ui.search.SearchActivity
 import com.example.filmes.ui.searchSeries.SerieSearchActivity
 import com.example.filmes.ui.series.SeriesFragment
@@ -38,8 +38,8 @@ class MainActivity : AppCompatActivity() {
                        replaceFragment(MovieFragment()) }
                    R.id.navigation_serie -> { actual = "Séries"
                        replaceFragment(SeriesFragment()) }
-                   R.id.navigation_profile -> { actual = "Perfil"
-                       replaceFragment(ProfileFragment()) }
+                   R.id.navigation_favorites -> { actual = "Favoritos"
+                       replaceFragment(FavoriteFragment()) }
                    else -> {}
                }
                true
@@ -49,7 +49,7 @@ class MainActivity : AppCompatActivity() {
     private fun setupToolbar(){
         setSupportActionBar(binding.myToolbar2)
         binding.myToolbar2.setTitleTextColor(resources.getColor(R.color.white))
-        binding.myToolbar2.setTitle(actual)
+        binding.myToolbar2.title = actual
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

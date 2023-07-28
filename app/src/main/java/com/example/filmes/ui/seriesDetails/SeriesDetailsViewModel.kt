@@ -6,8 +6,10 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.filmes.data.Resource
+import com.example.filmes.model.SerieRoom
 import com.example.filmes.model.serie.Season
 import com.example.filmes.model.serie.Serie
+import com.example.filmes.repository.RoomRepository
 import com.example.filmes.repository.SeriesRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -15,7 +17,7 @@ import java.lang.Exception
 import javax.inject.Inject
 
 @HiltViewModel
-class SeriesDetailsViewModel @Inject constructor( private val seriesRepository: SeriesRepository )
+class SeriesDetailsViewModel @Inject constructor( private val seriesRepository: SeriesRepository, private val roomRepository: RoomRepository)
     : ViewModel() {
 
     private var _seriesInfo = MutableLiveData<Serie>()
@@ -24,6 +26,8 @@ class SeriesDetailsViewModel @Inject constructor( private val seriesRepository: 
     val seriesInfo: LiveData<Serie> = _seriesInfo
     val seasonEpisodes: LiveData<Season> = _seasonEpisodes
     val carregando: LiveData<Boolean> = carregandoEmitter
+
+    fun addSeries( series: SerieRoom ) = viewModelScope.launch { roomRepository.addSeries( series ) }
 
     fun getSerieInfo(serieId: String ) {
 
