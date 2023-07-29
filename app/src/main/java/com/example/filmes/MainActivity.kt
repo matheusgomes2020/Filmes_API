@@ -1,10 +1,8 @@
 package com.example.filmes
 
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
-import android.view.Menu
-import android.view.MenuItem
+import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
@@ -12,8 +10,7 @@ import androidx.fragment.app.Fragment
 import com.example.filmes.databinding.ActivityMainBinding
 import com.example.filmes.ui.filmes.MovieFragment
 import com.example.filmes.ui.perfil.FavoriteFragment
-import com.example.filmes.ui.search.SearchActivity
-import com.example.filmes.ui.searchSeries.SerieSearchActivity
+import com.example.filmes.ui.search.SearchMoviesFragment
 import com.example.filmes.ui.series.SeriesFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -30,7 +27,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         replaceFragment(MovieFragment())
-        setupToolbar()
            binding.navView.setOnItemSelectedListener {
 
                when( it.itemId ) {
@@ -44,37 +40,47 @@ class MainActivity : AppCompatActivity() {
                }
                true
            }
-    }
 
-    private fun setupToolbar(){
-        setSupportActionBar(binding.myToolbar2)
-        binding.myToolbar2.setTitleTextColor(resources.getColor(R.color.white))
-        binding.myToolbar2.title = actual
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.actionbar_menu, menu)
-        return super.onCreateOptionsMenu(menu)
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-
-            Toast.makeText(applicationContext, actual, Toast.LENGTH_SHORT).show()
-
-        when (item.itemId) {
-            R.id.search -> {
-                return if ( actual == "Filmes" ) {
-                    val intent = Intent(this, SearchActivity::class.java)
-                    startActivity( intent )
-                    true
-                } else {
-                    val intent = Intent(this, SerieSearchActivity::class.java)
-                    startActivity( intent )
-                    true
+            binding.searchMovies.setOnQueryTextListener(object: androidx.appcompat.widget.SearchView.OnQueryTextListener{
+                override fun onQueryTextSubmit(query: String?): Boolean {
+                    return false
                 }
+                override fun onQueryTextChange(newText: String?): Boolean {
+                    if ( newText.isNullOrEmpty() ) {
+                        if ( actual == "Filmes" ) {
+                            replaceFragment(MovieFragment())
+                            hideKeyboard()
+                        } else {
+                            replaceFragment(SeriesFragment())
+                            hideKeyboard() } }
+                    else {
+                        if (actual == "Filmes") {
+                            replaceFragment(SearchMoviesFragment(newText, "movies"))
+                        }else {
+                            replaceFragment(SearchMoviesFragment(newText, "series")) } }
+                    return true
+                }
+            })
+
+
+        binding.searchMovies.setOnCloseListener {
+
+            if (actual == "Filmes") {
+                replaceFragment(MovieFragment())
+                hideKeyboard()
+            }else {
+                replaceFragment(SeriesFragment())
+                hideKeyboard()
             }
+
+            hideKeyboard()
+            true
         }
-        return super.onOptionsItemSelected(item)
+    }
+
+    private fun hideKeyboard() {
+        val imm = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(binding.searchMovies.getWindowToken(), 0)
     }
 
     private fun replaceFragment( fragment: Fragment ){
@@ -83,6 +89,5 @@ class MainActivity : AppCompatActivity() {
         val fragmentTransaction = fragmentManager.beginTransaction()
         fragmentTransaction.replace(R.id.frameLayout, fragment)
         fragmentTransaction.commit()
-        setupToolbar()
     }
 }
