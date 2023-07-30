@@ -2,6 +2,7 @@ package com.example.filmes
 
 import android.os.Build
 import android.os.Bundle
+import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.annotation.RequiresApi
@@ -31,11 +32,14 @@ class MainActivity : AppCompatActivity() {
 
                when( it.itemId ) {
                    R.id.navigation_movie -> { actual = "Filmes"
-                       replaceFragment(MovieFragment()) }
+                       replaceFragment(MovieFragment())
+                       binding.searchMovies.visibility = View.VISIBLE}
                    R.id.navigation_serie -> { actual = "Séries"
-                       replaceFragment(SeriesFragment()) }
+                       replaceFragment(SeriesFragment())
+                       binding.searchMovies.visibility = View.VISIBLE}
                    R.id.navigation_favorites -> { actual = "Favoritos"
-                       replaceFragment(FavoriteFragment()) }
+                       replaceFragment(FavoriteFragment())
+                   binding.searchMovies.visibility = View.GONE}
                    else -> {}
                }
                true

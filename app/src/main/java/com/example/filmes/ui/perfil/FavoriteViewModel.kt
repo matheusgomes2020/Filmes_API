@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class favoriteViewModel @Inject constructor(private val repository: RoomRepository)
+class FavoriteViewModel @Inject constructor(private val repository: RoomRepository)
     : ViewModel() {
 
     private val _movieList = MutableLiveData<List<MovieRoom>>()

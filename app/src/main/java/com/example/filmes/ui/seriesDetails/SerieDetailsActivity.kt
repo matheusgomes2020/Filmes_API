@@ -8,6 +8,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.filmes.R
 import com.example.filmes.databinding.ActivitySerieDetailBinding
 import com.example.filmes.model.SerieRoom
 import com.example.filmes.model.general.Cast
@@ -29,6 +30,8 @@ class SerieDetailsActivity : AppCompatActivity() {
     var serieId = ""
     var nomeSerie = ""
     var seriesRoom: SerieRoom? = null
+    var lista: List<SerieRoom> = emptyList()
+    var favorito: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,10 +43,21 @@ class SerieDetailsActivity : AppCompatActivity() {
         viewModel.getSerieInfo(id!!)
         viewModel.getSeasonEpisodes(id!!, 1)
         observeSeries()
+        observe()
 
-        binding.seriesTitle.setOnClickListener {
-            Toast.makeText(applicationContext, seriesRoom!!.name, Toast.LENGTH_SHORT).show()
-            viewModel.addSeries( seriesRoom!! )
+        binding.imageView8.setOnClickListener {
+            if (favorito) {
+                Toast.makeText(applicationContext, seriesRoom!!.name + " removida dos favoritos!!!", Toast.LENGTH_SHORT).show()
+                viewModel.deleteSeries( seriesRoom!! )
+                binding.imageView8.setImageResource(R.drawable.ic_favorite_border)
+                favorito = false
+            } else {
+                Toast.makeText(applicationContext, seriesRoom!!.name + " salva nos favoritos!!!", Toast.LENGTH_SHORT).show()
+                viewModel.addSeries( seriesRoom!! )
+                binding.imageView8.setImageResource(R.drawable.ic_favorite)
+                favorito = true
+            }
+
         }
 
     }
@@ -51,7 +65,23 @@ class SerieDetailsActivity : AppCompatActivity() {
     private fun observeSeries() {
 
         try {
+
             viewModel.seriesInfo.observe(this) {
+
+                if ( !lista.isNullOrEmpty() ) {
+                    for (i in lista ) {
+                        if ( i.id == it.id ) {
+                            binding.imageView8.setImageResource(R.drawable.ic_favorite)
+                            favorito = true
+                            break
+                        } else {
+                            favorito = false
+                        }
+                    }
+                } else {
+                    favorito = false
+                }
+
                 nomeSerie = it.name
                 binding.seriesOverview.text = it.overview
                 binding.seriesTitle.text = it.name
@@ -153,6 +183,17 @@ class SerieDetailsActivity : AppCompatActivity() {
             }.apply {
                 items = list.toMutableList()
             }
+        }
+    }
+
+    private fun observe() {
+
+        try {
+            viewModel.seriesList.observe(this) {
+                lista = it
+            }
+        }catch (e: java.lang.Exception) {
+            e.printStackTrace()
         }
     }
 }

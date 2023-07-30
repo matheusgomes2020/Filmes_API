@@ -6,8 +6,10 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.ReportFragment.Companion.reportFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.filmes.R
 import com.example.filmes.databinding.ActivityMovieDetailsBinding
 import com.example.filmes.model.MovieRoom
 import com.example.filmes.model.general.Cast
@@ -25,6 +27,8 @@ class MovieDetailsActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMovieDetailsBinding
     private val viewModel: MovieDetailsViewModel by viewModels()
     var movieRoom: MovieRoom? = null
+    var lista: List<MovieRoom> = emptyList()
+    var favorito: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -34,10 +38,21 @@ class MovieDetailsActivity : AppCompatActivity() {
         val id = intent.getStringExtra("id")
         viewModel.getMovieInfo( id!! )
         observeMovies()
+        observe()
 
-        binding.movieTitle.setOnClickListener {
-            Toast.makeText(applicationContext, movieRoom!!.title, Toast.LENGTH_SHORT).show()
+        binding.imageView2.setOnClickListener {
+            if (favorito) {
+                Toast.makeText(applicationContext, movieRoom!!.title + " removido dos favoritos!!!", Toast.LENGTH_SHORT).show()
+                viewModel.deleteMovie( movieRoom!! )
+                binding.imageView2.setImageResource(R.drawable.ic_favorite_border)
+                favorito = false
+            } else {
+                Toast.makeText(applicationContext, movieRoom!!.title + " salvo nos favoritos!!!", Toast.LENGTH_SHORT).show()
                 viewModel.addMovie( movieRoom!! )
+                binding.imageView2.setImageResource(R.drawable.ic_favorite)
+                favorito = true
+            }
+
         }
     }
 
@@ -48,6 +63,21 @@ class MovieDetailsActivity : AppCompatActivity() {
             var gen = ""
 
             viewModel.movieInfo.observe(this) {
+
+                if ( !lista.isNullOrEmpty() ) {
+                    for (i in lista ) {
+                        if ( i.id == it.id ) {
+                            binding.imageView2.setImageResource(R.drawable.ic_favorite)
+                            favorito = true
+                            break
+                        } else {
+                            favorito = false
+                        }
+                    }
+                } else {
+                    favorito = false
+                }
+
                 binding.movieOverview.text = it.overview
                 binding.movieTitle.text = it.title
                 binding.textData.text = it.release_date
@@ -119,4 +149,16 @@ class MovieDetailsActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun observe() {
+
+        try {
+            viewModel.movieList.observe(this) {
+                lista = it
+                 }
+        }catch (e: java.lang.Exception) {
+            e.printStackTrace()
+        }
+    }
+
 }

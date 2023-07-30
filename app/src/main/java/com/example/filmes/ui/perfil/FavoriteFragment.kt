@@ -27,7 +27,7 @@ import java.lang.Exception
 class FavoriteFragment : Fragment() {
 
     private var _binding: FragmentProfileBinding? = null
-    private val profileViewModel: favoriteViewModel by viewModels()
+    private val profileViewModel: FavoriteViewModel by viewModels()
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -50,6 +50,7 @@ class FavoriteFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
 
     private fun observe() {
 
@@ -95,7 +96,7 @@ class FavoriteFragment : Fragment() {
         }
     }
 
-     class MovieRoomView (viewGroup: ViewGroup, private val viewModel: favoriteViewModel) : BaseViewHolder<MovieRoom>(
+     class MovieRoomView (viewGroup: ViewGroup, private val viewModel: FavoriteViewModel) : BaseViewHolder<MovieRoom>(
         R.layout.movie_an_series_cell,
         viewGroup
     ) {
@@ -126,7 +127,7 @@ class FavoriteFragment : Fragment() {
         }
     }
 
-    class SeriesRoomView (viewGroup: ViewGroup, private val viewModel: favoriteViewModel) : BaseViewHolder<SerieRoom>(
+    class SeriesRoomView (viewGroup: ViewGroup, private val viewModel: FavoriteViewModel) : BaseViewHolder<SerieRoom>(
         R.layout.movie_an_series_cell,
         viewGroup
     ) {

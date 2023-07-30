@@ -22,12 +22,20 @@ class SeriesDetailsViewModel @Inject constructor( private val seriesRepository: 
 
     private var _seriesInfo = MutableLiveData<Serie>()
     private val _seasonEpisodes = MutableLiveData<Season>()
+    private val _seriesList = MutableLiveData<List<SerieRoom>>()
     var carregandoEmitter = MutableLiveData<Boolean>()
     val seriesInfo: LiveData<Serie> = _seriesInfo
     val seasonEpisodes: LiveData<Season> = _seasonEpisodes
+    val seriesList:  LiveData<List<SerieRoom>> = _seriesList
     val carregando: LiveData<Boolean> = carregandoEmitter
 
+    init {
+        loadSeries()
+    }
+
     fun addSeries( series: SerieRoom ) = viewModelScope.launch { roomRepository.addSeries( series ) }
+
+    fun deleteSeries( series: SerieRoom ) = viewModelScope.launch { roomRepository.deleteSeries( series ) }
 
     fun getSerieInfo(serieId: String ) {
 
@@ -81,6 +89,18 @@ class SeriesDetailsViewModel @Inject constructor( private val seriesRepository: 
         }catch (exception: Exception) {
             carregandoEmitter.value = false
             Log.d("Network", "seasonEpisodes: ${exception.message.toString()} Carregando?= $carregando")
+        }
+    }
+
+    private fun loadSeries() {
+
+        viewModelScope.launch {
+            try {
+                val response = roomRepository.getAllSeries()
+                _seriesList.value = response
+            } catch (exception: Exception) {
+                Log.d("Network", "Profile: ${exception.message.toString()} Carregando?= $carregando")
+            }
         }
     }
 
