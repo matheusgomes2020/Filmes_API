@@ -1,10 +1,15 @@
 package com.example.filmes.ui.perfil
 
+import android.app.Dialog
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.Window
+import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -104,6 +109,26 @@ class FavoriteFragment : Fragment() {
         private val context = viewGroup.context
         var movie: MovieRoom? = null
 
+         private fun showCustomDialogBox(message: String?, movie: MovieRoom )  {
+             val dialog = Dialog(context)
+             dialog.requestWindowFeature( Window.FEATURE_NO_TITLE )
+             dialog.setCancelable( false )
+             dialog.setContentView( R.layout.layout_custom_dialog )
+             dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+             val tvMessage: TextView = dialog.findViewById(R.id.tvMessage)
+             val btnYes: Button = dialog.findViewById(R.id.btnYes)
+             val btnNo: Button = dialog.findViewById(R.id.btnNo)
+             tvMessage.text = message
+             btnYes.setOnClickListener {
+                 viewModel.deleteMovie(movie)
+                 dialog.dismiss()
+             }
+             btnNo.setOnClickListener {
+                 dialog.dismiss()
+             }
+             dialog.show()
+         }
+
         override fun bind(item: MovieRoom) {
             movie = MovieRoom(
                 item.id,
@@ -121,7 +146,9 @@ class FavoriteFragment : Fragment() {
                 context.startActivity(intent)
             }
             itemView.findViewById<ConstraintLayout>(R.id.movieAndSeriesCellContainer).setOnLongClickListener {
-                viewModel.deleteMovie(movie!!)
+                val message: String? = "Voce tem certeza que deseja remover " + movie!!.title + " de seus favoritos?"
+                showCustomDialogBox(message, movie!!)
+                //viewModel.deleteMovie(movie!!)
                 true
             }
         }
@@ -134,6 +161,26 @@ class FavoriteFragment : Fragment() {
 
         private val context = viewGroup.context
         var series: SerieRoom? = null
+
+        private fun showCustomDialogBox(message: String?, serie: SerieRoom )  {
+            val dialog = Dialog(context)
+            dialog.requestWindowFeature( Window.FEATURE_NO_TITLE )
+            dialog.setCancelable( false )
+            dialog.setContentView( R.layout.layout_custom_dialog )
+            dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+            val tvMessage: TextView = dialog.findViewById(R.id.tvMessage)
+            val btnYes: Button = dialog.findViewById(R.id.btnYes)
+            val btnNo: Button = dialog.findViewById(R.id.btnNo)
+            tvMessage.text = message
+            btnYes.setOnClickListener {
+                viewModel.deleteSeries(serie)
+                dialog.dismiss()
+            }
+            btnNo.setOnClickListener {
+                dialog.dismiss()
+            }
+            dialog.show()
+        }
 
         override fun bind(item: SerieRoom) {
             series = SerieRoom(
@@ -152,7 +199,8 @@ class FavoriteFragment : Fragment() {
                 context.startActivity(intent)
             }
             itemView.findViewById<ConstraintLayout>(R.id.movieAndSeriesCellContainer).setOnLongClickListener {
-                viewModel.deleteSeries(series!!)
+                val message: String? = "Voce tem certeza que deseja remover " + series!!.name + " de seus favoritos?"
+                showCustomDialogBox(message, series!!)
                 true
             }
         }
