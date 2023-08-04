@@ -31,7 +31,7 @@ class SearchSeriesView (viewGroup: ViewGroup) : BaseViewHolder<Serie>(
         }
         itemView.findViewById<TextView>(R.id.ratingSearchCell).text = rating
         if ( !item.poster_path.isNullOrEmpty() ) itemView.findViewById<ImageView>(R.id.imageSearchCell).load( "https://image.tmdb.org/t/p/w500" + item.poster_path)
-        else itemView.findViewById<ImageView>(R.id.imageSearchCell).load( R.drawable.padrao)
+        else itemView.findViewById<ImageView>(R.id.imageSearchCell).load(R.drawable.logo)
         itemView.findViewById<LinearLayout>(R.id.movie_search_cellContainer).setOnClickListener {
             val intent = Intent( context, SerieDetailsActivity::class.java ).apply {
                 putExtra("id", item.id.toString() )

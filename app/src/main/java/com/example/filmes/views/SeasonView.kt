@@ -21,7 +21,7 @@ class SeasonView (viewGroup: ViewGroup, private var seriesId: String, private va
     override fun bind(item: Season) {
         itemView.findViewById<TextView>(R.id.nomeOrTitle).text = item.season_number.toString() + " - temporada"
         if ( !item.poster_path.isNullOrEmpty() ) itemView.findViewById<ImageView>(R.id.imageViewMovieAndSeries).load( "https://image.tmdb.org/t/p/w500" + item.poster_path )
-        else itemView.findViewById<ImageView>(R.id.imageViewMovieAndSeries).load( R.drawable.padrao)
+        else itemView.findViewById<ImageView>(R.id.imageViewMovieAndSeries).load(R.drawable.logo)
         itemView.findViewById<ConstraintLayout>(R.id.movieAndSeriesCellContainer).setOnClickListener {
             SeasonEpisodes( item, seriesId ).show( fragmentManager, "seasonTag" )
         }

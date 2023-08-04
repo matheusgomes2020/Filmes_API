@@ -12,11 +12,12 @@
     tools:layout_editor_absoluteX="5dp"
     tools:layout_editor_absoluteY="5dp">
 
-    <ImageView
+    <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/imageViewMovieAndSeries"
         android:layout_width="110dp"
         android:layout_height="150dp"
-        android:background="@drawable/bg_p"
+        android:adjustViewBounds="true"
+        app:shapeAppearanceOverlay="@style/roundImageView"
         android:scaleType="centerCrop"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -24,7 +25,7 @@
         app:srcCompat="@color/material_dynamic_neutral10"
         tools:srcCompat="@tools:sample/avatars">
 
-    </ImageView>
+    </com.google.android.material.imageview.ShapeableImageView>
 
 
     <LinearLayout

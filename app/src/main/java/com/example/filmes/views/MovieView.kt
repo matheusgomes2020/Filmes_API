@@ -20,7 +20,9 @@ class MovieView (viewGroup: ViewGroup) : BaseViewHolder<Movie>(
 
     override fun bind(item: Movie) {
         itemView.findViewById<TextView>(R.id.nomeOrTitle).text = item.title
-        if ( item.poster_path.isNullOrEmpty() ) itemView.findViewById<ImageView>(R.id.imageViewMovieAndSeries).load(R.drawable.padrao)
+        if ( item.poster_path.isNullOrEmpty() ) itemView.findViewById<ImageView>(R.id.imageViewMovieAndSeries).load(
+            R.drawable.logo
+        )
         else itemView.findViewById<ImageView>(R.id.imageViewMovieAndSeries).load("https://image.tmdb.org/t/p/w500" + item.poster_path)
         itemView.findViewById<ConstraintLayout>(R.id.movieAndSeriesCellContainer).setOnClickListener {
             val intent = Intent( context, MovieDetailsActivity::class.java ).apply {

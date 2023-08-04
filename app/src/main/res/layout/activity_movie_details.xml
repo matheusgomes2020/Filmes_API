@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -27,7 +28,7 @@
                     android:id="@+id/movieTitle"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginStart="16dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
                     android:fontFamily="@font/poppins"
@@ -42,9 +43,9 @@
                     android:id="@+id/movieOverview"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
                     android:fontFamily="@font/nunito_sans"
                     android:text="Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of &quot;de Finibus Bonorum et Malorum&quot; (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance."
                     android:textSize="16sp"
@@ -58,7 +59,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="8dp"
                     android:fontFamily="@font/lato"
                     android:text="23 de jun de 2023"
                     app:layout_constraintStart_toEndOf="@+id/imageView3"
@@ -69,7 +70,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:layout_marginTop="4dp"
+                    android:layout_marginTop="8dp"
                     android:fontFamily="@font/lato"
                     android:text="2h 3m"
                     app:layout_constraintStart_toEndOf="@+id/imageView4"
@@ -80,8 +81,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
-                    android:layout_marginTop="2dp"
-                    android:text="🌟🌟🌟🌟🌟"
+                    android:layout_marginTop="8dp"
+                    android:text="⭐⭐⭐⭐⭐"
                     app:layout_constraintStart_toEndOf="@+id/imageView5"
                     app:layout_constraintTop_toBottomOf="@+id/movieTitle" />
 
@@ -89,36 +90,39 @@
                     android:id="@+id/imageView3"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="4dp"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/movieTitle"
-                    app:srcCompat="@drawable/baseline_calendar_month_24" />
+                    app:srcCompat="@drawable/ic_calendar" />
 
                 <ImageView
                     android:id="@+id/imageView4"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
+                    android:layout_marginTop="4dp"
                     app:layout_constraintStart_toEndOf="@+id/textData"
                     app:layout_constraintTop_toBottomOf="@+id/movieTitle"
-                    app:srcCompat="@drawable/baseline_access_time_24" />
+                    app:srcCompat="@drawable/ic_timer" />
 
                 <ImageView
                     android:id="@+id/imageView5"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
+                    android:layout_marginTop="4dp"
                     app:layout_constraintStart_toEndOf="@+id/textDuration"
                     app:layout_constraintTop_toBottomOf="@+id/movieTitle"
-                    app:srcCompat="@drawable/baseline_star_24" />
+                    app:srcCompat="@drawable/ic_star" />
 
                 <TextView
                     android:id="@+id/textGenres"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="8dp"
+                    android:layout_marginStart="24dp"
                     android:layout_marginTop="8dp"
-                    android:fontFamily="@font/lato"
+                    android:fontFamily="@font/nunito_sans"
                     android:text="Drama"
                     android:textSize="12sp"
                     app:layout_constraintStart_toStartOf="parent"
@@ -128,8 +132,6 @@
                     android:id="@+id/videoView"
                     android:layout_width="0dp"
                     android:layout_height="200dp"
-
-
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="8dp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -140,7 +142,9 @@
                     android:id="@+id/linearLayout2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="8dp"
                     android:orientation="vertical"
                     android:padding="5dp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -153,13 +157,14 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins"
                         android:text="Elenco"
-                        android:textSize="16sp"
+                        android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recyclerMoviecast"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_margin="10dp"
                         android:layout_marginBottom="10dp"
                         android:padding="5dp"
                         android:paddingEnd="5dp" />
@@ -170,36 +175,38 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins"
                         android:text="Direção"
-                        android:textSize="16sp"
+                        android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/textViewDirecaoFilme"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="10dp"
                         android:fontFamily="@font/lato"
                         android:text="Alpha Patino Jr"
-                        android:textSize="16sp" />
+                        android:textSize="17sp" />
 
                     <TextView
                         android:id="@+id/textView9"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
                         android:fontFamily="@font/poppins"
                         android:text="Roteiro"
-                        android:layout_marginTop="5dp"
-                        android:textSize="16sp"
+                        android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/textViewRoteiro"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="5dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="10dp"
                         android:fontFamily="@font/lato"
                         android:text="Alpha Patino Jr"
-                        android:textSize="16sp" />
+                        android:textSize="17sp" />
 
                 </LinearLayout>
 
@@ -207,6 +214,8 @@
                     android:id="@+id/linearLayout3"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
                     android:layout_marginBottom="8dp"
                     android:orientation="vertical"
                     android:padding="5dp"
@@ -221,14 +230,14 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/poppins"
                         android:text="Filmes Similares"
-                        android:textSize="16sp"
+                        android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/recyclerMovieSimilars"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginBottom="10dp"
+                        android:layout_margin="10dp"
                         android:padding="5dp"
                         android:paddingEnd="5dp" />
                 </LinearLayout>
@@ -241,7 +250,7 @@
                     android:layout_marginEnd="16dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/ic_favorites" />
+                    app:srcCompat="@drawable/ic_boomark" />
 
 
             </androidx.constraintlayout.widget.ConstraintLayout>

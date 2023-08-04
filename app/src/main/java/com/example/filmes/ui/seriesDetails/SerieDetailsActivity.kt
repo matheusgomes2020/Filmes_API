@@ -49,12 +49,12 @@ class SerieDetailsActivity : AppCompatActivity() {
             if (favorito) {
                 Toast.makeText(applicationContext, seriesRoom!!.name + " removida dos favoritos!!!", Toast.LENGTH_SHORT).show()
                 viewModel.deleteSeries( seriesRoom!! )
-                binding.imageView8.setImageResource(R.drawable.ic_favorite_border)
+                binding.imageView8.setImageResource(R.drawable.ic_boomark)
                 favorito = false
             } else {
                 Toast.makeText(applicationContext, seriesRoom!!.name + " salva nos favoritos!!!", Toast.LENGTH_SHORT).show()
                 viewModel.addSeries( seriesRoom!! )
-                binding.imageView8.setImageResource(R.drawable.ic_favorite)
+                binding.imageView8.setImageResource(R.drawable.ic_boomark_filled)
                 favorito = true
             }
 
@@ -71,7 +71,7 @@ class SerieDetailsActivity : AppCompatActivity() {
                 if ( !lista.isNullOrEmpty() ) {
                     for (i in lista ) {
                         if ( i.id == it.id ) {
-                            binding.imageView8.setImageResource(R.drawable.ic_favorite)
+                            binding.imageView8.setImageResource(R.drawable.ic_boomark_filled)
                             favorito = true
                             break
                         } else {

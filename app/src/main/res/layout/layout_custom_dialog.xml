@@ -32,7 +32,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/lato"
+            android:fontFamily="@font/nunito_sans"
             android:text="Remover Favorito?"
             android:textColor="#302F2F"
             android:textSize="20sp"
@@ -44,7 +44,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
 
-            android:fontFamily="@font/lato"
+            android:fontFamily="@font/nunito_sans"
             android:text="Voce tem certeza que deseja remover Flash de seus favoritos?"
             android:textColor="#555252"
             android:textSize="18sp" />
@@ -62,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:backgroundTint="#F75D6B"
-                android:fontFamily="@font/poppins"
+                android:fontFamily="@font/nunito_sans"
                 android:text="Deletar"
                 android:textAllCaps="false"
                 android:textColor="@color/white"
@@ -75,7 +75,7 @@
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:backgroundTint="#ECE4E5"
-                android:fontFamily="@font/poppins"
+                android:fontFamily="@font/nunito_sans"
                 android:text="Cancelar"
                 android:textAllCaps="false"
                 android:textColor="#5C5B5C"

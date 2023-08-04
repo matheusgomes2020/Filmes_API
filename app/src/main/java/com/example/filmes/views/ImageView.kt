@@ -18,7 +18,7 @@ class ImageView (viewGroup: ViewGroup, private var fragmentManager: FragmentMana
 
     override fun bind(item: Profile) {
         if ( !item.file_path.isNullOrEmpty() ) itemView.findViewById<ImageView>(R.id.imageP).load( "https://image.tmdb.org/t/p/w500" + item.file_path)
-        else itemView.findViewById<ImageView>(R.id.imageP).load( R.drawable.padrao)
+        else itemView.findViewById<ImageView>(R.id.imageP).load(R.drawable.logo)
         itemView.findViewById<LinearLayout>(R.id.containerImage).setOnClickListener {
 
 

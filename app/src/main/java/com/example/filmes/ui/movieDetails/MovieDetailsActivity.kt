@@ -44,12 +44,12 @@ class MovieDetailsActivity : AppCompatActivity() {
             if (favorito) {
                 Toast.makeText(applicationContext, movieRoom!!.title + " removido dos favoritos!!!", Toast.LENGTH_SHORT).show()
                 viewModel.deleteMovie( movieRoom!! )
-                binding.imageView2.setImageResource(R.drawable.ic_favorite_border)
+                binding.imageView2.setImageResource(R.drawable.ic_boomark)
                 favorito = false
             } else {
                 Toast.makeText(applicationContext, movieRoom!!.title + " salvo nos favoritos!!!", Toast.LENGTH_SHORT).show()
                 viewModel.addMovie( movieRoom!! )
-                binding.imageView2.setImageResource(R.drawable.ic_favorite)
+                binding.imageView2.setImageResource(R.drawable.ic_boomark_filled)
                 favorito = true
             }
 
@@ -67,7 +67,7 @@ class MovieDetailsActivity : AppCompatActivity() {
                 if ( !lista.isNullOrEmpty() ) {
                     for (i in lista ) {
                         if ( i.id == it.id ) {
-                            binding.imageView2.setImageResource(R.drawable.ic_favorite)
+                            binding.imageView2.setImageResource(R.drawable.ic_boomark_filled)
                             favorito = true
                             break
                         } else {

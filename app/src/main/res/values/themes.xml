@@ -22,5 +22,21 @@
         <item name="android:fontFamily">@font/nunito_sans</item>
     </style>
 
+    <style name="roundImageView" parent="">
+
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">20dp</item>
+        <item name="color">@color/white</item>
+
+    </style>
+
+    <style name="roundImageViewCast" parent="">
+
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">10dp</item>
+        <item name="color">@color/white</item>
+
+    </style>
+
 
 </resources>

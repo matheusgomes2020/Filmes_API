@@ -22,7 +22,7 @@ class EpisodeView (viewGroup: ViewGroup, private var seriesId: String, private v
         if ( !item.overview.isNullOrEmpty() ) itemView.findViewById<TextView>(R.id.textOverviewEpisode).text = item.overview
         else itemView.findViewById<TextView>(R.id.textOverviewEpisode).text = "Sem overview!!!"
         if ( !item.still_path.isNullOrEmpty() ) itemView.findViewById<ImageView>(R.id.imageEpisode).load( "https://image.tmdb.org/t/p/w500" + item.still_path)
-        else itemView.findViewById<ImageView>(R.id.imageEpisode).load( R.drawable.padrao)
+        else itemView.findViewById<ImageView>(R.id.imageEpisode).load(R.drawable.logo)
         itemView.findViewById<LinearLayout>(R.id.episode_cellContainer).setOnClickListener {
 
             Episode(seriesId,item.season_number, item.episode_number).show(fragmentManager , "seasonTag")
