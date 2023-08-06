@@ -3,18 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/containerImage"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="5dp">
 
     <com.google.android.material.imageview.ShapeableImageView
         android:id="@+id/imageP"
-        android:layout_width="150dp"
+        android:layout_width="match_parent"
         android:layout_height="200dp"
-        android:scaleType="center"
         android:adjustViewBounds="true"
-        app:shapeAppearanceOverlay="@style/roundImageView"
+        android:scaleType="fitCenter"
+        app:shapeAppearanceOverlay="@style/roundImageViewCast"
         tools:srcCompat="@tools:sample/avatars[2]" />
 
 </LinearLayout>

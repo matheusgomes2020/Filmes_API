@@ -19,8 +19,8 @@ class SearchSeriesView (viewGroup: ViewGroup) : BaseViewHolder<Serie>(
     private val context = viewGroup.context
 
     override fun bind(item: Serie) {
-        itemView.findViewById<TextView>(R.id.nomeSearchCell).text = item.name
-        itemView.findViewById<TextView>(R.id.overviewSearchCell).text = item.overview
+        itemView.findViewById<TextView>(R.id.textNameEpisode).text = item.name
+        itemView.findViewById<TextView>(R.id.textOverviewEpisode).text = item.overview
         var rating = ""
         when ( item.vote_average ) {
             in 0.0..1.9 -> rating = "⭐"
@@ -30,8 +30,8 @@ class SearchSeriesView (viewGroup: ViewGroup) : BaseViewHolder<Serie>(
             in 8.0..10.0 -> rating = "⭐⭐⭐⭐⭐"
         }
         itemView.findViewById<TextView>(R.id.ratingSearchCell).text = rating
-        if ( !item.poster_path.isNullOrEmpty() ) itemView.findViewById<ImageView>(R.id.imageSearchCell).load( "https://image.tmdb.org/t/p/w500" + item.poster_path)
-        else itemView.findViewById<ImageView>(R.id.imageSearchCell).load(R.drawable.logo)
+        if ( !item.poster_path.isNullOrEmpty() ) itemView.findViewById<ImageView>(R.id.imageEpisode).load( "https://image.tmdb.org/t/p/w500" + item.poster_path)
+        else itemView.findViewById<ImageView>(R.id.imageEpisode).load(R.drawable.logo)
         itemView.findViewById<LinearLayout>(R.id.movie_search_cellContainer).setOnClickListener {
             val intent = Intent( context, SerieDetailsActivity::class.java ).apply {
                 putExtra("id", item.id.toString() )

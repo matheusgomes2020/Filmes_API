@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/review_cellContainer"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginBottom="8dp"
+    android:background="@drawable/bg_p2"
+    android:orientation="vertical"
+    android:padding="1dp"
+    app:cardCornerRadius="5dp"
+    tools:layout_editor_absoluteX="5dp"
+    tools:layout_editor_absoluteY="5dp">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imageReview"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:adjustViewBounds="true"
+            android:scaleType="centerInside"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:shapeAppearanceOverlay="@style/roundImageView"
+            app:srcCompat="@color/material_dynamic_neutral10"
+            tools:srcCompat="@tools:sample/avatars">
+
+        </com.google.android.material.imageview.ShapeableImageView>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginStart="5dp"
+            android:orientation="vertical"
+            android:padding="5dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageEpisode">
+
+            <TextView
+                android:id="@+id/textNameReview"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins"
+                android:maxLines="1"
+                android:text="Avatar"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/textOverviewEpisode"
+                app:layout_constraintEnd_toEndOf="@+id/imageEpisode"
+                app:layout_constraintStart_toEndOf="@+id/imageEpisode"
+                app:layout_constraintTop_toBottomOf="@+id/id"></TextView>
+
+            <TextView
+                android:id="@+id/textReviewDate"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppins"
+                android:maxLines="3"
+                android:text="2023/03/03"
+                android:textSize="11sp"
+                tools:layout_editor_absoluteX="157dp"
+                tools:layout_editor_absoluteY="402dp"></TextView>
+
+
+        </LinearLayout>
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/ratingReviewCell"
+        style="@style/TextAppearance.AppCompat.Title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:text="⭐⭐⭐⭐⭐"
+        android:textSize="14sp"
+        tools:layout_editor_absoluteX="157dp"
+        tools:layout_editor_absoluteY="402dp"></TextView>
+
+    <TextView
+        android:id="@+id/textReview"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginEnd="5dp"
+        android:fontFamily="@font/poppins"
+        android:maxLines="3"
+        android:text="O príncipe T'Challa retorna a Wakanda para ser coroado rei. Assumindo o manto de Pantera Negra, ele vai à caça de um vilão que roubou um precioso metal de seu país."
+        android:textSize="12sp"
+        tools:layout_editor_absoluteX="157dp"
+        tools:layout_editor_absoluteY="402dp"></TextView><![CDATA[
+
+
+
+    >
+
+
+
+
+
+
+]]>
+</LinearLayout>

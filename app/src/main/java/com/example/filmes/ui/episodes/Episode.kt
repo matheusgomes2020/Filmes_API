@@ -10,7 +10,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.filmes.databinding.FragmentEpisodeBinding
 import com.example.filmes.model.general.Cast
+import com.example.filmes.model.general.Image
+import com.example.filmes.model.general.Images
+import com.example.filmes.model.person.Profile
 import com.example.filmes.views.CastView
+import com.example.filmes.views.EpidoseImagesView
+import com.example.filmes.views.ImageView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import java.lang.Exception
@@ -48,6 +53,8 @@ class Episode(private var seriesId: String, private var seasonNumber: Int, priva
                     binding.textView9.visibility = View.GONE}
                 if ( !it.guest_stars.isNullOrEmpty() ) setRecyclerViewCast(it.guest_stars)
                 else binding.linearLayout2.visibility = View.GONE
+                if ( it.images.stills.isNullOrEmpty() ) binding.recyclerEpisodeImages.visibility = View.GONE
+                else setRecyclerViewImages( it.images.stills!! )
 
             }
         }catch (e: Exception){
@@ -60,6 +67,18 @@ class Episode(private var seriesId: String, private var seasonNumber: Int, priva
             layoutManager = LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false)
             adapter = com.example.filmes.adapter.Adapter {
                 CastView(it, childFragmentManager )
+            }.apply {
+                items = list.toMutableList()
+            }
+        }
+    }
+
+    private fun setRecyclerViewImages(list: List<Profile>) {
+
+        binding.recyclerEpisodeImages.apply {
+            layoutManager = LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false)
+            adapter = com.example.filmes.adapter.Adapter {
+                EpidoseImagesView(it, childFragmentManager)
             }.apply {
                 items = list.toMutableList()
             }

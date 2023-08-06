@@ -13,9 +13,14 @@ import com.example.filmes.R
 import com.example.filmes.databinding.ActivityMovieDetailsBinding
 import com.example.filmes.model.MovieRoom
 import com.example.filmes.model.general.Cast
+import com.example.filmes.model.general.Review
 import com.example.filmes.model.movie.Movie
+import com.example.filmes.model.person.Profile
 import com.example.filmes.views.CastView
+import com.example.filmes.views.EpidoseImagesView
+import com.example.filmes.views.ImageView
 import com.example.filmes.views.MovieView
+import com.example.filmes.views.ReviewView
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -111,6 +116,17 @@ class MovieDetailsActivity : AppCompatActivity() {
 
                 setRecyclerViewSimilar(it.similar.results)
                 setRecyclerViewCast(it.credits.cast)
+                 if ( it.reviews.results.isNullOrEmpty() ) {
+                   binding.recyclerMovieReviews.visibility = View.GONE
+                  binding.textView443.visibility = View.GONE
+                }
+                else setRecyclerViewReviews( it.reviews.results )
+               // if ( it.images.backdrops.isNullOrEmpty() ) {
+                 //   binding.recyclerMovieImages.visibility = View.GONE
+                 //   binding.textView443.visibility = View.GONE
+                //}
+                //else setRecyclerViewImages( it.images.backdrops!! )
+                //setRecyclerViewImages(it.images.backdrops!!)
 
                 movieRoom = MovieRoom(
                     it.id,
@@ -144,6 +160,30 @@ class MovieDetailsActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false)
             adapter = com.example.filmes.adapter.Adapter {
                 MovieView(it)
+            }.apply {
+                items = list.toMutableList()
+            }
+        }
+    }
+
+    private fun setRecyclerViewImages(list: List<Profile>) {
+
+        binding.recyclerMovieReviews.apply {
+            layoutManager = LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false)
+            adapter = com.example.filmes.adapter.Adapter {
+                ImageView(it, supportFragmentManager)
+            }.apply {
+                items = list.toMutableList()
+            }
+        }
+    }
+
+    private fun setRecyclerViewReviews(list: List<Review>) {
+
+        binding.recyclerMovieReviews.apply {
+            layoutManager = LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false)
+            adapter = com.example.filmes.adapter.Adapter {
+                ReviewView(it, supportFragmentManager)
             }.apply {
                 items = list.toMutableList()
             }

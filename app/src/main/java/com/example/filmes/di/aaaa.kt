@@ -1,17 +1,6 @@
-package com.example.filmes.model.movie
+package com.example.filmes.di
 
-import androidx.room.ColumnInfo
-import androidx.room.Entity
-import androidx.room.PrimaryKey
-import com.example.filmes.model.general.Credits
-import com.example.filmes.model.general.Genre
-import com.example.filmes.model.general.Images
-import com.example.filmes.model.general.ProductionCompany
-import com.example.filmes.model.general.ProductionCountry
-import com.example.filmes.model.general.Reviews
-import com.example.filmes.model.general.SpokenLanguage
-import com.example.filmes.model.general.Videos
-data class Movie(
+data class aaaa(
     val adult: Boolean,
     val backdrop_path: String,
     val belongs_to_collection: BelongsToCollection,
@@ -20,7 +9,7 @@ data class Movie(
     val genres: List<Genre>,
     val homepage: String,
     val id: Int,
-    val images: com.example.filmes.di.Images,
+    val images: Images,
     val imdb_id: String,
     val original_language: String,
     val original_title: String,

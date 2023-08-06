@@ -5,25 +5,27 @@
     android:id="@+id/movie_search_cellContainer"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="2dp"
-    android:background="@drawable/bg"
+    android:layout_marginBottom="8dp"
+    android:background="@drawable/bg_p2"
     android:padding="1dp"
     app:cardCornerRadius="5dp"
     tools:layout_editor_absoluteX="5dp"
     tools:layout_editor_absoluteY="5dp">
 
-    <ImageView
-        android:id="@+id/imageSearchCell"
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/imageEpisode"
         android:layout_width="110dp"
         android:layout_height="120dp"
-        android:scaleType="centerCrop"
+        android:adjustViewBounds="true"
+        android:scaleType="center"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearanceOverlay="@style/roundImageView"
         app:srcCompat="@color/material_dynamic_neutral10"
         tools:srcCompat="@tools:sample/avatars">
 
-    </ImageView>
+    </com.google.android.material.imageview.ShapeableImageView>>
 
 
     <LinearLayout
@@ -34,10 +36,10 @@
         android:padding="5dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageSearchCell">
+        app:layout_constraintTop_toBottomOf="@+id/imageEpisode">
 
         <TextView
-            android:id="@+id/nomeSearchCell"
+            android:id="@+id/textNameEpisode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/poppins"
@@ -45,9 +47,9 @@
             android:text="Avatar"
             android:textSize="14sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/overviewSearchCell"
-            app:layout_constraintEnd_toEndOf="@+id/imageSearchCell"
-            app:layout_constraintStart_toEndOf="@+id/imageSearchCell"
+            app:layout_constraintBottom_toTopOf="@+id/textOverviewEpisode"
+            app:layout_constraintEnd_toEndOf="@+id/imageEpisode"
+            app:layout_constraintStart_toEndOf="@+id/imageEpisode"
             app:layout_constraintTop_toBottomOf="@+id/id"></TextView>
 
         <TextView
@@ -62,7 +64,7 @@
             tools:layout_editor_absoluteY="402dp"></TextView>
 
         <TextView
-            android:id="@+id/overviewSearchCell"
+            android:id="@+id/textOverviewEpisode"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="7dp"

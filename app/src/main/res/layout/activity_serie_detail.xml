@@ -216,14 +216,13 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/linnearSimilarSeries"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
-                    android:layout_marginBottom="8dp"
                     android:orientation="vertical"
                     android:padding="5dp"
-                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/linearElenco">
@@ -243,6 +242,38 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_margin="10dp"
+                        android:padding="5dp"
+                        android:paddingEnd="5dp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/linearSeriesReviews"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:orientation="vertical"
+                    android:padding="5dp"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/linnearSimilarSeries">
+
+                    <TextView
+                        android:id="@+id/textView443"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/poppins"
+                        android:text="Avaliações"
+                        android:textSize="17sp"
+                        android:textStyle="bold" />
+
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/recyclerSeriesReviews"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:padding="5dp"
                         android:paddingEnd="5dp" />
                 </LinearLayout>

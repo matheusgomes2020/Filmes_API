@@ -12,9 +12,11 @@ import com.example.filmes.R
 import com.example.filmes.databinding.ActivitySerieDetailBinding
 import com.example.filmes.model.SerieRoom
 import com.example.filmes.model.general.Cast
+import com.example.filmes.model.general.Review
 import com.example.filmes.model.serie.Season
 import com.example.filmes.model.serie.Serie
 import com.example.filmes.views.CastView
+import com.example.filmes.views.ReviewView
 import com.example.filmes.views.SeasonView
 import com.example.filmes.views.SeriesView
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
@@ -83,7 +85,7 @@ class SerieDetailsActivity : AppCompatActivity() {
                 }
 
                 nomeSerie = it.name
-                binding.seriesOverview.text = it.overview
+                binding.seriesOverview.text = it.reviews.toString()
                 binding.seriesTitle.text = it.name
                 binding.textSeriesData.text = it.first_air_date
                 binding.textSeriesDuration.text = it.episode_run_time.toString()
@@ -139,6 +141,12 @@ class SerieDetailsActivity : AppCompatActivity() {
                 setRecyclerViewCast(it.aggregate_credits.cast)
                 setRecyclerViewSimilar(it.similar.results)
 
+                if ( it.reviews.results.isNullOrEmpty() ) {
+                    binding.recyclerSeriesReviews.visibility = View.GONE
+                    binding.textView443.visibility = View.GONE
+                }
+                else setRecyclerViewReviews( it.reviews.results )
+
                 seriesRoom = SerieRoom(
                     it.id,
                     it.poster_path ,
@@ -168,6 +176,18 @@ class SerieDetailsActivity : AppCompatActivity() {
             layoutManager = LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false)
             adapter = com.example.filmes.adapter.Adapter {
                 SeriesView(it)
+            }.apply {
+                items = list.toMutableList()
+            }
+        }
+    }
+
+    private fun setRecyclerViewReviews(list: List<Review>) {
+
+        binding.recyclerSeriesReviews.apply {
+            layoutManager = LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false)
+            adapter = com.example.filmes.adapter.Adapter {
+                ReviewView(it, supportFragmentManager)
             }.apply {
                 items = list.toMutableList()
             }

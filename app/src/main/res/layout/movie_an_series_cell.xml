@@ -47,9 +47,9 @@
             android:text="Avatar"
             android:textColor="#434242"
             android:textSize="14sp"
-            app:layout_constraintBottom_toTopOf="@+id/overviewSearchCell"
-            app:layout_constraintEnd_toEndOf="@+id/imageSearchCell"
-            app:layout_constraintStart_toEndOf="@+id/imageSearchCell"
+            app:layout_constraintBottom_toTopOf="@+id/textOverviewEpisode"
+            app:layout_constraintEnd_toEndOf="@+id/imageEpisode"
+            app:layout_constraintStart_toEndOf="@+id/imageEpisode"
             app:layout_constraintTop_toBottomOf="@+id/id">
 
         </TextView>
