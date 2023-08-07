@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.filmes.adapter.Adapter
 import com.example.filmes.databinding.FragmentSeriesBinding
 import com.example.filmes.model.serie.Serie
-import com.example.filmes.views.SeriesView
+import com.example.filmes.adapter.views.SeriesView
 import dagger.hilt.android.AndroidEntryPoint
 import java.lang.Exception
 

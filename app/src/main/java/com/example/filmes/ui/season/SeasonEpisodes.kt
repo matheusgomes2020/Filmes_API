@@ -12,7 +12,7 @@ import com.example.filmes.R
 import com.example.filmes.databinding.FragmentSeasonEpisodesBinding
 import com.example.filmes.model.serie.Episode
 import com.example.filmes.model.serie.Season
-import com.example.filmes.views.EpisodeView
+import com.example.filmes.adapter.views.EpisodeView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import java.lang.Exception

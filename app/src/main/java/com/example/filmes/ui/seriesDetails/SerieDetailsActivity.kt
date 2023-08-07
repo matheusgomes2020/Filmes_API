@@ -15,10 +15,10 @@ import com.example.filmes.model.general.Cast
 import com.example.filmes.model.general.Review
 import com.example.filmes.model.serie.Season
 import com.example.filmes.model.serie.Serie
-import com.example.filmes.views.CastView
-import com.example.filmes.views.ReviewView
-import com.example.filmes.views.SeasonView
-import com.example.filmes.views.SeriesView
+import com.example.filmes.adapter.views.CastView
+import com.example.filmes.adapter.views.ReviewView
+import com.example.filmes.adapter.views.SeasonView
+import com.example.filmes.adapter.views.SeriesView
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -85,7 +85,7 @@ class SerieDetailsActivity : AppCompatActivity() {
                 }
 
                 nomeSerie = it.name
-                binding.seriesOverview.text = it.reviews.toString()
+                binding.seriesOverview.text = it.overview
                 binding.seriesTitle.text = it.name
                 binding.textSeriesData.text = it.first_air_date
                 binding.textSeriesDuration.text = it.episode_run_time.toString()
@@ -101,7 +101,8 @@ class SerieDetailsActivity : AppCompatActivity() {
                 }
 
                 if (it.created_by.isNullOrEmpty()) {
-                    binding.textViewSerieDirecao.text = "Null"
+                    binding.textView13.visibility = View.GONE
+                    binding.textViewSerieDirecao.visibility = View.GONE
                 } else {
                     var roteiro = ""
 

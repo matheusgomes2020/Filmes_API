@@ -13,9 +13,9 @@ import com.example.filmes.model.general.Cast
 import com.example.filmes.model.general.Image
 import com.example.filmes.model.general.Images
 import com.example.filmes.model.person.Profile
-import com.example.filmes.views.CastView
-import com.example.filmes.views.EpidoseImagesView
-import com.example.filmes.views.ImageView
+import com.example.filmes.adapter.views.CastView
+import com.example.filmes.adapter.views.EpidoseImagesView
+import com.example.filmes.adapter.views.ImageView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import java.lang.Exception

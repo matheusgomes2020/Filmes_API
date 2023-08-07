@@ -19,7 +19,7 @@ import com.example.filmes.model.person.CastX
 import com.example.filmes.model.person.Profile
 import com.example.filmes.ui.movieDetails.MovieDetailsActivity
 import com.example.filmes.ui.seriesDetails.SerieDetailsActivity
-import com.example.filmes.views.ImageView
+import com.example.filmes.adapter.views.ImageView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import java.lang.Exception

@@ -1,4 +1,4 @@
-package com.example.filmes.views
+package com.example.filmes.adapter.views
 
 import android.view.ViewGroup
 import android.widget.ImageView
@@ -8,6 +8,7 @@ import coil.load
 import com.example.filmes.R
 import com.example.filmes.adapter.BaseViewHolder
 import com.example.filmes.model.person.Profile
+import com.example.filmes.ui.personImage.PersonImageFragment
 
 class ImageView (viewGroup: ViewGroup, private var fragmentManager: FragmentManager) : BaseViewHolder<Profile>(
     R.layout.image_cell,
@@ -20,9 +21,7 @@ class ImageView (viewGroup: ViewGroup, private var fragmentManager: FragmentMana
         if ( !item.file_path.isNullOrEmpty() ) itemView.findViewById<ImageView>(R.id.imageP).load( "https://image.tmdb.org/t/p/w500" + item.file_path)
         else itemView.findViewById<ImageView>(R.id.imageP).load(R.drawable.logo)
         itemView.findViewById<LinearLayout>(R.id.containerImage).setOnClickListener {
-
-
-
+            PersonImageFragment(item.file_path).show(fragmentManager, "personImageTag")
         }
     }
 

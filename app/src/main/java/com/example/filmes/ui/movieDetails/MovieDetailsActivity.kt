@@ -16,11 +16,11 @@ import com.example.filmes.model.general.Cast
 import com.example.filmes.model.general.Review
 import com.example.filmes.model.movie.Movie
 import com.example.filmes.model.person.Profile
-import com.example.filmes.views.CastView
-import com.example.filmes.views.EpidoseImagesView
-import com.example.filmes.views.ImageView
-import com.example.filmes.views.MovieView
-import com.example.filmes.views.ReviewView
+import com.example.filmes.adapter.views.CastView
+import com.example.filmes.adapter.views.EpidoseImagesView
+import com.example.filmes.adapter.views.ImageView
+import com.example.filmes.adapter.views.MovieView
+import com.example.filmes.adapter.views.ReviewView
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import dagger.hilt.android.AndroidEntryPoint

@@ -14,7 +14,7 @@ import com.example.filmes.databinding.FragmentMovieBinding
 import com.example.filmes.model.movie.Movie
 import com.example.filmes.ui.search.SearchActivity
 import com.example.filmes.ui.searchSeries.SerieSearchActivity
-import com.example.filmes.views.MovieView
+import com.example.filmes.adapter.views.MovieView
 import dagger.hilt.android.AndroidEntryPoint
 import java.lang.Exception
 

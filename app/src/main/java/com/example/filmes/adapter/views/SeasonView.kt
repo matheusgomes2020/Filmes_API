@@ -1,4 +1,4 @@
-package com.example.filmes.views
+package com.example.filmes.adapter.views
 
 import android.view.ViewGroup
 import android.widget.ImageView

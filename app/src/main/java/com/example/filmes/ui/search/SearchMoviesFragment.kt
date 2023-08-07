@@ -13,8 +13,8 @@ import com.example.filmes.databinding.FragmentSearchMoviesBinding
 import com.example.filmes.model.movie.Movie
 import com.example.filmes.model.serie.Serie
 import com.example.filmes.ui.searchSeries.SerieSearchViewModel
-import com.example.filmes.views.SearchSeriesView
-import com.example.filmes.views.SearchView
+import com.example.filmes.adapter.views.SearchSeriesView
+import com.example.filmes.adapter.views.SearchView
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
