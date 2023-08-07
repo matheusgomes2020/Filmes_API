@@ -4,35 +4,57 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import android.os.Looper
+import android.view.View
 import android.view.animation.AnimationUtils
 import android.widget.ImageView
+import androidx.activity.viewModels
+import androidx.lifecycle.coroutineScope
 import com.example.filmes.MainActivity
 import com.example.filmes.R
+import com.example.filmes.databinding.ActivitySplashScreenBinding
+import com.example.filmes.ui.login.AuthViewModel
+import com.example.filmes.ui.login.LoginActivity
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class SplashScreen : AppCompatActivity() {
+
+    private lateinit var binding: ActivitySplashScreenBinding
+
+    private val viewModel: AuthViewModel by viewModels()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_splash_screen)
+        binding = ActivitySplashScreenBinding.inflate(layoutInflater)
+        setContentView( binding.root )
 
-        /*
-        Handler(Looper.getMainLooper()).postDelayed({
-            val intent = Intent( this, MainActivity::class.java )
-            startActivity( intent )
-            finish()
-        },3000)
+        viewModel.loggedUser()
 
-
-         */
         val backgroundImg: ImageView = findViewById(R.id.imageViewSplash)
         val slideAnimation = AnimationUtils.loadAnimation( this, R.anim.slide )
         backgroundImg.startAnimation( slideAnimation )
 
-        Handler().postDelayed({
-            val intent = Intent( this, MainActivity::class.java )
-            startActivity( intent )
-            finish()
-        },3)
+        lifecycle.coroutineScope.launchWhenCreated {
+            viewModel.user.collect {
+                if (it.isLoading) {
+                    binding.progressCircular.visibility = View.VISIBLE
+                }
+                if (it.error.isNotBlank()) {
+                    Handler().postDelayed({
+                        binding.progressCircular.visibility = View.GONE
+                        startActivity(Intent(this@SplashScreen, LoginActivity::class.java))
+                    }, 3000)
+                }
+                it.data?.let {
+                    Handler().postDelayed({
+                        binding.progressCircular.visibility = View.GONE
+                        startActivity(Intent(this@SplashScreen, MainActivity::class.java))
+                    }, 3000)
+
+                }
+            }
+        }
+
 
 
     }

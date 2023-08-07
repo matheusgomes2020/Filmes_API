@@ -23,6 +23,8 @@ import com.example.filmes.adapter.BaseViewHolder
 import com.example.filmes.databinding.FragmentProfileBinding
 import com.example.filmes.model.MovieRoom
 import com.example.filmes.model.SerieRoom
+import com.example.filmes.ui.login.LoggedInViewModel
+import com.example.filmes.ui.login.LoginActivity
 import com.example.filmes.ui.movieDetails.MovieDetailsActivity
 import com.example.filmes.ui.seriesDetails.SerieDetailsActivity
 import dagger.hilt.android.AndroidEntryPoint
@@ -49,6 +51,9 @@ class FavoriteFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         observe()
         observeSeries()
+
+
+
     }
 
     override fun onDestroyView() {

@@ -3,11 +3,12 @@ package com.example.filmes.di
 import android.content.Context
 import androidx.room.Room
 import com.example.filmes.data.MovieDatabase
-import com.example.filmes.data.MovieDao
 import com.example.filmes.network.PersonApi
 import com.example.filmes.network.MoviesApi
 import com.example.filmes.network.SeriesApi
+import com.example.filmes.repository.AuthRepository
 import com.example.filmes.utils.Constants
+import com.google.firebase.auth.FirebaseAuth
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -75,4 +76,12 @@ object AppModule {
     @Singleton
     @Provides
     fun provideSeriesDao( movieDatabase: MovieDatabase ) = movieDatabase.seriesDao()
+
+    @Provides
+    fun provideFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
+
+
+    @Provides
+    fun provideAuthRepository() = AuthRepository()
+
 }

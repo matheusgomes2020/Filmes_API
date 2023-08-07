@@ -56,4 +56,5 @@
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/recyclerPerfil" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
