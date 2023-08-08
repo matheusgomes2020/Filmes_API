@@ -14,6 +14,7 @@ import com.example.filmes.R
 import com.example.filmes.databinding.ActivitySplashScreenBinding
 import com.example.filmes.ui.login.AuthViewModel
 import com.example.filmes.ui.login.LoginActivity
+import com.example.filmes.ui.login.LoginnActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -42,7 +43,7 @@ class SplashScreen : AppCompatActivity() {
                 if (it.error.isNotBlank()) {
                     Handler().postDelayed({
                         binding.progressCircular.visibility = View.GONE
-                        startActivity(Intent(this@SplashScreen, LoginActivity::class.java))
+                        startActivity(Intent(this@SplashScreen, LoginnActivity::class.java))
                     }, 3000)
                 }
                 it.data?.let {
