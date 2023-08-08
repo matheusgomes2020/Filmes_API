@@ -1,81 +1,45 @@
 package com.example.filmes.ui.login
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
-import android.widget.Toast
-import androidx.activity.viewModels
-import androidx.lifecycle.coroutineScope
-import com.example.filmes.MainActivity
+import com.example.filmes.adapter.LoginAdapter
 import com.example.filmes.databinding.ActivityLoginBinding
-import com.example.filmes.model.User
+import com.google.android.material.tabs.TabLayout
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
-
-    private val viewModel: AuthViewModel by viewModels()
-    private var email = ""
-    private var password = ""
-
     private lateinit var binding: ActivityLoginBinding
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        lifecycle.coroutineScope.launchWhenCreated {
-            viewModel.user.collect {
-                if (it.isLoading) {
-                    binding.progressCircular.visibility = View.VISIBLE
-                }
-                if (it.error.isNotBlank()) {
-                    binding.progressCircular.visibility = View.GONE
-                    Toast.makeText(this@LoginActivity, it.error, Toast.LENGTH_SHORT).show()
+        binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Login"))
+        binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Cadastro"))
+        binding.tabLayout.setTabGravity(TabLayout.GRAVITY_FILL)
 
-                }
-                it.data?.let {
-                   binding.progressCircular.visibility = View.GONE
-                    startActivity(Intent(this@LoginActivity, MainActivity::class.java))
-                }
-            }
-        }
-
-
-        binding.btnSignIn.setOnClickListener {
-            with(binding) {
-                email = edtEmailID.text.toString()
-                password = edtPassword.text.toString()
-                if (email.isNotEmpty() && password.isNotEmpty()) {
-                    viewModel.login(email, password)
-                } else {
-                    Toast.makeText(this@LoginActivity, "Email and Password Must be Entered.", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-
-        binding.btnSignUp.setOnClickListener {
-            with(binding) {
-                email = edtEmailID.text.toString()
-                password = edtPassword.text.toString()
-
-                val user = User(
-                    name = "Jahid Hasan",
-                    image = "",
-                    email = email,
-                    active = true,
-                    address = "Dhaka, Bangladesh"
-                )
-
-                if (email.isNotEmpty() && password.isNotEmpty()) {
-                    viewModel.register(email, password, user)
-                } else {
-                    Toast.makeText(this@LoginActivity, "Email and Password Must be Entered.", Toast.LENGTH_SHORT).show()
-                }
-            }
-        }
-
+        setupViewPager()
     }
+
+    private fun setupViewPager() {
+        val viewPager = binding.viewPager
+        viewPager.adapter = LoginAdapter(supportFragmentManager)
+
+        binding.fabFb.setTranslationY(300F)
+        binding.fabGoogle.setTranslationY(300F)
+        binding.fabTwitter.setTranslationY(300F)
+        binding.tabLayout.setTranslationY(300F)
+
+        binding.fabFb.setAlpha(0)
+        binding.fabGoogle.setAlpha(0)
+        binding.fabTwitter.setAlpha(0)
+        binding.tabLayout.setAlpha(0F)
+
+        binding.fabFb.animate().translationY(0F).alpha(1F).setDuration(1000).setStartDelay(400).start()
+        binding.fabGoogle.animate().translationY(0F).alpha(1F).setDuration(1000).setStartDelay(400).start()
+        binding.fabTwitter.animate().translationY(0F).alpha(1F).setDuration(1000).setStartDelay(400).start()
+        binding.tabLayout.animate().translationY(0F).alpha(1F).setDuration(1000).setStartDelay(400).start()
+    }
+
 }

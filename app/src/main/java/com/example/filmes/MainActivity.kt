@@ -5,12 +5,10 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import com.example.filmes.databinding.ActivityMainBinding
 import com.example.filmes.ui.filmes.MovieFragment
 import com.example.filmes.ui.login.LoggedInViewModel
