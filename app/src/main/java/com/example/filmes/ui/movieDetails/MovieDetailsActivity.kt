@@ -6,7 +6,9 @@ import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.ReportFragment.Companion.reportFragment
+import androidx.lifecycle.coroutineScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.filmes.R
@@ -21,6 +23,8 @@ import com.example.filmes.adapter.views.EpidoseImagesView
 import com.example.filmes.adapter.views.ImageView
 import com.example.filmes.adapter.views.MovieView
 import com.example.filmes.adapter.views.ReviewView
+import com.example.filmes.model.MovieF
+import com.example.filmes.ui.login.AuthViewModel
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,7 +35,9 @@ class MovieDetailsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMovieDetailsBinding
     private val viewModel: MovieDetailsViewModel by viewModels()
+    private val viewModelA: AuthViewModel by viewModels()
     var movieRoom: MovieRoom? = null
+    var movieF: MovieF? = null
     var lista: List<MovieRoom> = emptyList()
     var favorito: Boolean = true
 
@@ -40,12 +46,18 @@ class MovieDetailsActivity : AppCompatActivity() {
         binding = ActivityMovieDetailsBinding.inflate(layoutInflater)
         setContentView( binding.root )
 
+        viewModelA.getMovies()
+
         val id = intent.getStringExtra("id")
         viewModel.getMovieInfo( id!! )
         observeMovies()
         observe()
+        observeFirebase()
+
+        observeUser()
 
         binding.imageView2.setOnClickListener {
+            viewModelA.saveMovie(movieF!!)
             if (favorito) {
                 Toast.makeText(applicationContext, movieRoom!!.title + " removido dos favoritos!!!", Toast.LENGTH_SHORT).show()
                 viewModel.deleteMovie( movieRoom!! )
@@ -58,6 +70,53 @@ class MovieDetailsActivity : AppCompatActivity() {
                 favorito = true
             }
 
+        }
+    }
+
+    private fun observeFirebase(){
+        lifecycle.coroutineScope.launchWhenCreated {
+            viewModelA.movieLL.collect {
+                if (it.isLoading) {
+                    Toast.makeText(applicationContext, "CarregandoMovieLL!!!", Toast.LENGTH_SHORT).show()
+
+                }
+                if (it.error.isNotBlank()) {
+                    Toast.makeText(applicationContext, "Erro!!!" + it.error, Toast.LENGTH_SHORT).show()
+                }
+                it.data?.let { _movie ->
+                    Toast.makeText(applicationContext, _movie.toString(), Toast.LENGTH_SHORT).show()
+                    var a = ""
+                    for (i in _movie)
+                        a+= i.title + "\n"
+                    //Log.d( "DEU CERTO?", "observeFirebase: " + _movie.toString())
+                    Log.d( "DEU CERTO?", "observeFirebase: " + a)
+
+
+                }
+            }
+        }
+
+    }
+
+    private fun observeUser(){
+
+        viewModelA.getUserData()
+
+        lifecycle.coroutineScope.launchWhenCreated {
+            viewModelA.userData.collect {
+                if (it.isLoading) {
+
+                }
+                if (it.error.isNotBlank()) {
+
+                }
+                it.data?.let { _user ->
+
+                    Toast.makeText(applicationContext, _user.name, Toast.LENGTH_SHORT).show()
+
+
+                }
+            }
         }
     }
 
@@ -130,6 +189,12 @@ class MovieDetailsActivity : AppCompatActivity() {
 
                 movieRoom = MovieRoom(
                     it.id,
+                    it.poster_path ,
+                    it.title
+                )
+
+                movieF = MovieF(
+                    it.id.toString(),
                     it.poster_path ,
                     it.title
                 )

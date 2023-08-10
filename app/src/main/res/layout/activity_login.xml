@@ -59,9 +59,9 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginBottom="96dp"
             android:elevation="35dp"
-            app:backgroundTint="#AEDA7C"
+            app:backgroundTint="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/fab_twitter">
 
@@ -72,11 +72,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="110dp"
-            android:layout_marginBottom="32dp"
+            android:layout_marginBottom="96dp"
 
             android:elevation="35dp"
-            android:src="@drawable/baseline_search_24"
-            app:backgroundTint="#ECD07F"
+            app:backgroundTint="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
@@ -87,8 +86,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginBottom="32dp"
-            android:backgroundTint="#E68CAB"
+            android:layout_marginBottom="96dp"
+            android:backgroundTint="@color/white"
             android:elevation="35dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/fab_fb">

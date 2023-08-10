@@ -11,5 +11,8 @@ data class MovieRoom(
     @ColumnInfo(name = "poster_path")
     val poster_path: String,
     @ColumnInfo(name = "title")
-    val title: String
+    val title: String,
+    var userId: String = ""
+
+
 )

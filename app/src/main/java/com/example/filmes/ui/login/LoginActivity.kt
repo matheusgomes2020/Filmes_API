@@ -19,6 +19,8 @@ class LoginActivity : AppCompatActivity() {
         binding.tabLayout.addTab(binding.tabLayout.newTab().setText("Cadastro"))
         binding.tabLayout.setTabGravity(TabLayout.GRAVITY_FILL)
 
+
+
         setupViewPager()
     }
 

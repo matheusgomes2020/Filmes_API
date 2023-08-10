@@ -1,11 +1,19 @@
 package com.example.filmes.ui.login
 
+import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.filmes.data.Resource
+import com.example.filmes.model.MovieF
+import com.example.filmes.model.MovieRoom
 import com.example.filmes.model.User
+import com.example.filmes.model.movie.Movie
 import com.example.filmes.repository.AuthRepository
 import com.example.filmes.utils.AuthState
+import com.example.filmes.utils.MovieListState
+import com.example.filmes.utils.MovieState
 import com.example.filmes.utils.UserState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,8 +32,18 @@ constructor(
     private val _user = MutableStateFlow(AuthState())
     val user: StateFlow<AuthState> = _user
 
+    private val _movie = MutableStateFlow(MovieState())
+    private val _movieLL = MutableStateFlow(MovieListState())
+   // private val _movies = MutableLiveData(List<MovieRoom>>)
+    val movie: StateFlow<MovieState> = _movie
+    val movieLL: StateFlow<MovieListState> = _movieLL
+
     private val _userData = MutableStateFlow(UserState())
     val userData: StateFlow<UserState> = _userData
+
+
+    private val _movieList = MutableLiveData<List<MovieF>>()
+    val movieList: LiveData<List<MovieF>> = _movieList
 
     fun login(email: String, password: String) {
         authRepository.login(email, password).onEach {
@@ -63,6 +81,13 @@ constructor(
         }.launchIn(viewModelScope)
     }
 
+    fun saveMovie(movieRoom: MovieF) {
+        authRepository.saveMovie(movieRoom).onEach {
+        }.launchIn(viewModelScope)
+
+
+    }
+
     fun loggedUser() {
 
         authRepository.getLoggedUser().onEach {
@@ -93,6 +118,29 @@ constructor(
                 }
                 is Resource.Success -> {
                     _userData.value = UserState(data = it.data)
+                }
+
+                else -> {}
+            }
+        }.launchIn(viewModelScope)
+    }
+
+    fun getMovies() {
+        authRepository.getMovies().onEach {
+            when (it) {
+                is Resource.Loading -> {
+                    _movieLL.value = MovieListState(isLoading = true)
+                    Log.d("BBBBGTT", "VM/Loading: " + _movieLL.value)
+                }
+                is Resource.Error -> {
+                    _movieLL.value = MovieListState(error = it.message ?: "")
+                    Log.d("BBBBGTT", "VM/Error: " + _movieLL.value)
+
+                }
+                is Resource.Success -> {
+                    _movieLL.value = MovieListState(data = it.data!!)
+                    Log.d("BBBBGTT", "VM/Sucess: " + _movieLL.value)
+
                 }
 
                 else -> {}
