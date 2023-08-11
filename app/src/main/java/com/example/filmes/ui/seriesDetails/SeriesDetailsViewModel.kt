@@ -6,7 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.filmes.data.Resource
-import com.example.filmes.model.SerieRoom
+import com.example.filmes.model.SeriesFirebase
 import com.example.filmes.model.serie.Season
 import com.example.filmes.model.serie.Serie
 import com.example.filmes.repository.RoomRepository
@@ -17,25 +17,15 @@ import java.lang.Exception
 import javax.inject.Inject
 
 @HiltViewModel
-class SeriesDetailsViewModel @Inject constructor( private val seriesRepository: SeriesRepository, private val roomRepository: RoomRepository)
+class SeriesDetailsViewModel @Inject constructor( private val seriesRepository: SeriesRepository)
     : ViewModel() {
 
     private var _seriesInfo = MutableLiveData<Serie>()
     private val _seasonEpisodes = MutableLiveData<Season>()
-    private val _seriesList = MutableLiveData<List<SerieRoom>>()
-    var carregandoEmitter = MutableLiveData<Boolean>()
+    var carregando: Boolean = true
     val seriesInfo: LiveData<Serie> = _seriesInfo
     val seasonEpisodes: LiveData<Season> = _seasonEpisodes
-    val seriesList:  LiveData<List<SerieRoom>> = _seriesList
-    val carregando: LiveData<Boolean> = carregandoEmitter
 
-    init {
-        loadSeries()
-    }
-
-    fun addSeries( series: SerieRoom ) = viewModelScope.launch { roomRepository.addSeries( series ) }
-
-    fun deleteSeries( series: SerieRoom ) = viewModelScope.launch { roomRepository.deleteSeries( series ) }
 
     fun getSerieInfo(serieId: String ) {
 
@@ -44,24 +34,24 @@ class SeriesDetailsViewModel @Inject constructor( private val seriesRepository: 
                 when (val response = seriesRepository.getSerieInfo( serieId ) ){
                     is Resource.Success -> {
                         _seriesInfo.value = response.data!!
-                        if (_seriesInfo.value!! != null) carregandoEmitter.value = false
-                        Log.e("Network", "Série: Ok. Certo!!! Carregando?= ${carregando.value}")
+                        if (_seriesInfo.value!! != null) carregando = false
+                        Log.e("Network", "Série: Ok. Certo!!! Carregando?= ${carregando}")
                         Log.e("Network", "getSerieInfo: " + seriesInfo.value)
                         Log.e("Network", "getSerieInfo: " + _seriesInfo.value)
                     }
                     is Resource.Error -> {
-                        carregandoEmitter.value = false
-                        Log.e("Network", "Série: Failed getting Séries Carregando?= ${carregando.value}")
+                        carregando = false
+                        Log.e("Network", "Série: Failed getting Séries Carregando?= ${carregando}")
                         Log.e("Network", "Failed getting Séries: " + seriesInfo.value)
                         Log.e("Network", "Failed getting Séries: " + _seriesInfo.value)
                     }
                     else -> {
-                        carregandoEmitter.value = false
+                        carregando = false
                     }
                 }
             }
         }catch (exception: Exception) {
-            carregandoEmitter.value = false
+            carregando = false
             Log.d("Network", "Série: ${exception.message.toString()} Carregando?= $carregando")
             Log.d("wwww", "getSerieInfo: " + _seriesInfo.value)
         }
@@ -74,35 +64,22 @@ class SeriesDetailsViewModel @Inject constructor( private val seriesRepository: 
                 when (val response = seriesRepository.getSeasonEpisodes( seriesId, seasonNumber ) ){
                     is Resource.Success -> {
                         _seasonEpisodes.value = response.data!!
-                        if (_seasonEpisodes.value!! != null) carregandoEmitter.value = false
+                        if (_seasonEpisodes.value!! != null) carregando = false
                         Log.e("Network", "seasonEpisodes: Ok. Certo!!! Carregando?= $carregando")
                     }
                     is Resource.Error -> {
-                        carregandoEmitter.value = false
+                        carregando = false
                         Log.e("Network", "seasonEpisodes: Failed getting filmes Carregando?= $carregando")
                     }
                     else -> {
-                        carregandoEmitter.value = false
+                        carregando = false
                     }
                 }
             }
         }catch (exception: Exception) {
-            carregandoEmitter.value = false
+            carregando = false
             Log.d("Network", "seasonEpisodes: ${exception.message.toString()} Carregando?= $carregando")
         }
     }
-
-    private fun loadSeries() {
-
-        viewModelScope.launch {
-            try {
-                val response = roomRepository.getAllSeries()
-                _seriesList.value = response
-            } catch (exception: Exception) {
-                Log.d("Network", "Profile: ${exception.message.toString()} Carregando?= $carregando")
-            }
-        }
-    }
-
 
 }

@@ -15,24 +15,29 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.coroutineScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import com.example.filmes.R
 import com.example.filmes.adapter.BaseViewHolder
 import com.example.filmes.databinding.FragmentProfileBinding
-import com.example.filmes.model.MovieRoom
-import com.example.filmes.model.SerieRoom
+import com.example.filmes.model.MovieFirebase
+import com.example.filmes.model.SeriesFirebase
 import com.example.filmes.ui.movieDetails.MovieDetailsActivity
 import com.example.filmes.ui.seriesDetails.SerieDetailsActivity
+import com.google.firebase.auth.FirebaseAuth
 import dagger.hilt.android.AndroidEntryPoint
-import java.lang.Exception
 
 @AndroidEntryPoint
 class FavoriteFragment : Fragment() {
 
     private var _binding: FragmentProfileBinding? = null
-    private val profileViewModel: FavoriteViewModel by viewModels()
+    private val viewModel: FavoriteViewModel by viewModels()
+
+    private var listOfMovies = emptyList<MovieFirebase>()
+    private var listOfSeries = emptyList<SeriesFirebase>()
+    private val currentUser = FirebaseAuth.getInstance().currentUser
     private val binding get() = _binding!!
 
     override fun onCreateView(
@@ -47,11 +52,8 @@ class FavoriteFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        observe()
-        observeSeries()
-
-
-
+        observeMoviesFirebase()
+        observeSeriesFirebase()
     }
 
     override fun onDestroyView() {
@@ -59,60 +61,73 @@ class FavoriteFragment : Fragment() {
         _binding = null
     }
 
-
-    private fun observe() {
-
-        try {
-            profileViewModel.movieList.observe(viewLifecycleOwner) {
-                setRecyclerViewPersonMovies( it ) }
-        }catch (e: Exception) {
-            e.printStackTrace()
+    private fun observeMoviesFirebase() {
+        viewModel.getMovies()
+        lifecycle.coroutineScope.launchWhenCreated {
+            viewModel.movieList.collect {
+                if (it.isLoading) {
+                }
+                if (it.error.isNotBlank()) {
+                }
+                it.data?.let { _movie ->
+                    listOfMovies = _movie.filter { movie ->
+                        movie.userId == currentUser?.uid.toString() }
+                    setRecyclerFavoriteMovies(listOfMovies )
+                }
+            }
         }
     }
 
-    private fun observeSeries() {
-
-        try {
-            profileViewModel.seriesList.observe(viewLifecycleOwner) {
-                setRecyclerViewPersonSeries( it ) }
-        }catch (e: Exception) {
-            e.printStackTrace()
+    private fun observeSeriesFirebase() {
+        viewModel.getSeries()
+        lifecycle.coroutineScope.launchWhenCreated {
+            viewModel.seriesList.collect {
+                if (it.isLoading) {
+                }
+                if (it.error.isNotBlank()) {
+                }
+                it.data?.let { _series ->
+                    listOfSeries = _series.filter { series ->
+                        series.userId == currentUser?.uid.toString() }
+                    setRecyclerFavoriteSeries(listOfSeries )
+                }
+            }
         }
     }
 
-    private fun setRecyclerViewPersonMovies(list: List<MovieRoom>) {
+    private fun setRecyclerFavoriteMovies(list: List<MovieFirebase>) {
 
-        binding.recyclerPerfil.apply {
+        binding.recyclerFavoriteMovies.apply {
             layoutManager = LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false)
             adapter = com.example.filmes.adapter.Adapter {
-                MovieRoomView(it, profileViewModel)
+                FavoriteMovieView(it, viewModel)
             }.apply {
                 items = list.toMutableList()
             }
         }
     }
 
-    private fun setRecyclerViewPersonSeries(list: List<SerieRoom>) {
+    private fun setRecyclerFavoriteSeries(list: List<SeriesFirebase>) {
 
-        binding.recyclerSeries.apply {
+        binding.recyclerFavoriteSeries.apply {
             layoutManager = LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false)
             adapter = com.example.filmes.adapter.Adapter {
-                SeriesRoomView(it, profileViewModel)
+                FavoriteSeriesView(it, viewModel)
             }.apply {
                 items = list.toMutableList()
             }
         }
     }
 
-     class MovieRoomView (viewGroup: ViewGroup, private val viewModel: FavoriteViewModel) : BaseViewHolder<MovieRoom>(
+     class FavoriteMovieView (viewGroup: ViewGroup, private val viewModel: FavoriteViewModel) : BaseViewHolder<MovieFirebase>(
         R.layout.movie_an_series_cell,
         viewGroup
     ) {
 
         private val context = viewGroup.context
-        var movie: MovieRoom? = null
+        var movie: MovieFirebase? = null
 
-         private fun showCustomDialogBox(message: String?, movie: MovieRoom )  {
+         private fun showCustomDialogBox(message: String?, movie: MovieFirebase )  {
              val dialog = Dialog(context)
              dialog.requestWindowFeature( Window.FEATURE_NO_TITLE )
              dialog.setCancelable( false )
@@ -123,7 +138,7 @@ class FavoriteFragment : Fragment() {
              val btnNo: Button = dialog.findViewById(R.id.btnNo)
              tvMessage.text = message
              btnYes.setOnClickListener {
-                 viewModel.deleteMovie(movie)
+                // viewModel.deleteMovie(movie)
                  dialog.dismiss()
              }
              btnNo.setOnClickListener {
@@ -132,8 +147,8 @@ class FavoriteFragment : Fragment() {
              dialog.show()
          }
 
-        override fun bind(item: MovieRoom) {
-            movie = MovieRoom(
+        override fun bind(item: MovieFirebase) {
+            movie = MovieFirebase(
                 item.id,
                 item.poster_path ,
                 item.title
@@ -157,15 +172,15 @@ class FavoriteFragment : Fragment() {
         }
     }
 
-    class SeriesRoomView (viewGroup: ViewGroup, private val viewModel: FavoriteViewModel) : BaseViewHolder<SerieRoom>(
+    class FavoriteSeriesView (viewGroup: ViewGroup, private val viewModel: FavoriteViewModel) : BaseViewHolder<SeriesFirebase>(
         R.layout.movie_an_series_cell,
         viewGroup
     ) {
 
         private val context = viewGroup.context
-        var series: SerieRoom? = null
+        var series: SeriesFirebase? = null
 
-        private fun showCustomDialogBox(message: String?, serie: SerieRoom )  {
+        private fun showCustomDialogBox(message: String?, serie: SeriesFirebase)  {
             val dialog = Dialog(context)
             dialog.requestWindowFeature( Window.FEATURE_NO_TITLE )
             dialog.setCancelable( false )
@@ -176,7 +191,7 @@ class FavoriteFragment : Fragment() {
             val btnNo: Button = dialog.findViewById(R.id.btnNo)
             tvMessage.text = message
             btnYes.setOnClickListener {
-                viewModel.deleteSeries(serie)
+                //viewModel.deleteSeries(serie)
                 dialog.dismiss()
             }
             btnNo.setOnClickListener {
@@ -185,8 +200,8 @@ class FavoriteFragment : Fragment() {
             dialog.show()
         }
 
-        override fun bind(item: SerieRoom) {
-            series = SerieRoom(
+        override fun bind(item: SeriesFirebase) {
+            series = SeriesFirebase(
                 item.id,
                 item.poster_path ,
                 item.name

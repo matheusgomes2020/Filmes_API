@@ -1,67 +1,71 @@
 package com.example.filmes.ui.perfil
 
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.filmes.model.MovieRoom
-import com.example.filmes.model.SerieRoom
+import com.example.filmes.data.Resource
+import com.example.filmes.model.MovieFirebase
+import com.example.filmes.model.SeriesFirebase
+import com.example.filmes.repository.FireRepository
 import com.example.filmes.repository.RoomRepository
+import com.example.filmes.utils.MovieListState
+import com.example.filmes.utils.SeriesListState
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @HiltViewModel
-class FavoriteViewModel @Inject constructor(private val repository: RoomRepository)
+class FavoriteViewModel @Inject constructor(private val repository: RoomRepository, private val fireRepository: FireRepository)
     : ViewModel() {
 
-    private val _movieList = MutableLiveData<List<MovieRoom>>()
-    private val _seriesList = MutableLiveData<List<SerieRoom>>()
-    var carregando: Boolean = true
-    val movieList:  LiveData<List<MovieRoom>> = _movieList
-    val seriesList:  LiveData<List<SerieRoom>> = _seriesList
+    private val _movieList = MutableStateFlow(MovieListState())
+    val movieList: StateFlow<MovieListState> = _movieList
 
-    init {
-        loadMovies()
-        loadSeries()
+    private val _seriesList = MutableStateFlow(SeriesListState())
+    val seriesList: StateFlow<SeriesListState> = _seriesList
+
+    fun saveMovie(movie: MovieFirebase) {
+        fireRepository.saveMovie(movie).onEach {
+        }.launchIn(viewModelScope)
     }
 
-     fun deleteMovie( movie: MovieRoom ) = viewModelScope.launch { repository.deleteMovie( movie )
-    loadMovies()}
-
-    fun deleteSeries( series: SerieRoom ) = viewModelScope.launch { repository.deleteSeries( series )
-        loadSeries()}
-
-     fun deleteAllMovies() = viewModelScope.launch { repository.deleteAllMovies()
-    loadMovies()}
-
-    private fun loadMovies() {
-
-        viewModelScope.launch {
-            try {
-                val response = repository.getAllMovies()
-                _movieList.value = response
-            } catch (exception: Exception) {
-                carregando = false
-                Log.d("Network", "Profile: ${exception.message.toString()} Carregando?= $carregando")
+    fun deleteMovie(movie: MovieFirebase) {
+        fireRepository.deleteMovie(movie).onEach {
+        }.launchIn(viewModelScope)
+    }
+    fun getMovies() {
+        fireRepository.getMovies().onEach {
+            when (it) {
+                is Resource.Loading -> {
+                    _movieList.value = MovieListState(isLoading = true)}
+                is Resource.Error -> {
+                    _movieList.value = MovieListState(error = it.message ?: "")}
+                is Resource.Success -> {
+                    _movieList.value = MovieListState(data = it.data!!) }
+                else -> {}
             }
-        }
+        }.launchIn(viewModelScope)
     }
 
-    private fun loadSeries() {
-
-        viewModelScope.launch {
-            try {
-                val response = repository.getAllSeries()
-                _seriesList.value = response
-            } catch (exception: Exception) {
-                carregando = false
-                Log.d("Network", "Profile: ${exception.message.toString()} Carregando?= $carregando")
+    fun saveSeries( seriesFirebase: SeriesFirebase ) {
+        fireRepository.saveSeries(seriesFirebase).onEach {
+        }.launchIn(viewModelScope)
+    }
+    fun getSeries() {
+        fireRepository.getSeries().onEach {
+            when (it) {
+                is Resource.Loading -> {
+                    _seriesList.value = SeriesListState(isLoading = true)}
+                is Resource.Error -> {
+                    _seriesList.value = SeriesListState(error = it.message ?: "")}
+                is Resource.Success -> {
+                    _seriesList.value = SeriesListState(data = it.data!!) }
+                else -> {}
             }
-        }
+        }.launchIn(viewModelScope)
     }
-
 }
 
 

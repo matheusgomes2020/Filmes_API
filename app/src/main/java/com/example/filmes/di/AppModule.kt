@@ -7,6 +7,7 @@ import com.example.filmes.network.PersonApi
 import com.example.filmes.network.MoviesApi
 import com.example.filmes.network.SeriesApi
 import com.example.filmes.repository.AuthRepository
+import com.example.filmes.repository.FireRepository
 import com.example.filmes.utils.Constants
 import com.google.firebase.auth.FirebaseAuth
 import dagger.Module
@@ -83,5 +84,8 @@ object AppModule {
 
     @Provides
     fun provideAuthRepository() = AuthRepository()
+
+    @Provides
+    fun provideFireRepository() = FireRepository()
 
 }

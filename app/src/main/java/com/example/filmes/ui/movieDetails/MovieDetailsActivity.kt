@@ -1,13 +1,10 @@
 package com.example.filmes.ui.movieDetails
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.ReportFragment.Companion.reportFragment
 import androidx.lifecycle.coroutineScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -19,12 +16,13 @@ import com.example.filmes.model.general.Review
 import com.example.filmes.model.movie.Movie
 import com.example.filmes.model.person.Profile
 import com.example.filmes.adapter.views.CastView
-import com.example.filmes.adapter.views.EpidoseImagesView
 import com.example.filmes.adapter.views.ImageView
 import com.example.filmes.adapter.views.MovieView
 import com.example.filmes.adapter.views.ReviewView
-import com.example.filmes.model.MovieF
+import com.example.filmes.model.MovieFirebase
 import com.example.filmes.ui.login.AuthViewModel
+import com.example.filmes.ui.perfil.FavoriteViewModel
+import com.google.firebase.auth.FirebaseAuth
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,92 +33,71 @@ class MovieDetailsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMovieDetailsBinding
     private val viewModel: MovieDetailsViewModel by viewModels()
-    private val viewModelA: AuthViewModel by viewModels()
-    var movieRoom: MovieRoom? = null
-    var movieF: MovieF? = null
-    var lista: List<MovieRoom> = emptyList()
-    var favorito: Boolean = true
+    private val favoriteViewModel: FavoriteViewModel by viewModels()
+    private var movieFirebase: MovieFirebase? = null
+    private var favorite: Boolean = true
+
+    private val currentUser = FirebaseAuth.getInstance().currentUser
+
+    private var listOfMovies = emptyList<MovieFirebase>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMovieDetailsBinding.inflate(layoutInflater)
         setContentView( binding.root )
 
-        viewModelA.getMovies()
+       observeMoviesFirebase()
 
         val id = intent.getStringExtra("id")
         viewModel.getMovieInfo( id!! )
-        observeMovies()
-        observe()
-        observeFirebase()
+        observeMovie()
 
-        observeUser()
+
 
         binding.imageView2.setOnClickListener {
-            viewModelA.saveMovie(movieF!!)
-            if (favorito) {
-                Toast.makeText(applicationContext, movieRoom!!.title + " removido dos favoritos!!!", Toast.LENGTH_SHORT).show()
-                viewModel.deleteMovie( movieRoom!! )
+
+            if (favorite) {
+                //Toast.makeText(applicationContext, movieFirebase!!.title + " removido dos favoritos!!!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(applicationContext, "Favorito!!!", Toast.LENGTH_SHORT).show()
+
+                var movief = listOfMovies.filter { movie ->
+                    movie.title == movieFirebase?.title
+                }
+
+                favoriteViewModel.deleteMovie(movief[0]!!)
                 binding.imageView2.setImageResource(R.drawable.ic_boomark)
-                favorito = false
+                favorite = false
             } else {
-                Toast.makeText(applicationContext, movieRoom!!.title + " salvo nos favoritos!!!", Toast.LENGTH_SHORT).show()
-                viewModel.addMovie( movieRoom!! )
+                Toast.makeText(applicationContext, movieFirebase!!.title + " salvo nos favoritos!!!", Toast.LENGTH_SHORT).show()
+                favoriteViewModel.saveMovie(movieFirebase!!)
                 binding.imageView2.setImageResource(R.drawable.ic_boomark_filled)
-                favorito = true
+                favorite = true
             }
+
+            observeMoviesFirebase()
+            observeMovie()
 
         }
     }
 
-    private fun observeFirebase(){
+    private fun observeMoviesFirebase() {
+        favoriteViewModel.getMovies()
         lifecycle.coroutineScope.launchWhenCreated {
-            viewModelA.movieLL.collect {
+            favoriteViewModel.movieList.collect {
                 if (it.isLoading) {
-                    Toast.makeText(applicationContext, "CarregandoMovieLL!!!", Toast.LENGTH_SHORT).show()
-
                 }
                 if (it.error.isNotBlank()) {
-                    Toast.makeText(applicationContext, "Erro!!!" + it.error, Toast.LENGTH_SHORT).show()
                 }
                 it.data?.let { _movie ->
-                    Toast.makeText(applicationContext, _movie.toString(), Toast.LENGTH_SHORT).show()
-                    var a = ""
-                    for (i in _movie)
-                        a+= i.title + "\n"
-                    //Log.d( "DEU CERTO?", "observeFirebase: " + _movie.toString())
-                    Log.d( "DEU CERTO?", "observeFirebase: " + a)
-
-
-                }
-            }
-        }
-
-    }
-
-    private fun observeUser(){
-
-        viewModelA.getUserData()
-
-        lifecycle.coroutineScope.launchWhenCreated {
-            viewModelA.userData.collect {
-                if (it.isLoading) {
-
-                }
-                if (it.error.isNotBlank()) {
-
-                }
-                it.data?.let { _user ->
-
-                    Toast.makeText(applicationContext, _user.name, Toast.LENGTH_SHORT).show()
-
-
+                    listOfMovies = _movie.filter { movie ->
+                        movie.userId == currentUser?.uid.toString() }
+                    //setRecyclerFavoriteMovies(listOfMovies )
                 }
             }
         }
     }
 
-    private fun observeMovies() {
+    private fun observeMovie() {
 
         try {
             var roteiro = ""
@@ -128,19 +105,22 @@ class MovieDetailsActivity : AppCompatActivity() {
 
             viewModel.movieInfo.observe(this) {
 
-                if ( !lista.isNullOrEmpty() ) {
-                    for (i in lista ) {
-                        if ( i.id == it.id ) {
+
+                if ( !listOfMovies.isNullOrEmpty() ) {
+                    for (i in listOfMovies ) {
+                        if ( i.title == it.title ) {
                             binding.imageView2.setImageResource(R.drawable.ic_boomark_filled)
-                            favorito = true
+                            favorite = true
                             break
                         } else {
-                            favorito = false
+                            favorite = false
                         }
                     }
                 } else {
-                    favorito = false
+                    favorite = false
                 }
+
+
 
                 binding.movieOverview.text = it.overview
                 binding.movieTitle.text = it.title
@@ -187,13 +167,8 @@ class MovieDetailsActivity : AppCompatActivity() {
                 //else setRecyclerViewImages( it.images.backdrops!! )
                 //setRecyclerViewImages(it.images.backdrops!!)
 
-                movieRoom = MovieRoom(
-                    it.id,
-                    it.poster_path ,
-                    it.title
-                )
 
-                movieF = MovieF(
+                movieFirebase = MovieFirebase(
                     it.id.toString(),
                     it.poster_path ,
                     it.title
@@ -255,15 +230,5 @@ class MovieDetailsActivity : AppCompatActivity() {
         }
     }
 
-    private fun observe() {
-
-        try {
-            viewModel.movieList.observe(this) {
-                lista = it
-                 }
-        }catch (e: java.lang.Exception) {
-            e.printStackTrace()
-        }
-    }
 
 }

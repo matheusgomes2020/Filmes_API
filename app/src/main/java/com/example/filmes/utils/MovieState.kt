@@ -1,10 +1,9 @@
 package com.example.filmes.utils
 
-import com.example.filmes.model.MovieF
-import com.example.filmes.model.MovieRoom
+import com.example.filmes.model.MovieFirebase
 
 data class MovieState(
-    val data: MovieF? = null,
+    val data: MovieFirebase? = null,
     val error: String = "",
     val isLoading: Boolean = false
 )

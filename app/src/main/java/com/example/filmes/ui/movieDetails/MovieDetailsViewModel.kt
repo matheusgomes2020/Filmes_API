@@ -16,22 +16,13 @@ import java.lang.Exception
 import javax.inject.Inject
 
 @HiltViewModel
-class MovieDetailsViewModel @Inject constructor( private val repository: MoviesRepository, private val roomRepository: RoomRepository )
+class MovieDetailsViewModel @Inject constructor( private val repository: MoviesRepository )
     : ViewModel() {
 
     private var _movieInfo = MutableLiveData<Movie>()
-    private val _movieList = MutableLiveData<List<MovieRoom>>()
     var carregando: Boolean = true
     val movieInfo: LiveData<Movie> = _movieInfo
-    val movieList:  LiveData<List<MovieRoom>> = _movieList
 
-    init {
-        loadMovies()
-    }
-
-    fun addMovie(movie: MovieRoom) = viewModelScope.launch { roomRepository.addMovie(movie) }
-
-    fun deleteMovie(movie: MovieRoom) = viewModelScope.launch { roomRepository.deleteMovie(movie) }
     fun getMovieInfo( movieId: String ) {
 
          try {
@@ -56,18 +47,5 @@ class MovieDetailsViewModel @Inject constructor( private val repository: MoviesR
              Log.d("Network", "upcomingMovies: ${exception.message.toString()} Carregando?= $carregando")
          }
      }
-
-    private fun loadMovies() {
-
-        viewModelScope.launch {
-            try {
-                val response = roomRepository.getAllMovies()
-                _movieList.value = response
-            } catch (exception: Exception) {
-                carregando = false
-                Log.d("Network", "Profile: ${exception.message.toString()} Carregando?= $carregando")
-            }
-        }
-    }
 
     }

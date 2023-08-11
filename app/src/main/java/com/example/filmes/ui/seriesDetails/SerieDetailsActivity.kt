@@ -10,7 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.filmes.R
 import com.example.filmes.databinding.ActivitySerieDetailBinding
-import com.example.filmes.model.SerieRoom
+import com.example.filmes.model.SeriesFirebase
 import com.example.filmes.model.general.Cast
 import com.example.filmes.model.general.Review
 import com.example.filmes.model.serie.Season
@@ -19,6 +19,7 @@ import com.example.filmes.adapter.views.CastView
 import com.example.filmes.adapter.views.ReviewView
 import com.example.filmes.adapter.views.SeasonView
 import com.example.filmes.adapter.views.SeriesView
+import com.example.filmes.ui.perfil.FavoriteViewModel
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,35 +30,37 @@ class SerieDetailsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivitySerieDetailBinding
     private val viewModel: SeriesDetailsViewModel by viewModels()
-    var serieId = ""
-    var nomeSerie = ""
-    var seriesRoom: SerieRoom? = null
-    var lista: List<SerieRoom> = emptyList()
-    var favorito: Boolean = true
+    private val favoriteViewModel: FavoriteViewModel by viewModels()
+    private var seriesId = ""
+    private var nomeSeries = ""
+    private var seriesFirebase: SeriesFirebase? = null
+    private var favorite: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySerieDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        favoriteViewModel.getSeries()
+
         val id = intent.getStringExtra("id")
-        serieId = id!!
+        seriesId = id!!
         viewModel.getSerieInfo(id!!)
         viewModel.getSeasonEpisodes(id!!, 1)
         observeSeries()
-        observe()
 
         binding.imageView8.setOnClickListener {
-            if (favorito) {
-                Toast.makeText(applicationContext, seriesRoom!!.name + " removida dos favoritos!!!", Toast.LENGTH_SHORT).show()
-                viewModel.deleteSeries( seriesRoom!! )
+            favoriteViewModel.saveSeries(seriesFirebase!!)
+            if (favorite) {
+                Toast.makeText(applicationContext, seriesFirebase!!.name + " removida dos favoritos!!!", Toast.LENGTH_SHORT).show()
+
                 binding.imageView8.setImageResource(R.drawable.ic_boomark)
-                favorito = false
+                favorite = false
             } else {
-                Toast.makeText(applicationContext, seriesRoom!!.name + " salva nos favoritos!!!", Toast.LENGTH_SHORT).show()
-                viewModel.addSeries( seriesRoom!! )
+                Toast.makeText(applicationContext, seriesFirebase!!.name + " salva nos favoritos!!!", Toast.LENGTH_SHORT).show()
+
                 binding.imageView8.setImageResource(R.drawable.ic_boomark_filled)
-                favorito = true
+                favorite = true
             }
 
         }
@@ -70,21 +73,24 @@ class SerieDetailsActivity : AppCompatActivity() {
 
             viewModel.seriesInfo.observe(this) {
 
+                /*
                 if ( !lista.isNullOrEmpty() ) {
                     for (i in lista ) {
                         if ( i.id == it.id ) {
                             binding.imageView8.setImageResource(R.drawable.ic_boomark_filled)
-                            favorito = true
+                            favorite = true
                             break
                         } else {
-                            favorito = false
+                            favorite = false
                         }
                     }
                 } else {
-                    favorito = false
+                    favorite = false
                 }
 
-                nomeSerie = it.name
+
+                 */
+                nomeSeries = it.name
                 binding.seriesOverview.text = it.overview
                 binding.seriesTitle.text = it.name
                 binding.textSeriesData.text = it.first_air_date
@@ -148,8 +154,8 @@ class SerieDetailsActivity : AppCompatActivity() {
                 }
                 else setRecyclerViewReviews( it.reviews.results )
 
-                seriesRoom = SerieRoom(
-                    it.id,
+                seriesFirebase = SeriesFirebase(
+                    it.id.toString(),
                     it.poster_path ,
                     it.name
                 )
@@ -164,7 +170,7 @@ class SerieDetailsActivity : AppCompatActivity() {
         binding.recyclerSeasons.apply {
             layoutManager = LinearLayoutManager(this.context, RecyclerView.HORIZONTAL, false)
             adapter = com.example.filmes.adapter.Adapter {
-                SeasonView(it, serieId, (supportFragmentManager))
+                SeasonView(it, seriesId, (supportFragmentManager))
             }.apply {
                 items = list.toMutableList()
             }
@@ -207,14 +213,5 @@ class SerieDetailsActivity : AppCompatActivity() {
         }
     }
 
-    private fun observe() {
 
-        try {
-            viewModel.seriesList.observe(this) {
-                lista = it
-            }
-        }catch (e: java.lang.Exception) {
-            e.printStackTrace()
-        }
-    }
 }

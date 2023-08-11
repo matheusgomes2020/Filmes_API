@@ -3,7 +3,8 @@ package com.example.filmes.repository
 import com.example.filmes.data.MovieDao
 import com.example.filmes.data.SerieDao
 import com.example.filmes.model.MovieRoom
-import com.example.filmes.model.SerieRoom
+import com.example.filmes.model.SeriesFirebase
+import com.example.filmes.model.SeriesRoom
 import javax.inject.Inject
 
 class RoomRepository @Inject constructor(private val movieDatabaseDao: MovieDao, private val seriesDao: SerieDao ) {
@@ -18,13 +19,13 @@ class RoomRepository @Inject constructor(private val movieDatabaseDao: MovieDao,
 
     suspend fun deleteAllMovies() =  movieDatabaseDao.deleteAll()
 
-    suspend fun addSeries( series: SerieRoom ) =  seriesDao.insert( series )
+    suspend fun addSeries( series: SeriesRoom ) =  seriesDao.insert( series )
 
-    suspend fun getAllSeries(): List<SerieRoom> =  seriesDao.getSeries()
+    suspend fun getAllSeries(): List<SeriesRoom> =  seriesDao.getSeries()
 
-    suspend fun updateSeries( series: SerieRoom ) =  seriesDao.update( series )
+    suspend fun updateSeries( series: SeriesRoom ) =  seriesDao.update( series )
 
-    suspend fun deleteSeries( series: SerieRoom ) =  seriesDao.deleteSeries( series )
+    suspend fun deleteSeries( series: SeriesRoom ) =  seriesDao.deleteSeries( series )
 
     suspend fun deleteAllSeries() =  seriesDao.deleteAll()
 

@@ -1,15 +1,12 @@
 package com.example.filmes.ui.login
 
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.filmes.data.Resource
-import com.example.filmes.model.MovieF
-import com.example.filmes.model.MovieRoom
+import com.example.filmes.model.MovieFirebase
 import com.example.filmes.model.User
-import com.example.filmes.model.movie.Movie
 import com.example.filmes.repository.AuthRepository
 import com.example.filmes.utils.AuthState
 import com.example.filmes.utils.MovieListState
@@ -42,8 +39,8 @@ constructor(
     val userData: StateFlow<UserState> = _userData
 
 
-    private val _movieList = MutableLiveData<List<MovieF>>()
-    val movieList: LiveData<List<MovieF>> = _movieList
+    private val _movieList = MutableLiveData<List<MovieFirebase>>()
+    val movieList: LiveData<List<MovieFirebase>> = _movieList
 
     fun login(email: String, password: String) {
         authRepository.login(email, password).onEach {
@@ -79,13 +76,6 @@ constructor(
                 else -> {}
             }
         }.launchIn(viewModelScope)
-    }
-
-    fun saveMovie(movieRoom: MovieF) {
-        authRepository.saveMovie(movieRoom).onEach {
-        }.launchIn(viewModelScope)
-
-
     }
 
     fun loggedUser() {
@@ -125,28 +115,7 @@ constructor(
         }.launchIn(viewModelScope)
     }
 
-    fun getMovies() {
-        authRepository.getMovies().onEach {
-            when (it) {
-                is Resource.Loading -> {
-                    _movieLL.value = MovieListState(isLoading = true)
-                    Log.d("BBBBGTT", "VM/Loading: " + _movieLL.value)
-                }
-                is Resource.Error -> {
-                    _movieLL.value = MovieListState(error = it.message ?: "")
-                    Log.d("BBBBGTT", "VM/Error: " + _movieLL.value)
 
-                }
-                is Resource.Success -> {
-                    _movieLL.value = MovieListState(data = it.data!!)
-                    Log.d("BBBBGTT", "VM/Sucess: " + _movieLL.value)
-
-                }
-
-                else -> {}
-            }
-        }.launchIn(viewModelScope)
-    }
 
 
 }

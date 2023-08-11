@@ -1,11 +1,12 @@
 package com.example.filmes.model
 
 
-data class MovieF(
+data class MovieFirebase(
     var id: String,
     val poster_path: String,
     val title: String,
-    var userId: String = ""
+    var userId: String = "",
+    var idFirebase: String = ""
 
 
 )
@@ -14,7 +15,7 @@ data class MovieF(
 }
 
 fun main() {
-    var movieF = MovieF()
+    var movieFirebase = MovieFirebase()
 }
 
 
