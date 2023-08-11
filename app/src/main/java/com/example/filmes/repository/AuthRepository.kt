@@ -35,9 +35,6 @@ constructor() {
             fireStoreDatabase.collection("User")
                 .document(firebaseAuth.currentUser!!.uid)
                 .set(user).await()
-            fireStoreDatabase.collection("Movies")
-                .document(firebaseAuth.currentUser!!.uid)
-                .set("movies").await()
             emit((result.user?.let {
                 Resource.Success(data = it)
             }!!))

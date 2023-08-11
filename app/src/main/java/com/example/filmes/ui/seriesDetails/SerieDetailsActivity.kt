@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.viewModels
+import androidx.lifecycle.coroutineScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.filmes.R
@@ -20,6 +21,7 @@ import com.example.filmes.adapter.views.ReviewView
 import com.example.filmes.adapter.views.SeasonView
 import com.example.filmes.adapter.views.SeriesView
 import com.example.filmes.ui.perfil.FavoriteViewModel
+import com.google.firebase.auth.FirebaseAuth
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import dagger.hilt.android.AndroidEntryPoint
@@ -35,13 +37,15 @@ class SerieDetailsActivity : AppCompatActivity() {
     private var nomeSeries = ""
     private var seriesFirebase: SeriesFirebase? = null
     private var favorite: Boolean = true
+    private val currentUser = FirebaseAuth.getInstance().currentUser
+    private var listOfSeries = emptyList<SeriesFirebase>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySerieDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        favoriteViewModel.getSeries()
+        observeSeriesFirebase()
 
         val id = intent.getStringExtra("id")
         seriesId = id!!
@@ -50,21 +54,41 @@ class SerieDetailsActivity : AppCompatActivity() {
         observeSeries()
 
         binding.imageView8.setOnClickListener {
-            favoriteViewModel.saveSeries(seriesFirebase!!)
+
             if (favorite) {
-                Toast.makeText(applicationContext, seriesFirebase!!.name + " removida dos favoritos!!!", Toast.LENGTH_SHORT).show()
-
-                binding.imageView8.setImageResource(R.drawable.ic_boomark)
-                favorite = false
+                var favoriteSeries = listOfSeries.filter { series ->
+                    series.name == seriesFirebase?.name }
+                favoriteViewModel.deleteSeries(favoriteSeries[0]!!).let {
+                    binding.imageView8.setImageResource(R.drawable.ic_boomark)
+                    favorite = false
+                    Toast.makeText(applicationContext, seriesFirebase!!.name + ", removida nos favoritos!", Toast.LENGTH_SHORT).show()
+                }
             } else {
-                Toast.makeText(applicationContext, seriesFirebase!!.name + " salva nos favoritos!!!", Toast.LENGTH_SHORT).show()
-
-                binding.imageView8.setImageResource(R.drawable.ic_boomark_filled)
-                favorite = true
+                Toast.makeText(applicationContext, seriesFirebase!!.name + ", salva nos favoritos!", Toast.LENGTH_SHORT).show()
+                favoriteViewModel.saveSeries(seriesFirebase!!).let {
+                    binding.imageView8.setImageResource(R.drawable.ic_boomark_filled)
+                    favorite = true
+                }
             }
 
+            observeSeriesFirebase()
         }
+    }
 
+    private fun observeSeriesFirebase() {
+        favoriteViewModel.getSeries()
+        lifecycle.coroutineScope.launchWhenCreated {
+            favoriteViewModel.seriesList.collect {
+                if (it.isLoading) {
+                }
+                if (it.error.isNotBlank()) {
+                }
+                it.data?.let { _series ->
+                    listOfSeries = _series.filter { series ->
+                        series.userId == currentUser?.uid.toString() }
+                }
+            }
+        }
     }
 
     private fun observeSeries() {
@@ -72,11 +96,9 @@ class SerieDetailsActivity : AppCompatActivity() {
         try {
 
             viewModel.seriesInfo.observe(this) {
-
-                /*
-                if ( !lista.isNullOrEmpty() ) {
-                    for (i in lista ) {
-                        if ( i.id == it.id ) {
+                if ( !listOfSeries.isNullOrEmpty() ) {
+                    for (i in listOfSeries ) {
+                        if ( i.name == it.name ) {
                             binding.imageView8.setImageResource(R.drawable.ic_boomark_filled)
                             favorite = true
                             break
@@ -88,8 +110,6 @@ class SerieDetailsActivity : AppCompatActivity() {
                     favorite = false
                 }
 
-
-                 */
                 nomeSeries = it.name
                 binding.seriesOverview.text = it.overview
                 binding.seriesTitle.text = it.name
@@ -212,6 +232,4 @@ class SerieDetailsActivity : AppCompatActivity() {
             }
         }
     }
-
-
 }

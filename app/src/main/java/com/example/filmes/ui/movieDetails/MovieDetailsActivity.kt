@@ -10,7 +10,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.filmes.R
 import com.example.filmes.databinding.ActivityMovieDetailsBinding
-import com.example.filmes.model.MovieRoom
 import com.example.filmes.model.general.Cast
 import com.example.filmes.model.general.Review
 import com.example.filmes.model.movie.Movie
@@ -20,13 +19,11 @@ import com.example.filmes.adapter.views.ImageView
 import com.example.filmes.adapter.views.MovieView
 import com.example.filmes.adapter.views.ReviewView
 import com.example.filmes.model.MovieFirebase
-import com.example.filmes.ui.login.AuthViewModel
 import com.example.filmes.ui.perfil.FavoriteViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer
 import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener
 import dagger.hilt.android.AndroidEntryPoint
-
 
 @AndroidEntryPoint
 class MovieDetailsActivity : AppCompatActivity() {
@@ -36,9 +33,7 @@ class MovieDetailsActivity : AppCompatActivity() {
     private val favoriteViewModel: FavoriteViewModel by viewModels()
     private var movieFirebase: MovieFirebase? = null
     private var favorite: Boolean = true
-
     private val currentUser = FirebaseAuth.getInstance().currentUser
-
     private var listOfMovies = emptyList<MovieFirebase>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,31 +47,25 @@ class MovieDetailsActivity : AppCompatActivity() {
         viewModel.getMovieInfo( id!! )
         observeMovie()
 
-
-
         binding.imageView2.setOnClickListener {
 
             if (favorite) {
-                //Toast.makeText(applicationContext, movieFirebase!!.title + " removido dos favoritos!!!", Toast.LENGTH_SHORT).show()
-                Toast.makeText(applicationContext, "Favorito!!!", Toast.LENGTH_SHORT).show()
-
-                var movief = listOfMovies.filter { movie ->
-                    movie.title == movieFirebase?.title
+                var favoriteMovie = listOfMovies.filter { movie ->
+                    movie.title == movieFirebase?.title }
+                favoriteViewModel.deleteMovie(favoriteMovie[0]!!).let {
+                    binding.imageView2.setImageResource(R.drawable.ic_boomark)
+                    favorite = false
+                    Toast.makeText(applicationContext, movieFirebase!!.title + ", removido nos favoritos!", Toast.LENGTH_SHORT).show()
                 }
-
-                favoriteViewModel.deleteMovie(movief[0]!!)
-                binding.imageView2.setImageResource(R.drawable.ic_boomark)
-                favorite = false
             } else {
-                Toast.makeText(applicationContext, movieFirebase!!.title + " salvo nos favoritos!!!", Toast.LENGTH_SHORT).show()
-                favoriteViewModel.saveMovie(movieFirebase!!)
-                binding.imageView2.setImageResource(R.drawable.ic_boomark_filled)
-                favorite = true
+                Toast.makeText(applicationContext, movieFirebase!!.title + ", salvo nos favoritos!", Toast.LENGTH_SHORT).show()
+                favoriteViewModel.saveMovie(movieFirebase!!).let {
+                    binding.imageView2.setImageResource(R.drawable.ic_boomark_filled)
+                    favorite = true
+                }
             }
 
             observeMoviesFirebase()
-            observeMovie()
-
         }
     }
 
@@ -91,7 +80,6 @@ class MovieDetailsActivity : AppCompatActivity() {
                 it.data?.let { _movie ->
                     listOfMovies = _movie.filter { movie ->
                         movie.userId == currentUser?.uid.toString() }
-                    //setRecyclerFavoriteMovies(listOfMovies )
                 }
             }
         }
@@ -104,8 +92,6 @@ class MovieDetailsActivity : AppCompatActivity() {
             var gen = ""
 
             viewModel.movieInfo.observe(this) {
-
-
                 if ( !listOfMovies.isNullOrEmpty() ) {
                     for (i in listOfMovies ) {
                         if ( i.title == it.title ) {
@@ -119,8 +105,6 @@ class MovieDetailsActivity : AppCompatActivity() {
                 } else {
                     favorite = false
                 }
-
-
 
                 binding.movieOverview.text = it.overview
                 binding.movieTitle.text = it.title
@@ -160,22 +144,11 @@ class MovieDetailsActivity : AppCompatActivity() {
                   binding.textView443.visibility = View.GONE
                 }
                 else setRecyclerViewReviews( it.reviews.results )
-               // if ( it.images.backdrops.isNullOrEmpty() ) {
-                 //   binding.recyclerMovieImages.visibility = View.GONE
-                 //   binding.textView443.visibility = View.GONE
-                //}
-                //else setRecyclerViewImages( it.images.backdrops!! )
-                //setRecyclerViewImages(it.images.backdrops!!)
-
-
                 movieFirebase = MovieFirebase(
                     it.id.toString(),
                     it.poster_path ,
                     it.title
                 )
-
-
-
             }
         }catch (e: Exception){
             e.printStackTrace()
@@ -229,6 +202,4 @@ class MovieDetailsActivity : AppCompatActivity() {
             }
         }
     }
-
-
 }

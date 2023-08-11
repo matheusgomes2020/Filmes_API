@@ -53,6 +53,11 @@ class FavoriteViewModel @Inject constructor(private val repository: RoomReposito
         fireRepository.saveSeries(seriesFirebase).onEach {
         }.launchIn(viewModelScope)
     }
+
+    fun deleteSeries( series: SeriesFirebase ) {
+        fireRepository.deleteSeries( series ).onEach {
+        }.launchIn(viewModelScope)
+    }
     fun getSeries() {
         fireRepository.getSeries().onEach {
             when (it) {

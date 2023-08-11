@@ -6,7 +6,8 @@ data class SeriesFirebase(
     var id: String,
     val poster_path: String,
     val name: String,
-    var userId: String = ""
+    var userId: String = "",
+    var idFirebase: String = ""
 
 
 )
