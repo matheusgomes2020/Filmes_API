@@ -6,11 +6,14 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.filmes.data.Resource
-import com.example.filmes.model.MovieRoom
 import com.example.filmes.model.movie.Movie
-import com.example.filmes.repository.RoomRepository
 import com.example.filmes.repository.MoviesRepository
+import com.example.filmes.utils.Movie2State
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import java.lang.Exception
 import javax.inject.Inject
@@ -23,29 +26,26 @@ class MovieDetailsViewModel @Inject constructor( private val repository: MoviesR
     var carregando: Boolean = true
     val movieInfo: LiveData<Movie> = _movieInfo
 
-    fun getMovieInfo( movieId: String ) {
+    private val _movieData = MutableStateFlow(Movie2State())
+    val movieData: StateFlow<Movie2State> = _movieData
 
-         try {
-             viewModelScope.launch {
-             when (val response = repository.getMovieInfo( movieId ) ){
-                 is Resource.Success -> {
-                     _movieInfo.value = response.data!!
-                     if (_movieInfo.value!! != null) carregando = false
-                     Log.e("Network", "upcomingMovies: Ok. Certo!!! Carregando?= $carregando")
-                 }
-                 is Resource.Error -> {
-                     carregando = false
-                     Log.e("Network", "upcomingMovies: Failed getting filmes Carregando?= $carregando")
-                 }
-                 else -> {
-                     carregando = false
-                 }
-             }
-         }
-         }catch (exception: Exception) {
-             carregando = false
-             Log.d("Network", "upcomingMovies: ${exception.message.toString()} Carregando?= $carregando")
-         }
-     }
+
+    fun getMovieInfo2( movieId: String ) {
+        repository.getMovieInfo( movieId ).onEach {
+            when (it) {
+                is Resource.Loading -> {
+                    _movieData.value = Movie2State(isLoading = true)
+                }
+                is Resource.Error -> {
+                    _movieData.value = Movie2State(error = it.message ?: "")
+                }
+                is Resource.Success -> {
+                    _movieData.value = Movie2State(data = it.data)
+                }
+
+                else -> {}
+            }
+        }.launchIn(viewModelScope)
+    }
 
     }

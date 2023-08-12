@@ -8,7 +8,12 @@ import androidx.lifecycle.viewModelScope
 import com.example.filmes.data.Resource
 import com.example.filmes.model.movie.Movie
 import com.example.filmes.repository.MoviesRepository
+import com.example.filmes.utils.MovieList2State
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -16,123 +21,78 @@ import javax.inject.Inject
 class MovieViewModel @Inject constructor(private val moviesRepository: MoviesRepository )
     : ViewModel() {
 
-    private val _popularMovies = MutableLiveData<List<Movie>>()
-    private val _ratedMovies = MutableLiveData<List<Movie>>()
-    private val _upcomingMovies = MutableLiveData<List<Movie>>()
-    private val _nowPlayingMovies = MutableLiveData<List<Movie>>()
-    var carregando: Boolean = true
-    val popularMovies: LiveData<List<Movie>> = _popularMovies
-    val ratedMovies: LiveData<List<Movie>> = _ratedMovies
-    val upcomingMovies: LiveData<List<Movie>> = _upcomingMovies
-    val nowPlayingMovies: LiveData<List<Movie>> = _nowPlayingMovies
+    private val _movieListUpcoming = MutableStateFlow(MovieList2State())
+    private val _movieListNowPlaying = MutableStateFlow(MovieList2State())
+    private val _movieListRated = MutableStateFlow(MovieList2State())
+    private val _movieListPopular = MutableStateFlow(MovieList2State())
+    val movieListUpcoming: StateFlow<MovieList2State> = _movieListUpcoming
+    val movieListNowPlaying: StateFlow<MovieList2State> = _movieListNowPlaying
+    val movieListRated: StateFlow<MovieList2State> = _movieListRated
+    val movieListPopular: StateFlow<MovieList2State> = _movieListPopular
 
-    init {
-        loadPopularMovies()
-        loadRatedMovies()
-        loadUpcomingMovies()
-        loadNowPlayingMovies()
-        loadPopularMovies()
 
-        Log.e("Network", "Init!!! Carregando?= $carregando")
-    }
-
-    private fun loadUpcomingMovies() {
-
-        viewModelScope.launch {
-            try {
-                when (val response = moviesRepository.getUpcomingMovies()) {
-                    is Resource.Success -> {
-                        _upcomingMovies.value = response.data!!
-                        if (_upcomingMovies.value!!.isNotEmpty()) carregando = false
-                        Log.e("Network", "upcomingMovies: Ok. Certo!!! Carregando?= $carregando")
-                    }
-                    is Resource.Error -> {
-                        carregando = false
-                        Log.e("Network", "upcomingMovies: Failed getting filmes Carregando?= $carregando")
-                    }
-                    else -> {
-                        carregando = false
-                    }
+    fun getUpcomingMovies() {
+        moviesRepository.getUpcomingMovies().onEach {
+            when (it) {
+                is Resource.Loading -> {
+                    _movieListUpcoming.value = MovieList2State(isLoading = true)
                 }
-            } catch (exception: Exception) {
-                carregando = false
-                Log.d("Network", "upcomingMovies: ${exception.message.toString()} Carregando?= $carregando")
-            }
-        }
-    }
-
-    private fun loadPopularMovies() {
-
-        viewModelScope.launch {
-            try {
-                when (val response = moviesRepository.getPopularMovies()) {
-                    is Resource.Success -> {
-                        _popularMovies.value = response.data!!
-                        if (_popularMovies.value!!.isNotEmpty()) carregando = false
-                        Log.e("Network", "popularMovies: Ok. Certo!!! Carregando?= $carregando")
-                    }
-                    is Resource.Error -> {
-                        carregando = false
-                        Log.e("Network", "popularMovies: Failed getting filmes Carregando?= $carregando")
-                    }
-                    else -> {
-                        carregando = false
-                    }
+                is Resource.Error -> {
+                    _movieListUpcoming.value = MovieList2State(error = it.message ?: "")
                 }
-            } catch (exception: Exception) {
-                carregando = false
-                Log.d("Network", "popularMovies: ${exception.message.toString()} Carregando?= $carregando")
+                is Resource.Success -> {
+                    _movieListUpcoming.value = MovieList2State(data = it.data!!) }
+                else -> {}
             }
-        }
+        }.launchIn(viewModelScope)
     }
 
-    private fun loadRatedMovies() {
-
-        viewModelScope.launch {
-            try {
-                when (val response = moviesRepository.getRatedMovies()) {
-                    is Resource.Success -> {
-                        _ratedMovies.value = response.data!!
-                        if (_ratedMovies.value!!.isNotEmpty()) carregando = false
-                        Log.e("Network", "ratedMovies: Ok. Certo!!! Carregando?= $carregando")
-                    }
-                    is Resource.Error -> {
-                        carregando = false
-                        Log.e("Network", "ratedMovies: Failed getting filmes Carregando?= $carregando")
-                    }
-                    else -> {
-                        carregando = false
-                    }
+    fun getNowPlayingMovies() {
+        moviesRepository.getNowPlayingMovies().onEach {
+            when (it) {
+                is Resource.Loading -> {
+                    _movieListNowPlaying.value = MovieList2State(isLoading = true)
                 }
-            } catch (exception: Exception) {
-                carregando = false
-                Log.d("Network", "ratedMovies: ${exception.message.toString()} Carregando?= $carregando")
-            }
-        }
-    }
-
-    private fun loadNowPlayingMovies() {
-
-        viewModelScope.launch {
-            try {
-                when (val response = moviesRepository.getNowPlayingMovies()) {
-                    is Resource.Success -> {
-                        _nowPlayingMovies.value = response.data!!
-                        if (_nowPlayingMovies.value!!.isNotEmpty()) carregando = false
-                        Log.e("Network", "nowPlayingMovies: Ok. Certo!!! Carregando?= $carregando")
-                    }
-                    is Resource.Error -> {
-                        carregando = false
-                        Log.e("Network", "nowPlayingMovies: Failed getting filmes Carregando?= $carregando")
-                    }
-                    else -> {
-                        carregando = false
-                    }
+                is Resource.Error -> {
+                    _movieListNowPlaying.value = MovieList2State(error = it.message ?: "")
                 }
-            } catch (exception: Exception) {
-                carregando = false
-                Log.d("Network", "nowPlayingMovies: ${exception.message.toString()} Carregando?= $carregando")
+                is Resource.Success -> {
+                    _movieListNowPlaying.value = MovieList2State(data = it.data!!) }
+                else -> {}
             }
-        }
+        }.launchIn(viewModelScope)
     }
+
+    fun getNowPopularMovies() {
+        moviesRepository.getPopularMovies().onEach {
+            when (it) {
+                is Resource.Loading -> {
+                    _movieListPopular.value = MovieList2State(isLoading = true)
+                }
+                is Resource.Error -> {
+                    _movieListPopular.value = MovieList2State(error = it.message ?: "")
+                }
+                is Resource.Success -> {
+                    _movieListPopular.value = MovieList2State(data = it.data!!) }
+                else -> {}
+            }
+        }.launchIn(viewModelScope)
+    }
+
+    fun getNowRatedMovies() {
+        moviesRepository.getRatedMovies().onEach {
+            when (it) {
+                is Resource.Loading -> {
+                    _movieListRated.value = MovieList2State(isLoading = true)
+                }
+                is Resource.Error -> {
+                    _movieListRated.value = MovieList2State(error = it.message ?: "")
+                }
+                is Resource.Success -> {
+                    _movieListRated.value = MovieList2State(data = it.data!!) }
+                else -> {}
+            }
+        }.launchIn(viewModelScope)
+    }
+
 }

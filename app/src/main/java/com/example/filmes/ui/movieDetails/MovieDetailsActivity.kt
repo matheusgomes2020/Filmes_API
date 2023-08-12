@@ -44,8 +44,9 @@ class MovieDetailsActivity : AppCompatActivity() {
        observeMoviesFirebase()
 
         val id = intent.getStringExtra("id")
-        viewModel.getMovieInfo( id!! )
-        observeMovie()
+        viewModel.getMovieInfo2(id!!)
+        //observeMovie()
+        observeMovie2()
 
         binding.imageView2.setOnClickListener {
 
@@ -74,12 +75,96 @@ class MovieDetailsActivity : AppCompatActivity() {
         lifecycle.coroutineScope.launchWhenCreated {
             favoriteViewModel.movieList.collect {
                 if (it.isLoading) {
+
                 }
                 if (it.error.isNotBlank()) {
                 }
                 it.data?.let { _movie ->
                     listOfMovies = _movie.filter { movie ->
                         movie.userId == currentUser?.uid.toString() }
+                }
+            }
+        }
+    }
+
+    private fun observeMovie2() {
+        var roteiro = ""
+        var gen = ""
+        try {
+
+        }catch (e: Exception){
+            e.printStackTrace()
+        }
+
+        lifecycle.coroutineScope.launchWhenCreated {
+            viewModel.movieData.collect {
+                if (it.isLoading) {
+                    binding.consP.visibility = View.INVISIBLE
+                }
+                if (it.error.isNotBlank()) {
+                }
+                it.data?.let { _movie ->
+
+                    if ( !listOfMovies.isNullOrEmpty() ) {
+                        for (i in listOfMovies ) {
+                            if ( i.title == _movie.title ) {
+                                binding.imageView2.setImageResource(R.drawable.ic_boomark_filled)
+                                favorite = true
+                                break
+                            } else {
+                                favorite = false
+                            }
+                        }
+                    } else {
+                        favorite = false
+                    }
+
+                    binding.consP.visibility = View.VISIBLE
+
+                    //
+                    binding.movieOverview.text = _movie.overview
+                    binding.movieTitle.text = _movie.title
+                    binding.textData.text = _movie.release_date
+                    binding.textDuration.text = _movie.runtime.toString()
+                    binding.textViewDirecaoFilme.text = _movie.runtime.toString()
+                    for (i in _movie.credits.crew) if ( i.job == "Director" ) binding.textViewDirecaoFilme.text = i.name
+                    for (i in _movie.credits.crew) if ( i.department == "Writing" ) roteiro += i.name + "\n"
+                    binding.textViewRoteiro.text = roteiro
+                    _movie.genres.forEachIndexed { index, genres ->
+                        gen += genres.name + "  "
+                    }
+                    binding.textGenres.text = gen
+                    when ( _movie.vote_average ) {
+                        in 0.0..1.9 -> binding.texRating.text = "⭐"
+                        in 2.0..3.9 -> binding.texRating.text = "⭐⭐"
+                        in 4.0..5.9 -> binding.texRating.text = "⭐⭐⭐"
+                        in 6.0..7.9 -> binding.texRating.text = "⭐⭐⭐⭐"
+                        in 8.0..10.0 -> binding.texRating.text = "⭐⭐⭐⭐⭐"
+                    }
+
+                    if ( _movie.videos.results.isNullOrEmpty() ) {
+                        binding.videoView.visibility = View.GONE
+                    } else {
+                        binding.videoView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
+                            override fun onReady(youTubePlayer: YouTubePlayer) {
+                                val videoId = _movie.videos.results[0].key
+                                youTubePlayer.loadVideo(videoId, 0f)
+                            }
+                        })
+                    }
+
+                    setRecyclerViewSimilar(_movie.similar.results)
+                    setRecyclerViewCast(_movie.credits.cast)
+                    if ( _movie.reviews.results.isNullOrEmpty() ) {
+                        binding.recyclerMovieReviews.visibility = View.GONE
+                        binding.textView443.visibility = View.GONE
+                    }
+                    else setRecyclerViewReviews( _movie.reviews.results )
+                    movieFirebase = MovieFirebase(
+                        _movie.id.toString(),
+                        _movie.poster_path ,
+                        _movie.title
+                    )
                 }
             }
         }
