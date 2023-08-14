@@ -5,6 +5,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -76,7 +77,13 @@ class FavoriteFragment : Fragment() {
                 it.data?.let { _movie ->
                     listOfMovies = _movie.filter { movie ->
                         movie.userId == currentUser?.uid.toString() }
-                    setRecyclerFavoriteMovies(listOfMovies )
+                    setRecyclerFavoriteMovies(listOfMovies ).let {
+                        Handler().postDelayed({
+                            binding.sh.visibility = View.GONE
+                            binding.recyclerFavoriteMovies.visibility = View.VISIBLE
+                            binding.sh.stopShimmer()
+                        }, 1000)
+                    }
                 }
             }
         }
@@ -93,7 +100,13 @@ class FavoriteFragment : Fragment() {
                 it.data?.let { _series ->
                     listOfSeries = _series.filter { series ->
                         series.userId == currentUser?.uid.toString() }
-                    setRecyclerFavoriteSeries(listOfSeries )
+                    setRecyclerFavoriteSeries(listOfSeries ).let {
+                        Handler().postDelayed({
+                            binding.sh2.visibility = View.GONE
+                            binding.recyclerFavoriteSeries.visibility = View.VISIBLE
+                            binding.sh2.stopShimmer()
+                        }, 1000)
+                    }
                 }
             }
         }

@@ -7,23 +7,22 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.coroutineScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.filmes.databinding.FragmentSearchMoviesBinding
 import com.example.filmes.model.movie.Movie
 import com.example.filmes.model.serie.Serie
-import com.example.filmes.ui.searchSeries.SerieSearchViewModel
 import com.example.filmes.adapter.views.SearchSeriesView
 import com.example.filmes.adapter.views.SearchView
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class SearchMoviesFragment(private var newText: String?, private var tipo: String?) : Fragment() {
+class SearchFragment(private var newText: String?, private var tipo: String?) : Fragment() {
 
     private var _binding: FragmentSearchMoviesBinding? =  null
     private val binding get() = _binding!!
-    private val viewModel: SearchMoviesViewModel by viewModels()
-    private val viewModelSeries: SerieSearchViewModel by viewModels()
+    private val viewModel: SearchViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -47,10 +46,8 @@ class SearchMoviesFragment(private var newText: String?, private var tipo: Strin
 
             if ( tipo == "movies" ) {
                 viewModel.searchMovies( query )
-                Toast.makeText( context, tipo, Toast.LENGTH_LONG).show()
             }else {
-                viewModelSeries.searchSeries( query )
-                Toast.makeText( context, tipo, Toast.LENGTH_LONG).show()
+                viewModel.searchSeries( query )
             }
         } else {
             Toast.makeText( context, "Digite algo!!!", Toast.LENGTH_LONG).show()
@@ -66,12 +63,28 @@ class SearchMoviesFragment(private var newText: String?, private var tipo: Strin
     private fun observe(){
 
         if ( tipo == "movies" ) {
-            viewModel.popularMovies.observe( viewLifecycleOwner ) {
-                setRecyclerViewSearch( it )
+            lifecycle.coroutineScope.launchWhenCreated {
+                viewModel.searchMoviesData.collect {
+                    if (it.isLoading) {
+                    }
+                    if (it.error.isNotBlank()) {
+                    }
+                    it.data?.let { _movies ->
+                        setRecyclerViewSearch(_movies)
+                    }
+                }
             }
         } else {
-            viewModelSeries.series.observe(viewLifecycleOwner) {
-                setRecyclerViewSearchSeries(it)
+            lifecycle.coroutineScope.launchWhenCreated {
+                viewModel.searchSeriesData.collect {
+                    if (it.isLoading) {
+                    }
+                    if (it.error.isNotBlank()) {
+                    }
+                    it.data?.let { _series ->
+                        setRecyclerViewSearchSeries(_series)
+                    }
+                }
             }
         }
     }

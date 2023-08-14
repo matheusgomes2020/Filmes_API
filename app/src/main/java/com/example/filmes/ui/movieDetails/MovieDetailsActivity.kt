@@ -44,9 +44,8 @@ class MovieDetailsActivity : AppCompatActivity() {
        observeMoviesFirebase()
 
         val id = intent.getStringExtra("id")
-        viewModel.getMovieInfo2(id!!)
-        //observeMovie()
-        observeMovie2()
+        viewModel.getMovieInfo(id!!)
+        observeMovie()
 
         binding.imageView2.setOnClickListener {
 
@@ -87,14 +86,9 @@ class MovieDetailsActivity : AppCompatActivity() {
         }
     }
 
-    private fun observeMovie2() {
+    private fun observeMovie() {
         var roteiro = ""
         var gen = ""
-        try {
-
-        }catch (e: Exception){
-            e.printStackTrace()
-        }
 
         lifecycle.coroutineScope.launchWhenCreated {
             viewModel.movieData.collect {
@@ -121,7 +115,7 @@ class MovieDetailsActivity : AppCompatActivity() {
 
                     binding.consP.visibility = View.VISIBLE
 
-                    //
+
                     binding.movieOverview.text = _movie.overview
                     binding.movieTitle.text = _movie.title
                     binding.textData.text = _movie.release_date
@@ -167,76 +161,6 @@ class MovieDetailsActivity : AppCompatActivity() {
                     )
                 }
             }
-        }
-    }
-
-    private fun observeMovie() {
-
-        try {
-            var roteiro = ""
-            var gen = ""
-
-            viewModel.movieInfo.observe(this) {
-                if ( !listOfMovies.isNullOrEmpty() ) {
-                    for (i in listOfMovies ) {
-                        if ( i.title == it.title ) {
-                            binding.imageView2.setImageResource(R.drawable.ic_boomark_filled)
-                            favorite = true
-                            break
-                        } else {
-                            favorite = false
-                        }
-                    }
-                } else {
-                    favorite = false
-                }
-
-                binding.movieOverview.text = it.overview
-                binding.movieTitle.text = it.title
-                binding.textData.text = it.release_date
-                binding.textDuration.text = it.runtime.toString()
-                binding.textViewDirecaoFilme.text = it.runtime.toString()
-                for (i in it.credits.crew) if ( i.job == "Director" ) binding.textViewDirecaoFilme.text = i.name
-                for (i in it.credits.crew) if ( i.department == "Writing" ) roteiro += i.name + "\n"
-                binding.textViewRoteiro.text = roteiro
-                it.genres.forEachIndexed { index, genres ->
-                    gen += genres.name + "  "
-                }
-                binding.textGenres.text = gen
-                when ( it.vote_average ) {
-                    in 0.0..1.9 -> binding.texRating.text = "⭐"
-                    in 2.0..3.9 -> binding.texRating.text = "⭐⭐"
-                    in 4.0..5.9 -> binding.texRating.text = "⭐⭐⭐"
-                    in 6.0..7.9 -> binding.texRating.text = "⭐⭐⭐⭐"
-                    in 8.0..10.0 -> binding.texRating.text = "⭐⭐⭐⭐⭐"
-                }
-
-                if ( it.videos.results.isNullOrEmpty() ) {
-                    binding.videoView.visibility = View.GONE
-                } else {
-                    binding.videoView.addYouTubePlayerListener(object : AbstractYouTubePlayerListener() {
-                        override fun onReady(youTubePlayer: YouTubePlayer) {
-                            val videoId = it.videos.results[0].key
-                            youTubePlayer.loadVideo(videoId, 0f)
-                        }
-                    })
-                }
-
-                setRecyclerViewSimilar(it.similar.results)
-                setRecyclerViewCast(it.credits.cast)
-                 if ( it.reviews.results.isNullOrEmpty() ) {
-                   binding.recyclerMovieReviews.visibility = View.GONE
-                  binding.textView443.visibility = View.GONE
-                }
-                else setRecyclerViewReviews( it.reviews.results )
-                movieFirebase = MovieFirebase(
-                    it.id.toString(),
-                    it.poster_path ,
-                    it.title
-                )
-            }
-        }catch (e: Exception){
-            e.printStackTrace()
         }
     }
 

@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.coroutineScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.filmes.databinding.FragmentEpisodeBinding
@@ -18,6 +19,7 @@ import com.example.filmes.adapter.views.EpidoseImagesView
 import com.example.filmes.adapter.views.ImageView
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
 import java.lang.Exception
 
 @AndroidEntryPoint
@@ -35,31 +37,33 @@ class Episode(private var seriesId: String, private var seasonNumber: Int, priva
 
     private fun observe(){
 
-        try {
-            var roteiro = ""
-            episodeViewModel.episodeInfo.observe(viewLifecycleOwner) {
-                if (!it.name.isNullOrEmpty()) binding.textView10.text = it.name else binding.textView10.visibility = View.GONE
-                if (!it.overview.isNullOrEmpty()) binding.textView11.text = it.overview else binding.textView11.visibility = View.GONE
-                var director = ""
-                var writing = ""
-                for (i in it.crew) if ( i.job == "Director" ) {binding.textViewDirecaoEdisodio.text = i.name
-                director = i.name }
-                for (i in it.crew) if ( i.department == "Writing" ) { roteiro += i.name + "\n"
-                    writing = i.name }
-                binding.textViewRoteiroEdisodio.text = roteiro
-                if (director.isNullOrEmpty()) {binding.textViewDirecaoEdisodio.visibility = View.GONE
-                binding.textView8.visibility = View.GONE}
-                if (writing.isNullOrEmpty()) {binding.textViewRoteiroEdisodio.visibility = View.GONE
-                    binding.textView9.visibility = View.GONE}
-                if ( !it.guest_stars.isNullOrEmpty() ) setRecyclerViewCast(it.guest_stars)
-                else binding.linearLayout2.visibility = View.GONE
-                if ( it.images.stills.isNullOrEmpty() ) binding.recyclerEpisodeImages.visibility = View.GONE
-                else setRecyclerViewImages( it.images.stills!! )
-
+        lifecycle.coroutineScope.launchWhenCreated {
+            episodeViewModel.episodeData.collect {
+                if (it.isLoading) { }
+                if (it.error.isNotBlank()) { }
+                it.data?.let { _episode ->
+                    var roteiro = ""
+                    if (!_episode.name.isNullOrEmpty()) binding.textView10.text = _episode.name else binding.textView10.visibility = View.GONE
+                    if (!_episode.overview.isNullOrEmpty()) binding.textView11.text = _episode.overview else binding.textView11.visibility = View.GONE
+                    var director = ""
+                    var writing = ""
+                    for (i in _episode.crew) if ( i.job == "Director" ) {binding.textViewDirecaoEdisodio.text = i.name
+                        director = i.name }
+                    for (i in _episode.crew) if ( i.department == "Writing" ) { roteiro += i.name + "\n"
+                        writing = i.name }
+                    binding.textViewRoteiroEdisodio.text = roteiro
+                    if (director.isNullOrEmpty()) {binding.textViewDirecaoEdisodio.visibility = View.GONE
+                        binding.textView8.visibility = View.GONE}
+                    if (writing.isNullOrEmpty()) {binding.textViewRoteiroEdisodio.visibility = View.GONE
+                        binding.textView9.visibility = View.GONE}
+                    if ( !_episode.guest_stars.isNullOrEmpty() ) setRecyclerViewCast(_episode.guest_stars)
+                    else binding.linearLayout2.visibility = View.GONE
+                    if ( _episode.images.stills.isNullOrEmpty() ) binding.recyclerEpisodeImages.visibility = View.GONE
+                    else setRecyclerViewImages( _episode.images.stills!! )
+                }
             }
-        }catch (e: Exception){
-            e.printStackTrace()
         }
+
     }
     private fun setRecyclerViewCast(list: List<Cast>) {
 

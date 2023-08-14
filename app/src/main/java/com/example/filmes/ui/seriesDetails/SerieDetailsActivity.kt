@@ -50,7 +50,6 @@ class SerieDetailsActivity : AppCompatActivity() {
         val id = intent.getStringExtra("id")
         seriesId = id!!
         viewModel.getSerieInfo(id!!)
-        viewModel.getSeasonEpisodes(id!!, 1)
         observeSeries()
 
         binding.imageView8.setOnClickListener {
@@ -93,95 +92,102 @@ class SerieDetailsActivity : AppCompatActivity() {
 
     private fun observeSeries() {
 
-        try {
-
-            viewModel.seriesInfo.observe(this) {
-                if ( !listOfSeries.isNullOrEmpty() ) {
-                    for (i in listOfSeries ) {
-                        if ( i.name == it.name ) {
-                            binding.imageView8.setImageResource(R.drawable.ic_boomark_filled)
-                            favorite = true
-                            break
-                        } else {
-                            favorite = false
+        lifecycle.coroutineScope.launchWhenCreated {
+            viewModel.seriesData.collect {
+                if (it.isLoading) {
+                    binding.constSeries.visibility = View.INVISIBLE
+                }
+                if (it.error.isNotBlank()) {
+                }
+                it.data?.let { _series ->
+                    if ( !listOfSeries.isNullOrEmpty() ) {
+                        for (i in listOfSeries ) {
+                            if ( i.name == _series.name ) {
+                                binding.imageView8.setImageResource(R.drawable.ic_boomark_filled)
+                                favorite = true
+                                break
+                            } else {
+                                favorite = false
+                            }
                         }
+                    } else {
+                        favorite = false
                     }
-                } else {
-                    favorite = false
-                }
 
-                nomeSeries = it.name
-                binding.seriesOverview.text = it.overview
-                binding.seriesTitle.text = it.name
-                binding.textSeriesData.text = it.first_air_date
-                binding.textSeriesDuration.text = it.episode_run_time.toString()
+                    binding.constSeries.visibility = View.VISIBLE
 
-                if (it.number_of_seasons == 1) binding.textSeasons.text = "1 Temporada"
-                else binding.textSeasons.text = it.number_of_seasons.toString() + " Temporadas"
+                    nomeSeries = _series.name
+                    binding.seriesOverview.text = _series.overview
+                    binding.seriesTitle.text = _series.name
+                    binding.textSeriesData.text = _series.first_air_date
+                    binding.textSeriesDuration.text = _series.episode_run_time.toString()
 
-                if (it.episode_run_time.isNullOrEmpty()) {
-                    binding.textSeriesDuration.visibility = View.GONE
-                    binding.imageView4.visibility = View.GONE
-                } else {
-                    binding.textSeriesDuration.text = it.episode_run_time.toString()
-                }
+                    if (_series.number_of_seasons == 1) binding.textSeasons.text = "1 Temporada"
+                    else binding.textSeasons.text = _series.number_of_seasons.toString() + " Temporadas"
 
-                if (it.created_by.isNullOrEmpty()) {
-                    binding.textView13.visibility = View.GONE
-                    binding.textViewSerieDirecao.visibility = View.GONE
-                } else {
-                    var roteiro = ""
-
-                    for (i in it.created_by) {
-                        roteiro += i.name + "\n"
+                    if (_series.episode_run_time.isNullOrEmpty()) {
+                        binding.textSeriesDuration.visibility = View.GONE
+                        binding.imageView4.visibility = View.GONE
+                    } else {
+                        binding.textSeriesDuration.text = _series.episode_run_time.toString()
                     }
-                    binding.textViewSerieDirecao.text = roteiro
-                }
 
-                var gen = ""
-                it.genres.forEachIndexed { index, genres ->
-                    gen += genres.name + "  "
-                }
-                binding.textSeriesGenres.text = gen
+                    if (_series.created_by.isNullOrEmpty()) {
+                        binding.textView13.visibility = View.GONE
+                        binding.textViewSerieDirecao.visibility = View.GONE
+                    } else {
+                        var roteiro = ""
 
-                when (it.vote_average) {
-                    in 0.0..1.9 -> binding.texSeriesRating.text = "⭐"
-                    in 2.0..3.9 -> binding.texSeriesRating.text = "⭐⭐"
-                    in 4.0..5.9 -> binding.texSeriesRating.text = "⭐⭐⭐"
-                    in 6.0..7.9 -> binding.texSeriesRating.text = "⭐⭐⭐⭐"
-                    in 8.0..10.0 -> binding.texSeriesRating.text = "⭐⭐⭐⭐⭐"
-                }
-
-                if (it.videos.results.isNullOrEmpty()) {
-                    binding.seriesImageView.visibility = View.GONE
-                } else {
-                    binding.seriesImageView.addYouTubePlayerListener(object :
-                        AbstractYouTubePlayerListener() {
-                        override fun onReady(youTubePlayer: YouTubePlayer) {
-                            val videoId = it.videos.results[0].key
-                            youTubePlayer.loadVideo(videoId, 0f)
+                        for (i in _series.created_by) {
+                            roteiro += i.name + "\n"
                         }
-                    })
+                        binding.textViewSerieDirecao.text = roteiro
+                    }
+
+                    var gen = ""
+                    _series.genres.forEachIndexed { index, genres ->
+                        gen += genres.name + "  "
+                    }
+                    binding.textSeriesGenres.text = gen
+
+                    when (_series.vote_average) {
+                        in 0.0..1.9 -> binding.texSeriesRating.text = "⭐"
+                        in 2.0..3.9 -> binding.texSeriesRating.text = "⭐⭐"
+                        in 4.0..5.9 -> binding.texSeriesRating.text = "⭐⭐⭐"
+                        in 6.0..7.9 -> binding.texSeriesRating.text = "⭐⭐⭐⭐"
+                        in 8.0..10.0 -> binding.texSeriesRating.text = "⭐⭐⭐⭐⭐"
+                    }
+
+                    if (_series.videos.results.isNullOrEmpty()) {
+                        binding.seriesImageView.visibility = View.GONE
+                    } else {
+                        binding.seriesImageView.addYouTubePlayerListener(object :
+                            AbstractYouTubePlayerListener() {
+                            override fun onReady(youTubePlayer: YouTubePlayer) {
+                                val videoId = _series.videos.results[0].key
+                                youTubePlayer.loadVideo(videoId, 0f)
+                            }
+                        })
+                    }
+
+                    setRecyclerViewSeason(_series.seasons)
+                    setRecyclerViewCast(_series.aggregate_credits.cast)
+                    setRecyclerViewSimilar(_series.similar.results)
+
+                    if ( _series.reviews.results.isNullOrEmpty() ) {
+                        binding.recyclerSeriesReviews.visibility = View.GONE
+                        binding.textView443.visibility = View.GONE
+                    }
+                    else setRecyclerViewReviews( _series.reviews.results )
+
+                    seriesFirebase = SeriesFirebase(
+                        _series.id.toString(),
+                        _series.poster_path ,
+                        _series.name
+                    )
+
                 }
-
-                setRecyclerViewSeason(it.seasons)
-                setRecyclerViewCast(it.aggregate_credits.cast)
-                setRecyclerViewSimilar(it.similar.results)
-
-                if ( it.reviews.results.isNullOrEmpty() ) {
-                    binding.recyclerSeriesReviews.visibility = View.GONE
-                    binding.textView443.visibility = View.GONE
-                }
-                else setRecyclerViewReviews( it.reviews.results )
-
-                seriesFirebase = SeriesFirebase(
-                    it.id.toString(),
-                    it.poster_path ,
-                    it.name
-                )
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
         }
     }
 

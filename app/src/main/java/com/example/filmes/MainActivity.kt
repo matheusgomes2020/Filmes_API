@@ -14,7 +14,7 @@ import com.example.filmes.ui.filmes.MovieFragment
 import com.example.filmes.ui.login.LoggedInViewModel
 import com.example.filmes.ui.login.LoginActivity
 import com.example.filmes.ui.perfil.FavoriteFragment
-import com.example.filmes.ui.search.SearchMoviesFragment
+import com.example.filmes.ui.search.SearchFragment
 import com.example.filmes.ui.series.SeriesFragment
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -75,9 +75,9 @@ class MainActivity : AppCompatActivity() {
                             hideKeyboard() } }
                     else {
                         if (actual == "Filmes") {
-                            replaceFragment(SearchMoviesFragment(newText, "movies"))
+                            replaceFragment(SearchFragment(newText, "movies"))
                         }else {
-                            replaceFragment(SearchMoviesFragment(newText, "series")) } }
+                            replaceFragment(SearchFragment(newText, "series")) } }
                     return true
                 }
             })

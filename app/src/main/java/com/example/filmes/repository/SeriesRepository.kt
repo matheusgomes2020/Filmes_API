@@ -2,113 +2,156 @@ package com.example.filmes.repository
 
 import android.util.Log
 import com.example.filmes.data.Resource
+import com.example.filmes.model.movie.Movie
 import com.example.filmes.model.serie.Serie
 import com.example.filmes.model.serie.Season
 import com.example.filmes.model.serie.Episode
 import com.example.filmes.network.SeriesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import retrofit2.HttpException
+import java.io.IOException
 import javax.inject.Inject
 
 class SeriesRepository @Inject constructor( private val api: SeriesApi) {
 
-    suspend fun searchSeries(searchQuery: String): Resource<List<Serie>> {
-
-        return try {
-            Resource.Loading(data = true)
-            val itemList = api.searchSeries(searchQuery).results
-            if (itemList.isNotEmpty()) Resource.Loading(data = false)
-            Resource.Success(data = itemList)
-        } catch (exception: Exception) {
-            Resource.Error(message = exception.message.toString())
+    fun searchSeries(searchQuery: String): Flow<Resource<List<Serie>>> = flow {
+        emit(Resource.Loading())
+        try {
+            val response =
+                api.searchSeries(searchQuery).results
+            emit(Resource.Success(data = response))
+        } catch (e: HttpException) {
+            emit(Resource.Error(message = e.localizedMessage ?: "Unknown Error"))
+        } catch (e: IOException) {
+            emit(
+                Resource.Error(
+                    message = e.localizedMessage ?: "Check Your Internet Connection"
+                )
+            )
+        } catch (e: Exception) {
+            emit(Resource.Error(message = e.localizedMessage ?: ""))
         }
     }
 
-    suspend fun getPopularSeries(): Resource<List<Serie>> {
-
-        return try {
-            Resource.Loading( data = true )
-            val itemList = api.getPopularSeries().results
-            if (itemList.isNotEmpty()) Resource.Loading(data = false)
-            Resource.Success(data = itemList)
-        } catch (exception: Exception) {
-            Resource.Error(message = exception.message.toString())
+    fun getPopularSeries(): Flow<Resource<List<Serie>>> = flow {
+        emit(Resource.Loading())
+        try {
+            val response =
+                api.getPopularSeries().results
+            emit(Resource.Success(data = response))
+        } catch (e: HttpException) {
+            emit(Resource.Error(message = e.localizedMessage ?: "Unknown Error"))
+        } catch (e: IOException) {
+            emit(
+                Resource.Error(
+                    message = e.localizedMessage ?: "Check Your Internet Connection"
+                )
+            )
+        } catch (e: Exception) {
+            emit(Resource.Error(message = e.localizedMessage ?: ""))
         }
     }
 
-    suspend fun getAiringTodaySeries(): Resource<List<Serie>> {
-
-        return try {
-            Resource.Loading( data = true )
-            val itemList = api.getAiringTodaySeries().results
-            if (itemList.isNotEmpty()) Resource.Loading(data = false)
-            Resource.Success(data = itemList)
-        } catch (exception: Exception) {
-            Resource.Error(message = exception.message.toString())
+    fun getOnTheAirSeries(): Flow<Resource<List<Serie>>> = flow {
+        emit(Resource.Loading())
+        try {
+            val response =
+                api.getOnTheAirSeries().results
+            emit(Resource.Success(data = response))
+        } catch (e: HttpException) {
+            emit(Resource.Error(message = e.localizedMessage ?: "Unknown Error"))
+        } catch (e: IOException) {
+            emit(
+                Resource.Error(
+                    message = e.localizedMessage ?: "Check Your Internet Connection"
+                )
+            )
+        } catch (e: Exception) {
+            emit(Resource.Error(message = e.localizedMessage ?: ""))
         }
     }
 
-    suspend fun getTopRatedSeries(): Resource<List<Serie>> {
-
-        return try {
-            Resource.Loading( data = true )
-            val itemList = api.getPopularTopRated().results
-            if (itemList.isNotEmpty()) Resource.Loading(data = false)
-            Resource.Success(data = itemList)
-        } catch (exception: Exception) {
-            Resource.Error(message = exception.message.toString())
+    fun getRatedSeries(): Flow<Resource<List<Serie>>> = flow {
+        emit(Resource.Loading())
+        try {
+            val response =
+                api.getPopularTopRated().results
+            emit(Resource.Success(data = response))
+        } catch (e: HttpException) {
+            emit(Resource.Error(message = e.localizedMessage ?: "Unknown Error"))
+        } catch (e: IOException) {
+            emit(
+                Resource.Error(
+                    message = e.localizedMessage ?: "Check Your Internet Connection"
+                )
+            )
+        } catch (e: Exception) {
+            emit(Resource.Error(message = e.localizedMessage ?: ""))
         }
     }
 
-    suspend fun getOnTheAirSeries(): Resource<List<Serie>> {
-
-        return try {
-            Resource.Loading( data = true )
-            val itemList = api.getOnTheAirSeries().results
-            if (itemList.isNotEmpty()) Resource.Loading(data = false)
-            Resource.Success(data = itemList)
-        } catch (exception: Exception) {
-            Resource.Error(message = exception.message.toString())
+    fun getAiringTodaySeries(): Flow<Resource<List<Serie>>> = flow {
+        emit(Resource.Loading())
+        try {
+            val response =
+                api.getAiringTodaySeries().results
+            emit(Resource.Success(data = response))
+        } catch (e: HttpException) {
+            emit(Resource.Error(message = e.localizedMessage ?: "Unknown Error"))
+        } catch (e: IOException) {
+            emit(
+                Resource.Error(
+                    message = e.localizedMessage ?: "Check Your Internet Connection"
+                )
+            )
+        } catch (e: Exception) {
+            emit(Resource.Error(message = e.localizedMessage ?: ""))
         }
     }
 
-    suspend fun getSerieInfo(serieId: String): Resource<Serie> {
-
-        val response = try {
-            Resource.Loading( data = true )
-            api.getSeriesInfo( serieId )
-        }catch ( exception: Exception ) {
-            return Resource.Error( message = "An error occurred ${exception.message.toString()}" )
-        }
-        Resource.Loading( data = false )
-        return Resource.Success( data = response )
-    }
-
-    suspend fun getSeasonEpisodes( seriesId: String, seasonNumber: Int ): Resource<Season> {
-
-        return try {
-            Resource.Loading( data = true )
-            val itemList = api.getSeasonEpisodes( seriesId, seasonNumber )
-            if (itemList.episodes.isNotEmpty()) Resource.Loading(data = false)
-            Resource.Success(data = itemList)
-        } catch (exception: Exception) {
-            Resource.Error(message = exception.message.toString())
+    fun getSeriesInfo(seriesId: String): Flow<Resource<Serie>> = flow {
+        emit(Resource.Loading())
+        try {
+            val response =
+                api.getSeriesInfo( seriesId )
+            emit(Resource.Success(data = response))
+        }catch (e: HttpException) {
+            emit(Resource.Error(message = e.localizedMessage ?: "Unknown Error"))
+        } catch (e: IOException) {
+            emit(Resource.Error(message = e.localizedMessage ?: "Check Your Internet Connection"))
+        } catch (e: Exception) {
+            emit(Resource.Error(message = e.localizedMessage ?: ""))
         }
     }
 
-    suspend fun getEpisodeInfo( seriesId: String, seasonNumber: Int, episodeNumber: Int ): Resource<Episode> {
+    fun getSeasonEpisodes(seriesId: String, seasonNumber: Int): Flow<Resource<Season>> = flow {
+        emit(Resource.Loading())
+        try {
+            val response =
+                api.getSeasonEpisodes( seriesId, seasonNumber )
+            emit(Resource.Success(data = response))
+        }catch (e: HttpException) {
+            emit(Resource.Error(message = e.localizedMessage ?: "Unknown Error"))
+        } catch (e: IOException) {
+            emit(Resource.Error(message = e.localizedMessage ?: "Check Your Internet Connection"))
+        } catch (e: Exception) {
+            emit(Resource.Error(message = e.localizedMessage ?: ""))
+        }
+    }
 
-        return try {
-
-            Log.d( "UTG", "Repository: " + "Id: " + seriesId + "\nSeason: " + seasonNumber + "\nEpisode: " + episodeNumber)
-
-            Resource.Loading( data = true )
-            val item = api.getEpisodeInfo( seriesId, seasonNumber, episodeNumber )
-            Log.d( "UTG", "Repository Item: " + item)
-
-            if (item != null) Resource.Loading(data = false)
-            Resource.Success(data = item)
-        } catch (exception: Exception) {
-            Resource.Error(message = exception.message.toString())
-
+    fun getEpisodeInfo(seriesId: String, seasonNumber: Int, episodeNumber: Int ): Flow<Resource<Episode>> = flow {
+        emit(Resource.Loading())
+        try {
+            val response =
+                api.getEpisodeInfo( seriesId, seasonNumber, episodeNumber )
+            emit(Resource.Success(data = response))
+        }catch (e: HttpException) {
+            emit(Resource.Error(message = e.localizedMessage ?: "Unknown Error"))
+        } catch (e: IOException) {
+            emit(Resource.Error(message = e.localizedMessage ?: "Check Your Internet Connection"))
+        } catch (e: Exception) {
+            emit(Resource.Error(message = e.localizedMessage ?: ""))
         }
     }
 

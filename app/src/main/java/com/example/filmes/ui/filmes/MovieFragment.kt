@@ -1,6 +1,5 @@
 package com.example.filmes.ui.filmes
 
-import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
 import android.view.LayoutInflater
@@ -11,15 +10,11 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.coroutineScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.filmes.MainActivity
 import com.example.filmes.adapter.Adapter
 import com.example.filmes.databinding.FragmentMovieBinding
 import com.example.filmes.model.movie.Movie
-import com.example.filmes.ui.search.SearchActivity
-import com.example.filmes.ui.searchSeries.SerieSearchActivity
 import com.example.filmes.adapter.views.MovieView
 import dagger.hilt.android.AndroidEntryPoint
-import java.lang.Exception
 
 @AndroidEntryPoint
 class MovieFragment : Fragment() {
@@ -45,7 +40,6 @@ class MovieFragment : Fragment() {
         observeNowPlayingMovies()
         observeRatedMovies()
         observePopularMovies()
-
     }
 
     override fun onDestroyView() {
@@ -60,12 +54,13 @@ class MovieFragment : Fragment() {
                 if (it.isLoading) { }
                 if (it.error.isNotBlank()) { }
                 it.data?.let { _movie ->
-                    setRecyclerViewUpcomingMovies(_movie )
-                    Handler().postDelayed({
-                    binding.sh.visibility = View.GONE
-                        binding.textUpcoming.visibility = View.VISIBLE
-                        binding.movieRecyclerViewLancamentos.visibility = View.VISIBLE
-                        binding.sh.stopShimmer() }, 1000)
+                    setRecyclerViewUpcomingMovies(_movie ).let {
+                        Handler().postDelayed({
+                            binding.sh.visibility = View.GONE
+                            binding.movieRecyclerViewLancamentos.visibility = View.VISIBLE
+                            binding.sh.stopShimmer()
+                        }, 1000)
+                    }
                 }
             }
         }
@@ -78,12 +73,12 @@ class MovieFragment : Fragment() {
                 if (it.isLoading) {}
                 if (it.error.isNotBlank()) { }
                 it.data?.let { _movie ->
-                    setRecyclerViewNowPlayingMovies(_movie )
-                   Handler().postDelayed({
-                        binding.sh2.visibility = View.GONE
-                        binding.textView.visibility = View.VISIBLE
-                        binding.movieRecyclerViewEmCartaz.visibility = View.VISIBLE
-                        binding.sh2.stopShimmer()}, 1000)
+                    setRecyclerViewNowPlayingMovies(_movie ).let {
+                        Handler().postDelayed({
+                            binding.sh2.visibility = View.GONE
+                            binding.movieRecyclerViewEmCartaz.visibility = View.VISIBLE
+                            binding.sh2.stopShimmer()}, 1000)
+                    }
                 }
             }
         }
@@ -96,12 +91,12 @@ class MovieFragment : Fragment() {
                 if (it.isLoading) { }
                 if (it.error.isNotBlank()) { }
                 it.data?.let { _movie ->
-                    setRecyclerViewRatedMovies(_movie )
-                    Handler().postDelayed({
-                        binding.sh4.visibility = View.GONE
-                        binding.textView3.visibility = View.VISIBLE
-                        binding.movieRecyclerViewMelhores.visibility = View.VISIBLE
-                        binding.sh4.stopShimmer() }, 1000)
+                    setRecyclerViewRatedMovies(_movie ).let {
+                        Handler().postDelayed({
+                            binding.sh4.visibility = View.GONE
+                            binding.movieRecyclerViewMelhores.visibility = View.VISIBLE
+                            binding.sh4.stopShimmer() }, 1000)
+                    }
                 }
             }
         }
@@ -114,17 +109,14 @@ class MovieFragment : Fragment() {
                 if (it.isLoading) {}
                 if (it.error.isNotBlank()) { }
                 it.data?.let { _movie ->
-                    setRecyclerViewPopular(_movie )
-                    Handler().postDelayed({
+                    setRecyclerViewPopular(_movie ).let {  Handler().postDelayed({
                         binding.sh3.visibility = View.GONE
-                        binding.textView2.visibility = View.VISIBLE
                         binding.movieRecyclerViewEmAlta.visibility = View.VISIBLE
-                        binding.sh3.stopShimmer()}, 1000)
+                        binding.sh3.stopShimmer()}, 1000) }
                 }
             }
         }
     }
-
 
     private fun setRecyclerViewPopular( list: List<Movie> ) {
         binding.movieRecyclerViewEmAlta.apply {
@@ -170,4 +162,3 @@ class MovieFragment : Fragment() {
         }
     }
 }
-

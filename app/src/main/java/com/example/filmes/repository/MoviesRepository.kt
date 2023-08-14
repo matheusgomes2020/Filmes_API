@@ -11,15 +11,22 @@ import javax.inject.Inject
 
 class MoviesRepository @Inject constructor( private val api: MoviesApi ) {
 
-    suspend fun searchMovies(searchQuery: String): Resource<List<Movie>> {
-
-        return try {
-            Resource.Loading(data = true)
-            val itemList = api.searchMovies(searchQuery).results
-            if (itemList.isNotEmpty()) Resource.Loading(data = false)
-            Resource.Success(data = itemList)
-        } catch (exception: Exception) {
-            Resource.Error(message = exception.message.toString())
+    fun searchMovies(searchQuery: String): Flow<Resource<List<Movie>>> = flow {
+        emit(Resource.Loading())
+        try {
+            val response =
+                api.searchMovies(searchQuery).results
+            emit(Resource.Success(data = response))
+        } catch (e: HttpException) {
+            emit(Resource.Error(message = e.localizedMessage ?: "Unknown Error"))
+        } catch (e: IOException) {
+            emit(
+                Resource.Error(
+                    message = e.localizedMessage ?: "Check Your Internet Connection"
+                )
+            )
+        } catch (e: Exception) {
+            emit(Resource.Error(message = e.localizedMessage ?: ""))
         }
     }
 
@@ -106,7 +113,6 @@ class MoviesRepository @Inject constructor( private val api: MoviesApi ) {
             val response =
                 api.getMovieInfo( movieId )
             emit(Resource.Success(data = response))
-
         }catch (e: HttpException) {
             emit(Resource.Error(message = e.localizedMessage ?: "Unknown Error"))
         } catch (e: IOException) {
@@ -115,11 +121,4 @@ class MoviesRepository @Inject constructor( private val api: MoviesApi ) {
             emit(Resource.Error(message = e.localizedMessage ?: ""))
         }
     }
-
-
-
-
-
-
-
 }

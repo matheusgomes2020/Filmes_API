@@ -8,7 +8,13 @@ import androidx.lifecycle.viewModelScope
 import com.example.filmes.data.Resource
 import com.example.filmes.model.serie.Episode
 import com.example.filmes.repository.SeriesRepository
+import com.example.filmes.utils.EpisodeState
+import com.example.filmes.utils.Serie2State
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
 import java.lang.Exception
 import javax.inject.Inject
@@ -17,43 +23,25 @@ import javax.inject.Inject
 class EpisodeViewModel @Inject constructor(private val seriesRepository: SeriesRepository)
     : ViewModel() {
 
-    private var _episodeInfo = MutableLiveData<Episode>()
-    var carregando: Boolean = true
-    val episodeInfo: LiveData<Episode> = _episodeInfo
-
+    private var _episodeData = MutableStateFlow(EpisodeState())
+    val episodeData: StateFlow<EpisodeState> = _episodeData
 
     fun getEpisodeInfo( seriesId: String, seasonNumber: Int, episodeNumber: Int ) {
-
-        Log.d( "UTG", "ViewModel: " + "Id: " + seriesId + "\nSeason: " + seasonNumber + "\nEpisode: " + episodeNumber)
-
-
-        try {
-            viewModelScope.launch {
-                when (val response = seriesRepository.getEpisodeInfo( seriesId, seasonNumber, episodeNumber ) ){
-                    is Resource.Success -> {
-                        _episodeInfo.value = response.data!!
-                        if (_episodeInfo.value!! != null) carregando = false
-                        Log.e("Network", "Episódio: Ok. Certo!!! Carregando?= ${carregando}")
-                        Log.e("Network", "getEpisódioInfo: " + episodeInfo.value)
-                        Log.e("Network", "getEpisódioInfo: " + _episodeInfo.value)
-                    }
-                    is Resource.Error -> {
-                        carregando = false
-                        Log.e("Network", "Episódio: Failed getting Episódio Carregando?= ${carregando}")
-                        Log.e("Network", "Failed getting Episódio: " + episodeInfo.value)
-                        Log.e("Network", "Failed getting Episódio: " + _episodeInfo.value)
-                    }
-                    else -> {
-                        carregando = false
-                    }
+        seriesRepository.getEpisodeInfo( seriesId, seasonNumber, episodeNumber ).onEach {
+            when (it) {
+                is Resource.Loading -> {
+                    _episodeData.value = EpisodeState(isLoading = true)
                 }
-            }
-        }catch (exception: Exception) {
-            carregando = false
-            Log.d("Network", "Episódio: ${exception.message.toString()} Carregando?= $carregando")
-            Log.d("wwww", "getEpisódioInfo: " + _episodeInfo.value)
-        }
+                is Resource.Error -> {
+                    _episodeData.value = EpisodeState(error = it.message ?: "")
+                }
+                is Resource.Success -> {
+                    _episodeData.value = EpisodeState(data = it.data)
+                }
 
+                else -> {}
+            }
+        }.launchIn( viewModelScope )
     }
 
 }

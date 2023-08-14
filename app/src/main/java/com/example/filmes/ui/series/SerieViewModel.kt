@@ -1,144 +1,92 @@
 package com.example.filmes.ui.series
 
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.filmes.data.Resource
-import com.example.filmes.model.serie.Serie
 import com.example.filmes.repository.SeriesRepository
+import com.example.filmes.utils.SeriesList2State
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @HiltViewModel
 class SerieViewModel @Inject constructor(private val seriesRepository: SeriesRepository)
     : ViewModel() {
 
-    private val popularSeriesEmitter = MutableLiveData<List<Serie>>()
-    private val airingTodaySeriesEmitter = MutableLiveData<List<Serie>>()
-    private val topRatedSeriesEmitter = MutableLiveData<List<Serie>>()
-    private val onTheAirSeriesEmitter = MutableLiveData<List<Serie>>()
-    var carregando: Boolean = true
-    val popularSeries: LiveData<List<Serie>> = popularSeriesEmitter
-    val airingTodaySeries: LiveData<List<Serie>> = airingTodaySeriesEmitter
-    val topRatedSeries: LiveData<List<Serie>> = topRatedSeriesEmitter
-    val onTheAirSeries: LiveData<List<Serie>> = onTheAirSeriesEmitter
+    private val _popularSeries = MutableStateFlow(SeriesList2State())
+    private val _onTheAirSeries = MutableStateFlow(SeriesList2State())
+    private val _airingTodaySeries = MutableStateFlow(SeriesList2State())
+    private val _ratedSeries = MutableStateFlow(SeriesList2State())
+    val popularSeries: StateFlow<SeriesList2State> = _popularSeries
+    val airingTodaySeries: StateFlow<SeriesList2State> = _airingTodaySeries
+    val topRatedSeries: StateFlow<SeriesList2State> = _ratedSeries
+    val onTheAirSeries: StateFlow<SeriesList2State> = _onTheAirSeries
 
-    init {
-        loadPopularSeries()
-        loadAiringTodaySeries()
-        loadOnTheAirSeries()
-        loadTopRatedSeries()
+     fun getPopularSeries() {
+         seriesRepository.getPopularSeries().onEach {
+             when (it) {
+                 is Resource.Loading -> {
+                     _popularSeries.value = SeriesList2State(isLoading = true)
+                 }
+                 is Resource.Error -> {
+                     _popularSeries.value = SeriesList2State(error = it.message ?: "")
+                 }
+                 is Resource.Success -> {
+                     _popularSeries.value = SeriesList2State(data = it.data!!) }
+                 else -> {}
+             }
+         }.launchIn(viewModelScope)
+     }
 
-        Log.e("Series", "Init!!! Carregando?= $carregando")
-    }
-
-    private fun loadPopularSeries() {
-
-        viewModelScope.launch {
-            try {
-                when( val response = seriesRepository.getPopularSeries() ) {
-                    is Resource.Success -> {
-                        popularSeriesEmitter.value = response.data!!
-                        if ( popularSeriesEmitter.value!!.isNotEmpty() ) carregando = false
-                        Log.e("Series", "popularSeries: Ok. Certo!!! Carregando?= $carregando")
-                    }
-                    is Resource.Error -> {
-                        carregando = false
-                        Log.e("Series", "popularSeries: Failed getting séries Carregando?= $carregando")
-                    }
-                    else -> {
-                        carregando = false
-                    }
+    fun getAiringTodaySeries() {
+        seriesRepository.getAiringTodaySeries().onEach {
+            when (it) {
+                is Resource.Loading -> {
+                    _airingTodaySeries.value = SeriesList2State(isLoading = true)
                 }
-            } catch ( exception: Exception ) {
-                carregando = false
-                Log.d("Series", "popularSeries: ${exception.message.toString()} Carregando?= $carregando")
-            }
-         }
-
-    }
-
-    private fun loadAiringTodaySeries() {
-
-        viewModelScope.launch {
-            try {
-                when( val response = seriesRepository.getAiringTodaySeries() ) {
-                    is Resource.Success -> {
-                        airingTodaySeriesEmitter.value = response.data!!
-                        if ( airingTodaySeriesEmitter.value!!.isNotEmpty() ) carregando = false
-                        Log.e("Series", "popularSeries: Ok. Certo!!! Carregando?= $carregando")
-                    }
-                    is Resource.Error -> {
-                        carregando = false
-                        Log.e("Series", "popularSeries: Failed getting séries Carregando?= $carregando")
-                    }
-                    else -> {
-                        carregando = false
-                    }
+                is Resource.Error -> {
+                    _airingTodaySeries.value = SeriesList2State(error = it.message ?: "")
                 }
-            } catch ( exception: Exception ) {
-                carregando = false
-                Log.d("Series", "popularSeries: ${exception.message.toString()} Carregando?= $carregando")
+                is Resource.Success -> {
+                    _airingTodaySeries.value = SeriesList2State(data = it.data!!) }
+                else -> {}
             }
-        }
-
+        }.launchIn(viewModelScope)
     }
 
-    private fun loadTopRatedSeries() {
+    fun getRatedSeries() {
 
-        viewModelScope.launch {
-            try {
-                when( val response = seriesRepository.getTopRatedSeries() ) {
-                    is Resource.Success -> {
-                        topRatedSeriesEmitter.value = response.data!!
-                        if ( topRatedSeriesEmitter.value!!.isNotEmpty() ) carregando = false
-                        Log.e("Series", "popularSeries: Ok. Certo!!! Carregando?= $carregando")
-                    }
-                    is Resource.Error -> {
-                        carregando = false
-                        Log.e("Series", "popularSeries: Failed getting séries Carregando?= $carregando")
-                    }
-                    else -> {
-                        carregando = false
-                    }
+        seriesRepository.getRatedSeries().onEach {
+            when (it) {
+                is Resource.Loading -> {
+                    _ratedSeries.value = SeriesList2State(isLoading = true)
                 }
-            } catch ( exception: Exception ) {
-                carregando = false
-                Log.d("Series", "popularSeries: ${exception.message.toString()} Carregando?= $carregando")
-            }
-        }
-
-    }
-
-    private fun loadOnTheAirSeries() {
-
-        viewModelScope.launch {
-            try {
-                when( val response = seriesRepository.getOnTheAirSeries() ) {
-                    is Resource.Success -> {
-                        onTheAirSeriesEmitter.value = response.data!!
-                        if ( onTheAirSeriesEmitter.value!!.isNotEmpty() ) carregando = false
-                        Log.e("Series", "popularSeries: Ok. Certo!!! Carregando?= $carregando")
-                    }
-                    is Resource.Error -> {
-                        carregando = false
-                        Log.e("Series", "popularSeries: Failed getting séries Carregando?= $carregando")
-                    }
-                    else -> {
-                        carregando = false
-                    }
+                is Resource.Error -> {
+                    _ratedSeries.value = SeriesList2State(error = it.message ?: "")
                 }
-            } catch ( exception: Exception ) {
-                carregando = false
-                Log.d("Series", "popularSeries: ${exception.message.toString()} Carregando?= $carregando")
+                is Resource.Success -> {
+                    _ratedSeries.value = SeriesList2State(data = it.data!!) }
+                else -> {}
             }
-        }
-
+        }.launchIn(viewModelScope)
     }
 
-
-
+    fun getOnTheAirSeries() {
+        seriesRepository.getOnTheAirSeries().onEach {
+            when (it) {
+                is Resource.Loading -> {
+                    _onTheAirSeries.value = SeriesList2State(isLoading = true)
+                }
+                is Resource.Error -> {
+                    _onTheAirSeries.value = SeriesList2State(error = it.message ?: "")
+                }
+                is Resource.Success -> {
+                    _onTheAirSeries.value = SeriesList2State(data = it.data!!) }
+                else -> {}
+            }
+        }.launchIn(viewModelScope)
+    }
 }

@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.coroutineScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import coil.load
@@ -18,7 +19,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.lang.Exception
 
 @AndroidEntryPoint
-class SeasonEpisodes(private var seasonX: Season?, private var seriesId: String) :BottomSheetDialogFragment(){
+class SeasonEpisodes(private var season: Season?, private var seriesId: String) :BottomSheetDialogFragment(){
 
     private lateinit var binding: FragmentSeasonEpisodesBinding
     private val seasonViewModel: SeasonViewModel by viewModels()
@@ -26,29 +27,31 @@ class SeasonEpisodes(private var seasonX: Season?, private var seriesId: String)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        if ( seasonX != null ) {
-            binding.textViewTemporada.text = seasonX!!.season_number.toString() + " - Temporada"
-            if ( seasonX!!.overview.isNullOrEmpty() ){
+        if ( season != null ) {
+            binding.textViewTemporada.text = season!!.season_number.toString() + " - Temporada"
+            if ( season!!.overview.isNullOrEmpty() ){
                 binding.textOverview.visibility = View.GONE
             } else {
-                binding.textOverview.text = seasonX!!.overview
+                binding.textOverview.text = season!!.overview
             }
-            if ( seasonX!!.poster_path.isNullOrEmpty() ) binding.imageView6.load(R.drawable.padrao)
-            else binding.imageView6.load("https://image.tmdb.org/t/p/w500" + seasonX!!.poster_path )
+            if ( season!!.poster_path.isNullOrEmpty() ) binding.imageView6.load(R.drawable.padrao)
+            else binding.imageView6.load("https://image.tmdb.org/t/p/w500" + season!!.poster_path )
 
-            seasonViewModel.loadSeason( seriesId, seasonX!!.season_number )
+            seasonViewModel.getSeasonEpisodes( seriesId, season!!.season_number )
             observe()
         }
     }
 
     private fun observe(){
 
-        try {
-            seasonViewModel.season.observe(this){
-                setRecyclerViewEpisodes(it.episodes)
+        lifecycle.coroutineScope.launchWhenCreated {
+            seasonViewModel.seasonEpisodesData.collect {
+                if (it.isLoading) { }
+                if (it.error.isNotBlank()) { }
+                it.data?.let { _series ->
+                    setRecyclerViewEpisodes(_series.episodes)
+                }
             }
-        }catch (e: Exception){
-            e.printStackTrace()
         }
     }
 

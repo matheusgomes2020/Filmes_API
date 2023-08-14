@@ -1,85 +1,63 @@
 package com.example.filmes.ui.seriesDetails
 
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.filmes.data.Resource
-import com.example.filmes.model.SeriesFirebase
-import com.example.filmes.model.serie.Season
-import com.example.filmes.model.serie.Serie
-import com.example.filmes.repository.RoomRepository
 import com.example.filmes.repository.SeriesRepository
+import com.example.filmes.utils.SeasonState
+import com.example.filmes.utils.Serie2State
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.launch
-import java.lang.Exception
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import javax.inject.Inject
 
 @HiltViewModel
 class SeriesDetailsViewModel @Inject constructor( private val seriesRepository: SeriesRepository)
     : ViewModel() {
 
-    private var _seriesInfo = MutableLiveData<Serie>()
-    private val _seasonEpisodes = MutableLiveData<Season>()
-    var carregando: Boolean = true
-    val seriesInfo: LiveData<Serie> = _seriesInfo
-    val seasonEpisodes: LiveData<Season> = _seasonEpisodes
-
+    private val _seriesData = MutableStateFlow(Serie2State())
+    val seriesData: StateFlow<Serie2State> = _seriesData
+    private val _seasonEpisodesData = MutableStateFlow(SeasonState())
+    val seasonEpisodesData: StateFlow<SeasonState> = _seasonEpisodesData
 
     fun getSerieInfo(serieId: String ) {
-
-        try {
-            viewModelScope.launch {
-                when (val response = seriesRepository.getSerieInfo( serieId ) ){
-                    is Resource.Success -> {
-                        _seriesInfo.value = response.data!!
-                        if (_seriesInfo.value!! != null) carregando = false
-                        Log.e("Network", "Série: Ok. Certo!!! Carregando?= ${carregando}")
-                        Log.e("Network", "getSerieInfo: " + seriesInfo.value)
-                        Log.e("Network", "getSerieInfo: " + _seriesInfo.value)
-                    }
-                    is Resource.Error -> {
-                        carregando = false
-                        Log.e("Network", "Série: Failed getting Séries Carregando?= ${carregando}")
-                        Log.e("Network", "Failed getting Séries: " + seriesInfo.value)
-                        Log.e("Network", "Failed getting Séries: " + _seriesInfo.value)
-                    }
-                    else -> {
-                        carregando = false
-                    }
+        seriesRepository.getSeriesInfo( serieId ).onEach {
+            when (it) {
+                is Resource.Loading -> {
+                    _seriesData.value = Serie2State(isLoading = true)
                 }
+                is Resource.Error -> {
+                    _seriesData.value = Serie2State(error = it.message ?: "")
+                }
+                is Resource.Success -> {
+                    _seriesData.value = Serie2State(data = it.data)
+                }
+
+                else -> {}
             }
-        }catch (exception: Exception) {
-            carregando = false
-            Log.d("Network", "Série: ${exception.message.toString()} Carregando?= $carregando")
-            Log.d("wwww", "getSerieInfo: " + _seriesInfo.value)
-        }
+        }.launchIn(viewModelScope)
     }
+
 
     fun getSeasonEpisodes( seriesId: String, seasonNumber: Int ) {
-
-        try {
-            viewModelScope.launch {
-                when (val response = seriesRepository.getSeasonEpisodes( seriesId, seasonNumber ) ){
-                    is Resource.Success -> {
-                        _seasonEpisodes.value = response.data!!
-                        if (_seasonEpisodes.value!! != null) carregando = false
-                        Log.e("Network", "seasonEpisodes: Ok. Certo!!! Carregando?= $carregando")
-                    }
-                    is Resource.Error -> {
-                        carregando = false
-                        Log.e("Network", "seasonEpisodes: Failed getting filmes Carregando?= $carregando")
-                    }
-                    else -> {
-                        carregando = false
-                    }
+        seriesRepository.getSeasonEpisodes( seriesId, seasonNumber ).onEach {
+            when (it) {
+                is Resource.Loading -> {
+                    _seasonEpisodesData.value = SeasonState(isLoading = true)
                 }
+                is Resource.Error -> {
+                    _seasonEpisodesData.value = SeasonState(error = it.message ?: "")
+                }
+                is Resource.Success -> {
+                    _seasonEpisodesData.value = SeasonState(data = it.data)
+                }
+
+                else -> {}
             }
-        }catch (exception: Exception) {
-            carregando = false
-            Log.d("Network", "seasonEpisodes: ${exception.message.toString()} Carregando?= $carregando")
+        }.launchIn(viewModelScope)
         }
-    }
+
 
 }
