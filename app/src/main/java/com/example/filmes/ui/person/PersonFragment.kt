@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.viewModels
@@ -20,6 +21,7 @@ import com.example.filmes.model.person.Profile
 import com.example.filmes.ui.movieDetails.MovieDetailsActivity
 import com.example.filmes.ui.seriesDetails.SerieDetailsActivity
 import com.example.filmes.adapter.views.ImageView
+import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
 import java.lang.Exception
@@ -115,7 +117,10 @@ class PersonFragment( private var personId: String) : BottomSheetDialogFragment(
             if ( !item.poster_path.isNullOrEmpty() ) itemView.findViewById<android.widget.ImageView>(
                 R.id.imageViewMovieAndSeries).load( "https://image.tmdb.org/t/p/w500" + item.poster_path)
             else itemView.findViewById<android.widget.ImageView>(R.id.imageViewMovieAndSeries).load( R.drawable.padrao)
-            itemView.findViewById<ConstraintLayout>(R.id.movieAndSeriesCellContainer).setOnClickListener {
+            itemView.findViewById<ShimmerFrameLayout>(R.id.shimmerMoviesAndSeriesCell).visibility = View.GONE
+            itemView.findViewById<TextView>(R.id.nomeOrTitle).visibility = View.VISIBLE
+            itemView.findViewById<android.widget.ImageView>(R.id.imageViewMovieAndSeries).visibility = View.VISIBLE
+            itemView.findViewById<LinearLayout>(R.id.movieAndSeriesCellContainer).setOnClickListener {
                 val intent = Intent( context, SerieDetailsActivity::class.java ).apply {
                     putExtra("id", item.id.toString() )
                 }
@@ -134,7 +139,10 @@ class PersonFragment( private var personId: String) : BottomSheetDialogFragment(
             if ( !item.poster_path.isNullOrEmpty() ) itemView.findViewById<android.widget.ImageView>(
                 R.id.imageViewMovieAndSeries).load( "https://image.tmdb.org/t/p/w500" + item.poster_path)
             else itemView.findViewById<android.widget.ImageView>(R.id.imageViewMovieAndSeries).load( R.drawable.padrao)
-            itemView.findViewById<ConstraintLayout>(R.id.movieAndSeriesCellContainer).setOnClickListener {
+            itemView.findViewById<ShimmerFrameLayout>(R.id.shimmerMoviesAndSeriesCell).visibility = View.GONE
+            itemView.findViewById<TextView>(R.id.nomeOrTitle).visibility = View.VISIBLE
+            itemView.findViewById<android.widget.ImageView>(R.id.imageViewMovieAndSeries).visibility = View.VISIBLE
+            itemView.findViewById<LinearLayout>(R.id.movieAndSeriesCellContainer).setOnClickListener {
                 val intent = Intent( context, MovieDetailsActivity::class.java ).apply {
                     putExtra("id", item.id.toString() )
                 }

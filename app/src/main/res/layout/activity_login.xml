@@ -61,6 +61,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginBottom="96dp"
             android:elevation="35dp"
+            android:visibility="invisible"
             app:backgroundTint="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/fab_twitter">
@@ -75,6 +76,7 @@
             android:layout_marginBottom="96dp"
 
             android:elevation="35dp"
+            android:visibility="invisible"
             app:backgroundTint="@color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent">
@@ -89,6 +91,7 @@
             android:layout_marginBottom="96dp"
             android:backgroundTint="@color/white"
             android:elevation="35dp"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/fab_fb">
 

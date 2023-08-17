@@ -5,10 +5,12 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.util.Log
+import android.view.View
 import android.view.ViewGroup
 import android.view.Window
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -19,6 +21,7 @@ import com.example.filmes.model.SeriesFirebase
 import com.example.filmes.ui.perfil.FavoriteFragment
 import com.example.filmes.ui.perfil.FavoriteViewModel
 import com.example.filmes.ui.seriesDetails.SerieDetailsActivity
+import com.facebook.shimmer.ShimmerFrameLayout
 
 class FavoriteSeriesView (viewGroup: ViewGroup, private val viewModel: FavoriteViewModel, private val fm: FavoriteFragment) : BaseViewHolder<SeriesFirebase>(
     R.layout.movie_an_series_cell,
@@ -66,13 +69,16 @@ class FavoriteSeriesView (viewGroup: ViewGroup, private val viewModel: FavoriteV
         if ( item.poster_path.isNullOrEmpty() ) itemView.findViewById<ImageView>(R.id.imageViewMovieAndSeries).load(
             R.drawable.padrao)
         else itemView.findViewById<ImageView>(R.id.imageViewMovieAndSeries).load("https://image.tmdb.org/t/p/w500" + item.poster_path)
-        itemView.findViewById<ConstraintLayout>(R.id.movieAndSeriesCellContainer).setOnClickListener {
+        itemView.findViewById<ShimmerFrameLayout>(R.id.shimmerMoviesAndSeriesCell).visibility = View.GONE
+        itemView.findViewById<TextView>(R.id.nomeOrTitle).visibility = View.VISIBLE
+        itemView.findViewById<ImageView>(R.id.imageViewMovieAndSeries).visibility = View.VISIBLE
+        itemView.findViewById<LinearLayout>(R.id.movieAndSeriesCellContainer).setOnClickListener {
             val intent = Intent( context, SerieDetailsActivity::class.java ).apply {
                 putExtra("id", item.id.toString() )
             }
             context.startActivity(intent)
         }
-        itemView.findViewById<ConstraintLayout>(R.id.movieAndSeriesCellContainer).setOnLongClickListener {
+        itemView.findViewById<LinearLayout>(R.id.movieAndSeriesCellContainer).setOnLongClickListener {
             val message: String? = "Voce tem certeza que deseja remover " + series!!.name + " de seus favoritos?"
             showCustomDialogBox(message, series!!)
             true
