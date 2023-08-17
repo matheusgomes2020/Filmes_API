@@ -1,4 +1,4 @@
-# Filmes_API
+# Filmes e Séries App
 
 <hr>
 
