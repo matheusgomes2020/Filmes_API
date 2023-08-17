@@ -9,8 +9,8 @@ import com.example.filmes.model.MovieFirebase
 import com.example.filmes.model.User
 import com.example.filmes.repository.AuthRepository
 import com.example.filmes.utils.AuthState
-import com.example.filmes.utils.MovieListState
-import com.example.filmes.utils.MovieState
+import com.example.filmes.utils.MovieListFirebaseState
+import com.example.filmes.utils.MovieFirebaseState
 import com.example.filmes.utils.UserState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,11 +29,11 @@ constructor(
     private val _user = MutableStateFlow(AuthState())
     val user: StateFlow<AuthState> = _user
 
-    private val _movie = MutableStateFlow(MovieState())
-    private val _movieLL = MutableStateFlow(MovieListState())
+    private val _movie = MutableStateFlow(MovieFirebaseState())
+    private val _movieLL = MutableStateFlow(MovieListFirebaseState())
    // private val _movies = MutableLiveData(List<MovieRoom>>)
-    val movie: StateFlow<MovieState> = _movie
-    val movieLL: StateFlow<MovieListState> = _movieLL
+    val movie: StateFlow<MovieFirebaseState> = _movie
+    val movieLL: StateFlow<MovieListFirebaseState> = _movieLL
 
     private val _userData = MutableStateFlow(UserState())
     val userData: StateFlow<UserState> = _userData

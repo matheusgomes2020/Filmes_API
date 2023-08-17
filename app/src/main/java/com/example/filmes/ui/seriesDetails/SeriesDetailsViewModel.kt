@@ -5,7 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.filmes.data.Resource
 import com.example.filmes.repository.SeriesRepository
 import com.example.filmes.utils.SeasonState
-import com.example.filmes.utils.Serie2State
+import com.example.filmes.utils.SerieState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,8 +17,8 @@ import javax.inject.Inject
 class SeriesDetailsViewModel @Inject constructor( private val seriesRepository: SeriesRepository)
     : ViewModel() {
 
-    private val _seriesData = MutableStateFlow(Serie2State())
-    val seriesData: StateFlow<Serie2State> = _seriesData
+    private val _seriesData = MutableStateFlow(SerieState())
+    val seriesData: StateFlow<SerieState> = _seriesData
     private val _seasonEpisodesData = MutableStateFlow(SeasonState())
     val seasonEpisodesData: StateFlow<SeasonState> = _seasonEpisodesData
 
@@ -26,13 +26,13 @@ class SeriesDetailsViewModel @Inject constructor( private val seriesRepository: 
         seriesRepository.getSeriesInfo( serieId ).onEach {
             when (it) {
                 is Resource.Loading -> {
-                    _seriesData.value = Serie2State(isLoading = true)
+                    _seriesData.value = SerieState(isLoading = true)
                 }
                 is Resource.Error -> {
-                    _seriesData.value = Serie2State(error = it.message ?: "")
+                    _seriesData.value = SerieState(error = it.message ?: "")
                 }
                 is Resource.Success -> {
-                    _seriesData.value = Serie2State(data = it.data)
+                    _seriesData.value = SerieState(data = it.data)
                 }
 
                 else -> {}

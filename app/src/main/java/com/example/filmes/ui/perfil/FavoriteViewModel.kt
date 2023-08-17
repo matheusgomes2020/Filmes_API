@@ -7,8 +7,8 @@ import com.example.filmes.model.MovieFirebase
 import com.example.filmes.model.SeriesFirebase
 import com.example.filmes.repository.FireRepository
 import com.example.filmes.repository.RoomRepository
-import com.example.filmes.utils.MovieListState
-import com.example.filmes.utils.SeriesListState
+import com.example.filmes.utils.MovieListFirebaseState
+import com.example.filmes.utils.SeriesFirebaseListState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -20,11 +20,11 @@ import javax.inject.Inject
 class FavoriteViewModel @Inject constructor(private val repository: RoomRepository, private val fireRepository: FireRepository)
     : ViewModel() {
 
-    private val _movieList = MutableStateFlow(MovieListState())
-    val movieList: StateFlow<MovieListState> = _movieList
+    private val _movieList = MutableStateFlow(MovieListFirebaseState())
+    val movieList: StateFlow<MovieListFirebaseState> = _movieList
 
-    private val _seriesList = MutableStateFlow(SeriesListState())
-    val seriesList: StateFlow<SeriesListState> = _seriesList
+    private val _seriesList = MutableStateFlow(SeriesFirebaseListState())
+    val seriesList: StateFlow<SeriesFirebaseListState> = _seriesList
 
     fun saveMovie(movie: MovieFirebase) {
         fireRepository.saveMovie(movie).onEach {
@@ -39,11 +39,11 @@ class FavoriteViewModel @Inject constructor(private val repository: RoomReposito
         fireRepository.getMovies().onEach {
             when (it) {
                 is Resource.Loading -> {
-                    _movieList.value = MovieListState(isLoading = true)}
+                    _movieList.value = MovieListFirebaseState(isLoading = true)}
                 is Resource.Error -> {
-                    _movieList.value = MovieListState(error = it.message ?: "")}
+                    _movieList.value = MovieListFirebaseState(error = it.message ?: "")}
                 is Resource.Success -> {
-                    _movieList.value = MovieListState(data = it.data!!) }
+                    _movieList.value = MovieListFirebaseState(data = it.data!!) }
                 else -> {}
             }
         }.launchIn(viewModelScope)
@@ -62,11 +62,11 @@ class FavoriteViewModel @Inject constructor(private val repository: RoomReposito
         fireRepository.getSeries().onEach {
             when (it) {
                 is Resource.Loading -> {
-                    _seriesList.value = SeriesListState(isLoading = true)}
+                    _seriesList.value = SeriesFirebaseListState(isLoading = true)}
                 is Resource.Error -> {
-                    _seriesList.value = SeriesListState(error = it.message ?: "")}
+                    _seriesList.value = SeriesFirebaseListState(error = it.message ?: "")}
                 is Resource.Success -> {
-                    _seriesList.value = SeriesListState(data = it.data!!) }
+                    _seriesList.value = SeriesFirebaseListState(data = it.data!!) }
                 else -> {}
             }
         }.launchIn(viewModelScope)

@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.filmes.data.Resource
 import com.example.filmes.repository.SeriesRepository
-import com.example.filmes.utils.SeriesList2State
+import com.example.filmes.utils.SeriesListState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -16,26 +16,26 @@ import javax.inject.Inject
 class SerieViewModel @Inject constructor(private val seriesRepository: SeriesRepository)
     : ViewModel() {
 
-    private val _popularSeries = MutableStateFlow(SeriesList2State())
-    private val _onTheAirSeries = MutableStateFlow(SeriesList2State())
-    private val _airingTodaySeries = MutableStateFlow(SeriesList2State())
-    private val _ratedSeries = MutableStateFlow(SeriesList2State())
-    val popularSeries: StateFlow<SeriesList2State> = _popularSeries
-    val airingTodaySeries: StateFlow<SeriesList2State> = _airingTodaySeries
-    val topRatedSeries: StateFlow<SeriesList2State> = _ratedSeries
-    val onTheAirSeries: StateFlow<SeriesList2State> = _onTheAirSeries
+    private val _popularSeries = MutableStateFlow(SeriesListState())
+    private val _onTheAirSeries = MutableStateFlow(SeriesListState())
+    private val _airingTodaySeries = MutableStateFlow(SeriesListState())
+    private val _ratedSeries = MutableStateFlow(SeriesListState())
+    val popularSeries: StateFlow<SeriesListState> = _popularSeries
+    val airingTodaySeries: StateFlow<SeriesListState> = _airingTodaySeries
+    val topRatedSeries: StateFlow<SeriesListState> = _ratedSeries
+    val onTheAirSeries: StateFlow<SeriesListState> = _onTheAirSeries
 
      fun getPopularSeries() {
          seriesRepository.getPopularSeries().onEach {
              when (it) {
                  is Resource.Loading -> {
-                     _popularSeries.value = SeriesList2State(isLoading = true)
+                     _popularSeries.value = SeriesListState(isLoading = true)
                  }
                  is Resource.Error -> {
-                     _popularSeries.value = SeriesList2State(error = it.message ?: "")
+                     _popularSeries.value = SeriesListState(error = it.message ?: "")
                  }
                  is Resource.Success -> {
-                     _popularSeries.value = SeriesList2State(data = it.data!!) }
+                     _popularSeries.value = SeriesListState(data = it.data!!) }
                  else -> {}
              }
          }.launchIn(viewModelScope)
@@ -45,13 +45,13 @@ class SerieViewModel @Inject constructor(private val seriesRepository: SeriesRep
         seriesRepository.getAiringTodaySeries().onEach {
             when (it) {
                 is Resource.Loading -> {
-                    _airingTodaySeries.value = SeriesList2State(isLoading = true)
+                    _airingTodaySeries.value = SeriesListState(isLoading = true)
                 }
                 is Resource.Error -> {
-                    _airingTodaySeries.value = SeriesList2State(error = it.message ?: "")
+                    _airingTodaySeries.value = SeriesListState(error = it.message ?: "")
                 }
                 is Resource.Success -> {
-                    _airingTodaySeries.value = SeriesList2State(data = it.data!!) }
+                    _airingTodaySeries.value = SeriesListState(data = it.data!!) }
                 else -> {}
             }
         }.launchIn(viewModelScope)
@@ -62,13 +62,13 @@ class SerieViewModel @Inject constructor(private val seriesRepository: SeriesRep
         seriesRepository.getRatedSeries().onEach {
             when (it) {
                 is Resource.Loading -> {
-                    _ratedSeries.value = SeriesList2State(isLoading = true)
+                    _ratedSeries.value = SeriesListState(isLoading = true)
                 }
                 is Resource.Error -> {
-                    _ratedSeries.value = SeriesList2State(error = it.message ?: "")
+                    _ratedSeries.value = SeriesListState(error = it.message ?: "")
                 }
                 is Resource.Success -> {
-                    _ratedSeries.value = SeriesList2State(data = it.data!!) }
+                    _ratedSeries.value = SeriesListState(data = it.data!!) }
                 else -> {}
             }
         }.launchIn(viewModelScope)
@@ -78,13 +78,13 @@ class SerieViewModel @Inject constructor(private val seriesRepository: SeriesRep
         seriesRepository.getOnTheAirSeries().onEach {
             when (it) {
                 is Resource.Loading -> {
-                    _onTheAirSeries.value = SeriesList2State(isLoading = true)
+                    _onTheAirSeries.value = SeriesListState(isLoading = true)
                 }
                 is Resource.Error -> {
-                    _onTheAirSeries.value = SeriesList2State(error = it.message ?: "")
+                    _onTheAirSeries.value = SeriesListState(error = it.message ?: "")
                 }
                 is Resource.Success -> {
-                    _onTheAirSeries.value = SeriesList2State(data = it.data!!) }
+                    _onTheAirSeries.value = SeriesListState(data = it.data!!) }
                 else -> {}
             }
         }.launchIn(viewModelScope)

@@ -1,47 +1,42 @@
 package com.example.filmes.ui.filmes
 
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.filmes.data.Resource
-import com.example.filmes.model.movie.Movie
 import com.example.filmes.repository.MoviesRepository
-import com.example.filmes.utils.MovieList2State
+import com.example.filmes.utils.MovieListState
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
-import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MovieViewModel @Inject constructor(private val moviesRepository: MoviesRepository )
     : ViewModel() {
 
-    private val _movieListUpcoming = MutableStateFlow(MovieList2State())
-    private val _movieListNowPlaying = MutableStateFlow(MovieList2State())
-    private val _movieListRated = MutableStateFlow(MovieList2State())
-    private val _movieListPopular = MutableStateFlow(MovieList2State())
-    val movieListUpcoming: StateFlow<MovieList2State> = _movieListUpcoming
-    val movieListNowPlaying: StateFlow<MovieList2State> = _movieListNowPlaying
-    val movieListRated: StateFlow<MovieList2State> = _movieListRated
-    val movieListPopular: StateFlow<MovieList2State> = _movieListPopular
+    private val _movieListUpcoming = MutableStateFlow(MovieListState())
+    private val _movieListNowPlaying = MutableStateFlow(MovieListState())
+    private val _movieListRated = MutableStateFlow(MovieListState())
+    private val _movieListPopular = MutableStateFlow(MovieListState())
+    val movieListUpcoming: StateFlow<MovieListState> = _movieListUpcoming
+    val movieListNowPlaying: StateFlow<MovieListState> = _movieListNowPlaying
+    val movieListRated: StateFlow<MovieListState> = _movieListRated
+    val movieListPopular: StateFlow<MovieListState> = _movieListPopular
 
 
     fun getUpcomingMovies() {
         moviesRepository.getUpcomingMovies().onEach {
             when (it) {
                 is Resource.Loading -> {
-                    _movieListUpcoming.value = MovieList2State(isLoading = true)
+                    _movieListUpcoming.value = MovieListState(isLoading = true)
                 }
                 is Resource.Error -> {
-                    _movieListUpcoming.value = MovieList2State(error = it.message ?: "")
+                    _movieListUpcoming.value = MovieListState(error = it.message ?: "")
                 }
                 is Resource.Success -> {
-                    _movieListUpcoming.value = MovieList2State(data = it.data!!) }
+                    _movieListUpcoming.value = MovieListState(data = it.data!!) }
                 else -> {}
             }
         }.launchIn(viewModelScope)
@@ -51,13 +46,13 @@ class MovieViewModel @Inject constructor(private val moviesRepository: MoviesRep
         moviesRepository.getNowPlayingMovies().onEach {
             when (it) {
                 is Resource.Loading -> {
-                    _movieListNowPlaying.value = MovieList2State(isLoading = true)
+                    _movieListNowPlaying.value = MovieListState(isLoading = true)
                 }
                 is Resource.Error -> {
-                    _movieListNowPlaying.value = MovieList2State(error = it.message ?: "")
+                    _movieListNowPlaying.value = MovieListState(error = it.message ?: "")
                 }
                 is Resource.Success -> {
-                    _movieListNowPlaying.value = MovieList2State(data = it.data!!) }
+                    _movieListNowPlaying.value = MovieListState(data = it.data!!) }
                 else -> {}
             }
         }.launchIn(viewModelScope)
@@ -67,13 +62,13 @@ class MovieViewModel @Inject constructor(private val moviesRepository: MoviesRep
         moviesRepository.getPopularMovies().onEach {
             when (it) {
                 is Resource.Loading -> {
-                    _movieListPopular.value = MovieList2State(isLoading = true)
+                    _movieListPopular.value = MovieListState(isLoading = true)
                 }
                 is Resource.Error -> {
-                    _movieListPopular.value = MovieList2State(error = it.message ?: "")
+                    _movieListPopular.value = MovieListState(error = it.message ?: "")
                 }
                 is Resource.Success -> {
-                    _movieListPopular.value = MovieList2State(data = it.data!!) }
+                    _movieListPopular.value = MovieListState(data = it.data!!) }
                 else -> {}
             }
         }.launchIn(viewModelScope)
@@ -83,13 +78,13 @@ class MovieViewModel @Inject constructor(private val moviesRepository: MoviesRep
         moviesRepository.getRatedMovies().onEach {
             when (it) {
                 is Resource.Loading -> {
-                    _movieListRated.value = MovieList2State(isLoading = true)
+                    _movieListRated.value = MovieListState(isLoading = true)
                 }
                 is Resource.Error -> {
-                    _movieListRated.value = MovieList2State(error = it.message ?: "")
+                    _movieListRated.value = MovieListState(error = it.message ?: "")
                 }
                 is Resource.Success -> {
-                    _movieListRated.value = MovieList2State(data = it.data!!) }
+                    _movieListRated.value = MovieListState(data = it.data!!) }
                 else -> {}
             }
         }.launchIn(viewModelScope)
